@@ -1,0 +1,20 @@
+{
+  "name": "nullbank",
+  "version": "1.0.0",
+  "description": "Trabalho Final de Banco de Dados 2017.2 - Equipe 374876",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://thalesrochas@bitbucket.org/thalesrochas/trabalhobd-2017_2-equipe374876.git"
+  },
+  "author": "Francisco Mauro, Maria Raquel, Francisco Thales",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/thalesrochas/trabalhobd-2017_2-equipe374876#readme",
+  "dependencies": {
+    "electron": "^1.7.9",
+    "mysql": "^2.15.0"
+  }
+}
