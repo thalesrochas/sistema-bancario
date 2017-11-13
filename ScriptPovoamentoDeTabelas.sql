@@ -56,6 +56,26 @@ INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`) VALUES (81282
 INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`) VALUES (026226, 8714, 6826.80, 998877);
 INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`) VALUES (954152, 6436, 7816.48, 445566);
 INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`) VALUES (602510, 7379, 3920.84, 654321);
+INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`) VALUES (784154, 2921, 8624.33, 893281);
+INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`) VALUES (910511, 8714, 7100.62, 722253);
+INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`) VALUES (285172, 2921, 3302.16, 275873);
+INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`) VALUES (613817, 7820, 7037.16, 804452);
+INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`) VALUES (372129, 7820, 8368.54, 291175);
+INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`) VALUES (874163, 6436, 6248.51, 949284);
+INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`) VALUES (804089, 7379, 6758.68, 805277);
+INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`) VALUES (834440, 7379, 267.64, 826706);
+INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`) VALUES (830557, 6436, 342.81, 809916);
+INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`) VALUES (986479, 6436, 4231.43, 170035);
+INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`) VALUES (513279, 8714, -272.79, 348536);
+INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`) VALUES (678050, 2921, 4937.15, 787316);
+INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`) VALUES (779511, 2921, -131.49, 603226);
+INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`) VALUES (363829, 2921, 1017.73, 865224);
+INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`) VALUES (885015, 2921, -69.45, 671054);
+INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`) VALUES (750483, 6436, 871.20, 521938);
+INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`) VALUES (348913, 8714, -447.22, 462981);
+INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`) VALUES (885720, 7379, 9910.29, 679315);
+INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`) VALUES (487652, 7820, -35.66, 440435);
+INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`) VALUES (387029, 7820, 1419.11, 744929);
 
 COMMIT;
 
@@ -65,9 +85,16 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `Equipe374876`;
-INSERT INTO `conta_poupanca` (`num_conta`, `taxa_juros`) VALUES (365256, 1.03);
-INSERT INTO `conta_poupanca` (`num_conta`, `taxa_juros`) VALUES (463126, 3.50);
-INSERT INTO `conta_poupanca` (`num_conta`, `taxa_juros`) VALUES (812821, 2.73);
+INSERT INTO `conta_poupanca` (`num_conta`, `taxa_juros`) VALUES (784154, 3.79);
+INSERT INTO `conta_poupanca` (`num_conta`, `taxa_juros`) VALUES (910511, 2.19);
+INSERT INTO `conta_poupanca` (`num_conta`, `taxa_juros`) VALUES (285172, 1.58);
+INSERT INTO `conta_poupanca` (`num_conta`, `taxa_juros`) VALUES (613817, 3.46);
+INSERT INTO `conta_poupanca` (`num_conta`, `taxa_juros`) VALUES (372129, 2.92);
+INSERT INTO `conta_poupanca` (`num_conta`, `taxa_juros`) VALUES (874163, 0.84);
+INSERT INTO `conta_poupanca` (`num_conta`, `taxa_juros`) VALUES (804089, 2.36);
+INSERT INTO `conta_poupanca` (`num_conta`, `taxa_juros`) VALUES (834440, 3.76);
+INSERT INTO `conta_poupanca` (`num_conta`, `taxa_juros`) VALUES (830557, 4.83);
+INSERT INTO `conta_poupanca` (`num_conta`, `taxa_juros`) VALUES (986479, 0.85);
 
 COMMIT;
 
@@ -77,9 +104,16 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `Equipe374876`;
-INSERT INTO `conta_especial` (`num_conta`, `limite_credito`) VALUES (026226, 300.00);
-INSERT INTO `conta_especial` (`num_conta`, `limite_credito`) VALUES (954152, 250.00);
-INSERT INTO `conta_especial` (`num_conta`, `limite_credito`) VALUES (602510, 275.00);
+INSERT INTO `conta_especial` (`num_conta`, `limite_credito`) VALUES (513279, 331);
+INSERT INTO `conta_especial` (`num_conta`, `limite_credito`) VALUES (678050, 477);
+INSERT INTO `conta_especial` (`num_conta`, `limite_credito`) VALUES (779511, 425);
+INSERT INTO `conta_especial` (`num_conta`, `limite_credito`) VALUES (363829, 218);
+INSERT INTO `conta_especial` (`num_conta`, `limite_credito`) VALUES (885015, 236);
+INSERT INTO `conta_especial` (`num_conta`, `limite_credito`) VALUES (750483, 286);
+INSERT INTO `conta_especial` (`num_conta`, `limite_credito`) VALUES (348913, 454);
+INSERT INTO `conta_especial` (`num_conta`, `limite_credito`) VALUES (885720, 432);
+INSERT INTO `conta_especial` (`num_conta`, `limite_credito`) VALUES (487652, 177);
+INSERT INTO `conta_especial` (`num_conta`, `limite_credito`) VALUES (387029, 189);
 
 COMMIT;
 
@@ -89,11 +123,31 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `Equipe374876`;
-INSERT INTO `transacao` (`num_transacao`, `valor_transacao`, `data_hora`, `tipo`) VALUES (1, 500.00, '2015-12-02 18:03:20', 'Transferência');
-INSERT INTO `transacao` (`num_transacao`, `valor_transacao`, `data_hora`, `tipo`) VALUES (2, 1200.00, '2016-03-22 07:09:36', 'Depósito');
-INSERT INTO `transacao` (`num_transacao`, `valor_transacao`, `data_hora`, `tipo`) VALUES (3, 1785.25, '2016-09-04 16:57:45', 'Saque');
-INSERT INTO `transacao` (`num_transacao`, `valor_transacao`, `data_hora`, `tipo`) VALUES (4, 55.00, '2017-04-30 14:30:13', 'Estorno');
-INSERT INTO `transacao` (`num_transacao`, `valor_transacao`, `data_hora`, `tipo`) VALUES (5, 2456.35, '2017-05-24 11:15:17', 'Saque');
+INSERT INTO `transacao` (`num_transacao`, `valor_transacao`, `data_hora`, `tipo`) VALUES (1, 2430.89, '2000-04-21 12:42:40', 'Estorno');
+INSERT INTO `transacao` (`num_transacao`, `valor_transacao`, `data_hora`, `tipo`) VALUES (2, 944.64, '2000-09-24 12:34:21', 'Saque');
+INSERT INTO `transacao` (`num_transacao`, `valor_transacao`, `data_hora`, `tipo`) VALUES (3, -2978.10, '2000-11-05 04:58:14', 'Transferência');
+INSERT INTO `transacao` (`num_transacao`, `valor_transacao`, `data_hora`, `tipo`) VALUES (4, 2978.10, '2000-11-05 04:58:14', 'Transferência');
+INSERT INTO `transacao` (`num_transacao`, `valor_transacao`, `data_hora`, `tipo`) VALUES (5, 1536.86, '2001-08-27 02:20:39', 'Depósito');
+INSERT INTO `transacao` (`num_transacao`, `valor_transacao`, `data_hora`, `tipo`) VALUES (6, 4182.24, '2001-11-11 02:46:07', 'Saque');
+INSERT INTO `transacao` (`num_transacao`, `valor_transacao`, `data_hora`, `tipo`) VALUES (7, 4044.63, '2002-02-24 06:15:42', 'Depósito');
+INSERT INTO `transacao` (`num_transacao`, `valor_transacao`, `data_hora`, `tipo`) VALUES (8, 1509.83, '2002-08-19 15:33:26', 'Saque');
+INSERT INTO `transacao` (`num_transacao`, `valor_transacao`, `data_hora`, `tipo`) VALUES (9, -331.63, '2003-03-09 17:59:54', 'Transferência');
+INSERT INTO `transacao` (`num_transacao`, `valor_transacao`, `data_hora`, `tipo`) VALUES (10, 331.63, '2003-03-09 17:59:54', 'Transferência');
+INSERT INTO `transacao` (`num_transacao`, `valor_transacao`, `data_hora`, `tipo`) VALUES (11, 1118.84, '2003-10-16 06:48:07', 'Estorno');
+INSERT INTO `transacao` (`num_transacao`, `valor_transacao`, `data_hora`, `tipo`) VALUES (12, 3623.83, '2004-01-01 02:31:21', 'Depósito');
+INSERT INTO `transacao` (`num_transacao`, `valor_transacao`, `data_hora`, `tipo`) VALUES (13, -2802.90, '2004-03-01 11:25:47', 'Transferência');
+INSERT INTO `transacao` (`num_transacao`, `valor_transacao`, `data_hora`, `tipo`) VALUES (14, 2802.90, '2004-03-01 11:25:47', 'Transferência');
+INSERT INTO `transacao` (`num_transacao`, `valor_transacao`, `data_hora`, `tipo`) VALUES (15, -333.92, '2005-03-11 11:09:28', 'Transferência');
+INSERT INTO `transacao` (`num_transacao`, `valor_transacao`, `data_hora`, `tipo`) VALUES (16, 333.92, '2005-03-11 11:09:28', 'Transferência');
+INSERT INTO `transacao` (`num_transacao`, `valor_transacao`, `data_hora`, `tipo`) VALUES (17, 2383.09, '2007-11-13 17:15:15', 'Saque');
+INSERT INTO `transacao` (`num_transacao`, `valor_transacao`, `data_hora`, `tipo`) VALUES (18, 432.42, '2009-09-21 23:36:49', 'Depósito');
+INSERT INTO `transacao` (`num_transacao`, `valor_transacao`, `data_hora`, `tipo`) VALUES (19, 1682.85, '2011-03-25 02:33:36', 'Saque');
+INSERT INTO `transacao` (`num_transacao`, `valor_transacao`, `data_hora`, `tipo`) VALUES (20, 3495.94, '2012-05-18 21:11:11', 'Estorno');
+INSERT INTO `transacao` (`num_transacao`, `valor_transacao`, `data_hora`, `tipo`) VALUES (21, 1522.92, '2013-12-17 05:36:54', 'Estorno');
+INSERT INTO `transacao` (`num_transacao`, `valor_transacao`, `data_hora`, `tipo`) VALUES (22, -4003.64, '2015-09-02 09:28:27', 'Transferência');
+INSERT INTO `transacao` (`num_transacao`, `valor_transacao`, `data_hora`, `tipo`) VALUES (23, 4003.64, '2015-09-02 09:28:27', 'Transferência');
+INSERT INTO `transacao` (`num_transacao`, `valor_transacao`, `data_hora`, `tipo`) VALUES (24, -2163.08, '2017-10-25 01:27:48', 'Transferência');
+INSERT INTO `transacao` (`num_transacao`, `valor_transacao`, `data_hora`, `tipo`) VALUES (25, 2163.08, '2017-10-25 01:27:48', 'Transferência');
 
 COMMIT;
 
@@ -103,11 +157,31 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `Equipe374876`;
-INSERT INTO `realiza` (`num_transacao`, `num_conta`) VALUES (1, 015040);
-INSERT INTO `realiza` (`num_transacao`, `num_conta`) VALUES (2, 812821);
-INSERT INTO `realiza` (`num_transacao`, `num_conta`) VALUES (3, 602510);
+INSERT INTO `realiza` (`num_transacao`, `num_conta`) VALUES (1, 164711);
+INSERT INTO `realiza` (`num_transacao`, `num_conta`) VALUES (2, 784581);
+INSERT INTO `realiza` (`num_transacao`, `num_conta`) VALUES (3, 015040);
 INSERT INTO `realiza` (`num_transacao`, `num_conta`) VALUES (4, 965824);
-INSERT INTO `realiza` (`num_transacao`, `num_conta`) VALUES (5, 164711);
+INSERT INTO `realiza` (`num_transacao`, `num_conta`) VALUES (5, 365256);
+INSERT INTO `realiza` (`num_transacao`, `num_conta`) VALUES (6, 463126);
+INSERT INTO `realiza` (`num_transacao`, `num_conta`) VALUES (7, 812821);
+INSERT INTO `realiza` (`num_transacao`, `num_conta`) VALUES (8, 026226);
+INSERT INTO `realiza` (`num_transacao`, `num_conta`) VALUES (9, 954152);
+INSERT INTO `realiza` (`num_transacao`, `num_conta`) VALUES (10, 602510);
+INSERT INTO `realiza` (`num_transacao`, `num_conta`) VALUES (11, 784154);
+INSERT INTO `realiza` (`num_transacao`, `num_conta`) VALUES (12, 910511);
+INSERT INTO `realiza` (`num_transacao`, `num_conta`) VALUES (13, 285172);
+INSERT INTO `realiza` (`num_transacao`, `num_conta`) VALUES (14, 613817);
+INSERT INTO `realiza` (`num_transacao`, `num_conta`) VALUES (15, 372129);
+INSERT INTO `realiza` (`num_transacao`, `num_conta`) VALUES (16, 874163);
+INSERT INTO `realiza` (`num_transacao`, `num_conta`) VALUES (17, 804089);
+INSERT INTO `realiza` (`num_transacao`, `num_conta`) VALUES (18, 834440);
+INSERT INTO `realiza` (`num_transacao`, `num_conta`) VALUES (19, 830557);
+INSERT INTO `realiza` (`num_transacao`, `num_conta`) VALUES (20, 986479);
+INSERT INTO `realiza` (`num_transacao`, `num_conta`) VALUES (21, 678050);
+INSERT INTO `realiza` (`num_transacao`, `num_conta`) VALUES (22, 363829);
+INSERT INTO `realiza` (`num_transacao`, `num_conta`) VALUES (23, 750483);
+INSERT INTO `realiza` (`num_transacao`, `num_conta`) VALUES (24, 885720);
+INSERT INTO `realiza` (`num_transacao`, `num_conta`) VALUES (25, 387029);
 
 COMMIT;
 
@@ -146,19 +220,41 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `Equipe374876`;
-INSERT INTO `conta_cliente` (`cpf_cliente`, `num_conta`, `num_agencia`) VALUES ('41587462518', 164711, 7820);
-INSERT INTO `conta_cliente` (`cpf_cliente`, `num_conta`, `num_agencia`) VALUES ('88544517866', 784581, 7820);
-INSERT INTO `conta_cliente` (`cpf_cliente`, `num_conta`, `num_agencia`) VALUES ('59944568461', 015040, 7820);
-INSERT INTO `conta_cliente` (`cpf_cliente`, `num_conta`, `num_agencia`) VALUES ('58549135133', 965824, 7379);
-INSERT INTO `conta_cliente` (`cpf_cliente`, `num_conta`, `num_agencia`) VALUES ('19416568746', 365256, 2921);
-INSERT INTO `conta_cliente` (`cpf_cliente`, `num_conta`, `num_agencia`) VALUES ('84154951621', 463126, 6436);
-INSERT INTO `conta_cliente` (`cpf_cliente`, `num_conta`, `num_agencia`) VALUES ('47948651514', 812821, 6436);
-INSERT INTO `conta_cliente` (`cpf_cliente`, `num_conta`, `num_agencia`) VALUES ('84984561515', 026226, 7379);
-INSERT INTO `conta_cliente` (`cpf_cliente`, `num_conta`, `num_agencia`) VALUES ('79488487552', 954152, 7379);
-INSERT INTO `conta_cliente` (`cpf_cliente`, `num_conta`, `num_agencia`) VALUES ('98963112021', 602510, 8714);
-INSERT INTO `conta_cliente` (`cpf_cliente`, `num_conta`, `num_agencia`) VALUES ('84484848484', 965824, 7379);
-INSERT INTO `conta_cliente` (`cpf_cliente`, `num_conta`, `num_agencia`) VALUES ('84415154845', 784581, 7820);
-INSERT INTO `conta_cliente` (`cpf_cliente`, `num_conta`, `num_agencia`) VALUES ('72975957917', 812821, 6436);
+INSERT INTO `conta_cliente` (`cpf_cliente`, `num_conta`, `num_agencia`) VALUES ('41587462518', 164711, 2921);
+INSERT INTO `conta_cliente` (`cpf_cliente`, `num_conta`, `num_agencia`) VALUES ('32623126547', 784581, 7820);
+INSERT INTO `conta_cliente` (`cpf_cliente`, `num_conta`, `num_agencia`) VALUES ('32623126547', 015040, 8714);
+INSERT INTO `conta_cliente` (`cpf_cliente`, `num_conta`, `num_agencia`) VALUES ('79497859457', 965824, 7379);
+INSERT INTO `conta_cliente` (`cpf_cliente`, `num_conta`, `num_agencia`) VALUES ('88544517866', 365256, 2921);
+INSERT INTO `conta_cliente` (`cpf_cliente`, `num_conta`, `num_agencia`) VALUES ('41587462518', 463126, 7820);
+INSERT INTO `conta_cliente` (`cpf_cliente`, `num_conta`, `num_agencia`) VALUES ('79488487552', 812821, 6436);
+INSERT INTO `conta_cliente` (`cpf_cliente`, `num_conta`, `num_agencia`) VALUES ('84484848484', 026226, 8714);
+INSERT INTO `conta_cliente` (`cpf_cliente`, `num_conta`, `num_agencia`) VALUES ('98963112021', 954152, 6436);
+INSERT INTO `conta_cliente` (`cpf_cliente`, `num_conta`, `num_agencia`) VALUES ('76151230215', 602510, 7379);
+INSERT INTO `conta_cliente` (`cpf_cliente`, `num_conta`, `num_agencia`) VALUES ('59944568461', 784154, 2921);
+INSERT INTO `conta_cliente` (`cpf_cliente`, `num_conta`, `num_agencia`) VALUES ('15975764216', 910511, 8714);
+INSERT INTO `conta_cliente` (`cpf_cliente`, `num_conta`, `num_agencia`) VALUES ('58549135133', 285172, 2921);
+INSERT INTO `conta_cliente` (`cpf_cliente`, `num_conta`, `num_agencia`) VALUES ('79488487552', 613817, 7820);
+INSERT INTO `conta_cliente` (`cpf_cliente`, `num_conta`, `num_agencia`) VALUES ('79497859457', 372129, 7820);
+INSERT INTO `conta_cliente` (`cpf_cliente`, `num_conta`, `num_agencia`) VALUES ('84484848484', 874163, 6436);
+INSERT INTO `conta_cliente` (`cpf_cliente`, `num_conta`, `num_agencia`) VALUES ('84415154845', 804089, 7379);
+INSERT INTO `conta_cliente` (`cpf_cliente`, `num_conta`, `num_agencia`) VALUES ('72975957917', 834440, 7379);
+INSERT INTO `conta_cliente` (`cpf_cliente`, `num_conta`, `num_agencia`) VALUES ('56691223322', 830557, 6436);
+INSERT INTO `conta_cliente` (`cpf_cliente`, `num_conta`, `num_agencia`) VALUES ('15975764216', 986479, 6436);
+INSERT INTO `conta_cliente` (`cpf_cliente`, `num_conta`, `num_agencia`) VALUES ('84154951621', 513279, 8714);
+INSERT INTO `conta_cliente` (`cpf_cliente`, `num_conta`, `num_agencia`) VALUES ('19416568746', 678050, 2921);
+INSERT INTO `conta_cliente` (`cpf_cliente`, `num_conta`, `num_agencia`) VALUES ('84154951621', 779511, 2921);
+INSERT INTO `conta_cliente` (`cpf_cliente`, `num_conta`, `num_agencia`) VALUES ('47948651514', 363829, 2921);
+INSERT INTO `conta_cliente` (`cpf_cliente`, `num_conta`, `num_agencia`) VALUES ('84984561515', 885015, 2921);
+INSERT INTO `conta_cliente` (`cpf_cliente`, `num_conta`, `num_agencia`) VALUES ('71279279197', 750483, 6436);
+INSERT INTO `conta_cliente` (`cpf_cliente`, `num_conta`, `num_agencia`) VALUES ('71279279197', 348913, 8714);
+INSERT INTO `conta_cliente` (`cpf_cliente`, `num_conta`, `num_agencia`) VALUES ('97548749742', 885720, 7379);
+INSERT INTO `conta_cliente` (`cpf_cliente`, `num_conta`, `num_agencia`) VALUES ('84484848484', 487652, 7820);
+INSERT INTO `conta_cliente` (`cpf_cliente`, `num_conta`, `num_agencia`) VALUES ('59944568461', 387029, 7820);
+INSERT INTO `conta_cliente` (`cpf_cliente`, `num_conta`, `num_agencia`) VALUES ('79488487552', 365256, 2921);
+INSERT INTO `conta_cliente` (`cpf_cliente`, `num_conta`, `num_agencia`) VALUES ('84984561515', 954152, 6436);
+INSERT INTO `conta_cliente` (`cpf_cliente`, `num_conta`, `num_agencia`) VALUES ('84415154845', 613817, 7820);
+INSERT INTO `conta_cliente` (`cpf_cliente`, `num_conta`, `num_agencia`) VALUES ('19416568746', 834440, 7379);
+INSERT INTO `conta_cliente` (`cpf_cliente`, `num_conta`, `num_agencia`) VALUES ('15975764216', 779511, 2921);
 
 COMMIT;
 
@@ -178,6 +274,21 @@ INSERT INTO `dependente` (`mat_funcionario`, `nome_dependente`, `parentesco`, `d
 INSERT INTO `dependente` (`mat_funcionario`, `nome_dependente`, `parentesco`, `data_nasc`, `idade`) VALUES (12, 'Agatha Gomes', 'Cônjuge', '1972-12-24', 44);
 INSERT INTO `dependente` (`mat_funcionario`, `nome_dependente`, `parentesco`, `data_nasc`, `idade`) VALUES (8, 'Sophie Campos', 'Filho', '1999-04-24', 18);
 INSERT INTO `dependente` (`mat_funcionario`, `nome_dependente`, `parentesco`, `data_nasc`, `idade`) VALUES (1, 'Bruno Cavalcanti', 'Filho', '1994-10-18', 23);
+INSERT INTO `dependente` (`mat_funcionario`, `nome_dependente`, `parentesco`, `data_nasc`, `idade`) VALUES (10, 'Júlia Schiavon', 'Filho', '1995-10-21', 22);
+INSERT INTO `dependente` (`mat_funcionario`, `nome_dependente`, `parentesco`, `data_nasc`, `idade`) VALUES (7, 'Evaristo Costa', 'Filho', '2016-10-28', 1);
+INSERT INTO `dependente` (`mat_funcionario`, `nome_dependente`, `parentesco`, `data_nasc`, `idade`) VALUES (9, 'Jackson Chang', 'Genitor', '1968-01-29', 49);
+INSERT INTO `dependente` (`mat_funcionario`, `nome_dependente`, `parentesco`, `data_nasc`, `idade`) VALUES (5, 'Ignacia Gilbert', 'Genitora', '1959-09-03', 58);
+INSERT INTO `dependente` (`mat_funcionario`, `nome_dependente`, `parentesco`, `data_nasc`, `idade`) VALUES (1, 'Chancellor Hull', 'Cônjuge', '1968-05-22', 49);
+INSERT INTO `dependente` (`mat_funcionario`, `nome_dependente`, `parentesco`, `data_nasc`, `idade`) VALUES (6, 'Britanney Michael', 'Genitor', '1938-10-23', 79);
+INSERT INTO `dependente` (`mat_funcionario`, `nome_dependente`, `parentesco`, `data_nasc`, `idade`) VALUES (9, 'Kessie Byrd', 'Cônjuge', '1997-03-03', 20);
+INSERT INTO `dependente` (`mat_funcionario`, `nome_dependente`, `parentesco`, `data_nasc`, `idade`) VALUES (7, 'Jena Mcfadden', 'Genitora', '1969-02-27', 48);
+INSERT INTO `dependente` (`mat_funcionario`, `nome_dependente`, `parentesco`, `data_nasc`, `idade`) VALUES (7, 'Lawrence Jackson', 'Filho', '2017-11-07', 0);
+INSERT INTO `dependente` (`mat_funcionario`, `nome_dependente`, `parentesco`, `data_nasc`, `idade`) VALUES (6, 'Olga Houston', 'Filho', '1991-06-22', 26);
+INSERT INTO `dependente` (`mat_funcionario`, `nome_dependente`, `parentesco`, `data_nasc`, `idade`) VALUES (15, 'Imogene Parks', 'Genitor', '1956-08-29', 61);
+INSERT INTO `dependente` (`mat_funcionario`, `nome_dependente`, `parentesco`, `data_nasc`, `idade`) VALUES (6, 'Olivia Collins', 'Filho', '1987-06-29', 30);
+INSERT INTO `dependente` (`mat_funcionario`, `nome_dependente`, `parentesco`, `data_nasc`, `idade`) VALUES (1, 'Kaye Delaney', 'Filho', '1997-03-03', 20);
+INSERT INTO `dependente` (`mat_funcionario`, `nome_dependente`, `parentesco`, `data_nasc`, `idade`) VALUES (9, 'Tasha Aguilar', 'Filho', '2017-10-29', 0);
+INSERT INTO `dependente` (`mat_funcionario`, `nome_dependente`, `parentesco`, `data_nasc`, `idade`) VALUES (4, 'Gary Wooten', 'Genitor', '1998-05-07', 19);
 
 COMMIT;
 
@@ -191,5 +302,11 @@ INSERT INTO `conta_corrente` (`num_conta`) VALUES (164711);
 INSERT INTO `conta_corrente` (`num_conta`) VALUES (784581);
 INSERT INTO `conta_corrente` (`num_conta`) VALUES (015040);
 INSERT INTO `conta_corrente` (`num_conta`) VALUES (965824);
+INSERT INTO `conta_corrente` (`num_conta`) VALUES (365256);
+INSERT INTO `conta_corrente` (`num_conta`) VALUES (463126);
+INSERT INTO `conta_corrente` (`num_conta`) VALUES (812821);
+INSERT INTO `conta_corrente` (`num_conta`) VALUES (026226);
+INSERT INTO `conta_corrente` (`num_conta`) VALUES (954152);
+INSERT INTO `conta_corrente` (`num_conta`) VALUES (602510);
 
 COMMIT;

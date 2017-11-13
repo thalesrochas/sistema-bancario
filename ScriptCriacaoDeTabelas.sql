@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `funcionario` (
   `cidade` VARCHAR(45) NULL,
   `endereco` VARCHAR(45) NULL,
   `cargo` ENUM('Atendente', 'Caixa', 'Gerente') NOT NULL,
-  `salario` DECIMAL(8,2) ZEROFILL NOT NULL,
+  `salario` DECIMAL(8,2) NOT NULL DEFAULT 0.00,
   `senha` VARCHAR(20) NOT NULL,
   `lotacao` INT NOT NULL,
   PRIMARY KEY (`matricula`),
@@ -63,7 +63,7 @@ DROP TABLE IF EXISTS `conta` ;
 CREATE TABLE IF NOT EXISTS `conta` (
   `num_conta` INT NOT NULL AUTO_INCREMENT,
   `num_agencia` INT NOT NULL,
-  `saldo` DECIMAL(11,2) ZEROFILL NOT NULL,
+  `saldo` DECIMAL(11,2) NOT NULL DEFAULT 0.00,
   `senha` INT(6) NOT NULL,
   PRIMARY KEY (`num_conta`),
   INDEX `fk_Contas_Agencia1_idx` (`num_agencia` ASC))
@@ -77,7 +77,7 @@ DROP TABLE IF EXISTS `conta_poupanca` ;
 
 CREATE TABLE IF NOT EXISTS `conta_poupanca` (
   `num_conta` INT NOT NULL,
-  `taxa_juros` DECIMAL(5,2) ZEROFILL NOT NULL,
+  `taxa_juros` DECIMAL(5,2) NOT NULL DEFAULT 0.00,
   INDEX `fk_Poupança_Contas1_idx` (`num_conta` ASC),
   PRIMARY KEY (`num_conta`))
 ENGINE = InnoDB;
@@ -90,7 +90,7 @@ DROP TABLE IF EXISTS `conta_especial` ;
 
 CREATE TABLE IF NOT EXISTS `conta_especial` (
   `num_conta` INT NOT NULL,
-  `limite_credito` DECIMAL(7,2) ZEROFILL NOT NULL,
+  `limite_credito` DECIMAL(7,2) NOT NULL DEFAULT 0.00,
   INDEX `fk_Conta especial_Contas1_idx` (`num_conta` ASC),
   PRIMARY KEY (`num_conta`))
 ENGINE = InnoDB;
