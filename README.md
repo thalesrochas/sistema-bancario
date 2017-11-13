@@ -17,7 +17,9 @@
 Ao baixar o repositório, executar os seguintes comandos na pasta do repositório:
 
 `npm install`
+
 `npm install electron`
+
 `npm install mysql`
 
 Para executar:
