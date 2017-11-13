@@ -277,11 +277,11 @@ INSERT INTO `dependente` (`mat_funcionario`, `nome_dependente`, `parentesco`, `d
 INSERT INTO `dependente` (`mat_funcionario`, `nome_dependente`, `parentesco`, `data_nasc`, `idade`) VALUES (10, 'Júlia Schiavon', 'Filho', '1995-10-21', 22);
 INSERT INTO `dependente` (`mat_funcionario`, `nome_dependente`, `parentesco`, `data_nasc`, `idade`) VALUES (7, 'Evaristo Costa', 'Filho', '2016-10-28', 1);
 INSERT INTO `dependente` (`mat_funcionario`, `nome_dependente`, `parentesco`, `data_nasc`, `idade`) VALUES (9, 'Jackson Chang', 'Genitor', '1968-01-29', 49);
-INSERT INTO `dependente` (`mat_funcionario`, `nome_dependente`, `parentesco`, `data_nasc`, `idade`) VALUES (5, 'Ignacia Gilbert', 'Genitora', '1959-09-03', 58);
+INSERT INTO `dependente` (`mat_funcionario`, `nome_dependente`, `parentesco`, `data_nasc`, `idade`) VALUES (5, 'Ignacia Gilbert', 'Genitor', '1959-09-03', 58);
 INSERT INTO `dependente` (`mat_funcionario`, `nome_dependente`, `parentesco`, `data_nasc`, `idade`) VALUES (1, 'Chancellor Hull', 'Cônjuge', '1968-05-22', 49);
 INSERT INTO `dependente` (`mat_funcionario`, `nome_dependente`, `parentesco`, `data_nasc`, `idade`) VALUES (6, 'Britanney Michael', 'Genitor', '1938-10-23', 79);
 INSERT INTO `dependente` (`mat_funcionario`, `nome_dependente`, `parentesco`, `data_nasc`, `idade`) VALUES (9, 'Kessie Byrd', 'Cônjuge', '1997-03-03', 20);
-INSERT INTO `dependente` (`mat_funcionario`, `nome_dependente`, `parentesco`, `data_nasc`, `idade`) VALUES (7, 'Jena Mcfadden', 'Genitora', '1969-02-27', 48);
+INSERT INTO `dependente` (`mat_funcionario`, `nome_dependente`, `parentesco`, `data_nasc`, `idade`) VALUES (7, 'Jena Mcfadden', 'Genitor', '1969-02-27', 48);
 INSERT INTO `dependente` (`mat_funcionario`, `nome_dependente`, `parentesco`, `data_nasc`, `idade`) VALUES (7, 'Lawrence Jackson', 'Filho', '2017-11-07', 0);
 INSERT INTO `dependente` (`mat_funcionario`, `nome_dependente`, `parentesco`, `data_nasc`, `idade`) VALUES (6, 'Olga Houston', 'Filho', '1991-06-22', 26);
 INSERT INTO `dependente` (`mat_funcionario`, `nome_dependente`, `parentesco`, `data_nasc`, `idade`) VALUES (15, 'Imogene Parks', 'Genitor', '1956-08-29', 61);
