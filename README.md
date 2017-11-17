@@ -11,10 +11,11 @@
 * [NodeJS](https://nodejs.org/en/) Versão 6.11.5
 * [Electron](https://electron.atom.io/) Versão 1.7.9 - Criador de aplicações Desktop multiplataforma com JavaScript, HTML e CSS.
 * [NPM MySQL](https://www.npmjs.com/package/mysql) Versão 2.15.0 - Conector MySQL para JavaScript.
+* [Bootstrap](https://getbootstrap.com/) Versão 4.0 beta - Estilizador de HTML
 
 ## Execução por linha de Comando
 
-Ao baixar o repositório, executar os seguintes comandos na pasta do repositório:
+Ao baixar, executar os seguintes comandos na pasta do repositório:
 
 `npm install`
 
