@@ -86,3 +86,43 @@ FROM
 WHERE
     ca.tipo_conta = 'Conta Poupança'
 ORDER BY ca.saldo DESC;
+
+
+-- 2) Dado um cliente (seu CPF), deseja-se saber:
+
+-- -------------------------------------------------------
+-- 2.1- Quais as contas do mesmo, com seus tipos, suas
+-- agências, seus gerentes e seus saldos atuais;
+-- -------------------------------------------------------
+SELECT 
+    cli.nome AS cliente,
+    cc.num_conta,
+    c.tipo_conta,
+    a.nome AS agencia,
+    f.nome AS gerente,
+    c.saldo
+FROM
+    (((cliente cli
+    JOIN conta_cliente cc ON cli.cpf = cc.cpf_cliente)
+    JOIN conta c ON c.num_conta = cc.num_conta)
+    JOIN agencia a ON a.numero = cc.num_agencia)
+        JOIN
+    funcionario f ON f.matricula = a.mat_gerente
+WHERE -- Pesquisa por CPF do cliente
+    cpf = '84484848484';
+
+
+-- 3) Dada uma cidade, deseja-se saber:
+
+-- -------------------------------------------------------
+-- 3.1- Quais os nomes e endereços dos clientes que moram
+-- naquela cidade, ordenando-os por idade;
+-- -------------------------------------------------------
+SELECT -- Cliente não possui campo endereço
+    nome,
+    YEAR(FROM_DAYS(TO_DAYS(CURDATE()) - TO_DAYS(data_nasc))) AS idade
+FROM
+    cliente
+WHERE -- Pesquisa por cidade
+    cidade = 'Sobral'
+ORDER BY idade, nome; -- Ordena por idade e por nome.
