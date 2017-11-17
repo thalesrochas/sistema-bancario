@@ -47,10 +47,8 @@ FROM
     WHERE -- Pode-se utilizar pesquisa por nome ou numero da agência
         -- a.nome = 'Ind2921') ca
         a.numero = 2921) ca
-        JOIN
-    conta_especial ce ON ca.num_conta = ce.num_conta
 WHERE
-    saldo < 0 -- Exibir somente os saldos devedores
+    ca.saldo < 0 and ca.tipo_conta = 'Conta Especial' -- Exibir somente os saldos devedores
 ORDER BY ca.saldo; -- Ordenar por ordem crescente
 
 -- -------------------------------------------------------
@@ -68,6 +66,6 @@ FROM
     WHERE -- Pode-se utilizar pesquisa por nome ou numero da agência
         -- a.nome = 'Haw7820'
         a.numero = 7820) ca -- ca -> Conta-Agência
-        JOIN
-    conta_poupanca cp ON ca.num_conta = cp.num_conta
+WHERE
+    ca.tipo_conta = 'Conta Poupança'
 ORDER BY ca.saldo DESC;
