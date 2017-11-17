@@ -17,6 +17,16 @@ app.on('ready', function () {
         slashes: true
     }));
 
+    // Evento executa quando o botão 'Acessar!' é clicado na mainWindow.html
+    ipcMain.on('acessar', function (event, arg) {
+        console.log(arg);
+        mainWindow.loadURL(url.format({
+            pathname: 'html/telaLogin.html',
+            protocol: 'file:',
+            slashes: true
+        }));
+    });
+
     mainWindow.on('closed', function () {
         mainWindow = null;
     });

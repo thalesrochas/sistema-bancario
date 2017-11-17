@@ -1,0 +1,35 @@
+@font-face {
+    font-family: 'Roboto Thin';
+    src: url('font/Roboto-Thin.ttf');
+}
+
+.background {
+    background-image: url('../img/nullbank.jpg');
+    background-size:100%;
+    height: 439px;
+    width: 600px;
+}
+
+.bottom-right {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+}
+
+.top-right {
+    position: absolute;
+    top: 10px;
+    right: 30px;
+}
+
+.new-top-right {
+    position: absolute;
+    top: 100px;
+    right: 100px;
+}
+
+.roboto {
+    font-family: 'Roboto Thin';
+    color: midnightblue;
+    font-size: 50pt;
+}

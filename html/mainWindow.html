@@ -3,10 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
 
     <title>NullBank</title>
 </head>
-<body>
-    <h1>NullBank</h1>
+<body class="background">
+    <div>
+        <h1 class="roboto top-right">NullBank</h1>
+        <form id="acessar">
+            <button type="submit" class="btn btn-info new-top-right">Acessar!</button>
+        </form>
+    </div>
+
+    <script>
+        const electron = require('electron');
+        const ipcRenderer = electron.ipcRenderer;
+
+        // Capturar elemento de HTML por ID
+        let form = document.getElementById('acessar');
+        form.addEventListener('submit', function (e) {
+            // Enviar mensagem para main.js
+            ipcRenderer.send('acessar', 'Carregando tela de login!');
+            e.preventDefault();
+        });
+    </script>
+
+    <!-- Scripts para Bootstrap -->
+    <script>let $ = require('../bootstrap/js/jquery-3.2.1.min.js');</script>
+    <script src="../bootstrap/js/popper.min.js"></script>
+    <script src="../bootstrap/js/bootstrap.js"></script>
 </body>
 </html>
