@@ -32,6 +32,23 @@ ORDER BY f.nome;
 -- ORDER BY f.salario;
 
 -- -------------------------------------------------------
+-- 1.2- Quais os clientes daquela agência, classificando-
+-- -os por tipo de conta;
+-- -------------------------------------------------------
+SELECT 
+	cli.nome AS nome_cliente, tipo_conta
+FROM
+    ((cliente cli
+    JOIN conta_cliente cc ON cli.cpf = cc.cpf_cliente)
+    JOIN agencia a ON a.numero = cc.num_agencia)
+        JOIN
+    conta con ON con.num_conta = cc.num_conta
+WHERE -- Pode-se utilizar pesquisa por nome ou numero da agência
+    a.nome = 'Haw7820'
+    -- a.numero = 7820
+order by tipo_conta, cli.nome;
+
+-- -------------------------------------------------------
 -- 1.3- Quais são as contas especiais com maior saldo
 -- devedor (mostrar todas as contas, ordenando do maior
 -- saldo devedor para o menor);
@@ -48,7 +65,7 @@ FROM
         -- a.nome = 'Ind2921') ca
         a.numero = 2921) ca
 WHERE
-    ca.saldo < 0 and ca.tipo_conta = 'Conta Especial' -- Exibir somente os saldos devedores
+    ca.saldo < 0 AND ca.tipo_conta = 'Conta Especial' -- Exibir somente os saldos devedores
 ORDER BY ca.saldo; -- Ordenar por ordem crescente
 
 -- -------------------------------------------------------
