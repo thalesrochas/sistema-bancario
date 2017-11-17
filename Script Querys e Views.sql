@@ -48,4 +48,4 @@ FROM
         a.numero = 7820) ca -- ca -> Conta-Agência
         JOIN
     conta_poupanca cp ON ca.num_conta = cp.num_conta
-ORDER BY ca.saldo;
+ORDER BY ca.saldo DESC;
