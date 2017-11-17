@@ -65,6 +65,7 @@ CREATE TABLE IF NOT EXISTS `conta` (
   `num_agencia` INT NOT NULL,
   `saldo` DECIMAL(11,2) NOT NULL DEFAULT 0.00,
   `senha` INT(6) NOT NULL,
+  `tipo_conta` ENUM('Conta Corrente', 'Conta Poupança', 'Conta Especial') NOT NULL,
   PRIMARY KEY (`num_conta`),
   INDEX `fk_Contas_Agencia1_idx` (`num_agencia` ASC))
 ENGINE = InnoDB;

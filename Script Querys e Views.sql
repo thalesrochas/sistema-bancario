@@ -32,6 +32,28 @@ ORDER BY f.nome;
 -- ORDER BY f.salario;
 
 -- -------------------------------------------------------
+-- 1.3- Quais são as contas especiais com maior saldo
+-- devedor (mostrar todas as contas, ordenando do maior
+-- saldo devedor para o menor);
+-- -------------------------------------------------------
+SELECT 
+    ca.num_conta, ca.saldo
+FROM
+    (SELECT 
+        *
+    FROM
+        agencia a
+    JOIN conta c ON c.num_agencia = a.numero
+    WHERE -- Pode-se utilizar pesquisa por nome ou numero da agência
+        -- a.nome = 'Ind2921') ca
+        a.numero = 2921) ca
+        JOIN
+    conta_especial ce ON ca.num_conta = ce.num_conta
+WHERE
+    saldo < 0 -- Exibir somente os saldos devedores
+ORDER BY ca.saldo; -- Ordenar por ordem crescente
+
+-- -------------------------------------------------------
 -- 1.4- Quais são as contas poupança com maior saldo
 -- positivo, classificando-as;
 -- -------------------------------------------------------
