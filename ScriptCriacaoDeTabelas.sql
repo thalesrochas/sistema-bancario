@@ -184,6 +184,30 @@ CREATE TABLE IF NOT EXISTS `conta_corrente` (
   PRIMARY KEY (`num_conta`))
 ENGINE = InnoDB;
 
+USE `Equipe374876` ;
+
+-- -----------------------------------------------------
+-- Placeholder table for view `contas_gerente`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `contas_gerente` (`mat_gerente` INT, `nome_cliente` INT, `tipo_conta` INT, `saldo` INT);
+
+-- -----------------------------------------------------
+-- View `contas_gerente`
+-- -----------------------------------------------------
+DROP VIEW IF EXISTS `contas_gerente` ;
+DROP TABLE IF EXISTS `contas_gerente`;
+USE `Equipe374876`;
+CREATE  OR REPLACE VIEW `contas_gerente` AS
+    SELECT 
+        a.mat_gerente,
+        cli.nome AS nome_cliente,
+        c.tipo_conta,
+        c.saldo
+    FROM
+        (((conta_cliente cc
+        JOIN agencia a ON cc.num_agencia = a.numero)
+        JOIN cliente cli ON cc.cpf_cliente = cli.cpf)
+        JOIN conta c ON cc.num_conta = c.num_conta);
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
