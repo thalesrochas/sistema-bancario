@@ -87,6 +87,24 @@ WHERE
     ca.tipo_conta = 'Conta Poupança'
 ORDER BY ca.saldo DESC;
 
+-- -------------------------------------------------------
+-- 1.5- Quais as contas correntes com maior número de
+-- transações na última semana (últimos 7 dias), no
+-- último mês (últimos 30 dias) e no último ano (últimos
+-- 365 dias);
+-- -------------------------------------------------------
+SELECT 
+    c.num_conta, COUNT(*)
+FROM
+    ((conta c
+    JOIN realiza r ON c.num_conta = r.num_conta)
+    JOIN transacao t ON t.num_transacao = r.num_transacao)
+WHERE
+    c.tipo_conta = 'Conta Corrente'
+        -- Ajustar para 7, 30 ou 365
+        AND (TO_DAYS(NOW()) - TO_DAYS(t.data_hora)) < 7
+GROUP BY c.num_conta;
+
 
 -- 2) Dado um cliente (seu CPF), deseja-se saber:
 

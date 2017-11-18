@@ -148,6 +148,11 @@ INSERT INTO `transacao` (`num_transacao`, `valor_transacao`, `data_hora`, `tipo`
 INSERT INTO `transacao` (`num_transacao`, `valor_transacao`, `data_hora`, `tipo`) VALUES (23, 4003.64, '2015-09-02 09:28:27', 'Transferência');
 INSERT INTO `transacao` (`num_transacao`, `valor_transacao`, `data_hora`, `tipo`) VALUES (24, -2163.08, '2017-10-25 01:27:48', 'Transferência');
 INSERT INTO `transacao` (`num_transacao`, `valor_transacao`, `data_hora`, `tipo`) VALUES (25, 2163.08, '2017-10-25 01:27:48', 'Transferência');
+INSERT INTO `transacao` (`num_transacao`, `valor_transacao`, `data_hora`, `tipo`) VALUES (26, 250.00, '2017-11-01 04:19:00', 'Depósito');
+INSERT INTO `transacao` (`num_transacao`, `valor_transacao`, `data_hora`, `tipo`) VALUES (27, 235.62, '2017-11-07 10:15:24', 'Estorno');
+INSERT INTO `transacao` (`num_transacao`, `valor_transacao`, `data_hora`, `tipo`) VALUES (28, -415.75, '2017-11-10 23:24:59', 'Saque');
+INSERT INTO `transacao` (`num_transacao`, `valor_transacao`, `data_hora`, `tipo`) VALUES (29, 368.24, '2017-11-12 05:02:12', 'Depósito');
+INSERT INTO `transacao` (`num_transacao`, `valor_transacao`, `data_hora`, `tipo`) VALUES (30, 953.25, '2017-11-15 21:51:42', 'Depósito');
 
 COMMIT;
 
@@ -182,6 +187,11 @@ INSERT INTO `realiza` (`num_transacao`, `num_conta`) VALUES (22, 363829);
 INSERT INTO `realiza` (`num_transacao`, `num_conta`) VALUES (23, 750483);
 INSERT INTO `realiza` (`num_transacao`, `num_conta`) VALUES (24, 885720);
 INSERT INTO `realiza` (`num_transacao`, `num_conta`) VALUES (25, 387029);
+INSERT INTO `realiza` (`num_transacao`, `num_conta`) VALUES (26, 164711);
+INSERT INTO `realiza` (`num_transacao`, `num_conta`) VALUES (27, 784581);
+INSERT INTO `realiza` (`num_transacao`, `num_conta`) VALUES (28, 463126);
+INSERT INTO `realiza` (`num_transacao`, `num_conta`) VALUES (29, 602510);
+INSERT INTO `realiza` (`num_transacao`, `num_conta`) VALUES (30, 602510);
 
 COMMIT;
 
