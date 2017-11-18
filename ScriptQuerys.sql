@@ -163,3 +163,26 @@ FROM
 WHERE -- Pesquisa por cidade
     cidade = 'Sobral'
 ORDER BY idade, nome; -- Ordena por idade e por nome.
+
+
+-- -------------------------------------------------------
+-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+-- 3.2- Quais os nomes, endereços, cargos, salários e 
+-- agências dos funcionários que trabalham naquela cidade,
+-- agrupando-os por agência, por cargo e por salário;
+-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+-- -------------------------------------------------------
+SELECT 
+	f.nome,
+    f.endereco,
+    f.cargo,
+    f.salario,
+    a.nome AS nome_agência,    -- Pode-se utilizar nome ou
+    a.numero AS numero_agência -- numero da agência
+FROM 
+	funcionario f 
+    JOIN agencia a ON f.lotacao = a.numero
+WHERE 
+	a.cidade = 'Sobral'
+ORDER BY 
+	a.nome, f.cargo, f.salario;
