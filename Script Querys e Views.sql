@@ -113,7 +113,7 @@ GROUP BY c.num_conta;
 -- agências, seus gerentes e seus saldos atuais;
 -- -------------------------------------------------------
 SELECT 
-    cli.nome AS cliente,
+	cli.nome AS cliente,
     cc.num_conta,
     c.tipo_conta,
     a.nome AS agencia,
@@ -128,6 +128,25 @@ FROM
     funcionario f ON f.matricula = a.mat_gerente
 WHERE -- Pesquisa por CPF do cliente
     cpf = '84484848484';
+
+
+-- —---------------------------------------------------—
+-- 2.2- Quais os nomes dos clientes e seus CPFs com 
+-- os quais aquele cliente possui contas conjuntas;
+-- —---------------------------------------------------—
+SELECT 
+    cli.nome AS cliente, cli.cpf AS cpf
+FROM
+    cliente cli
+	JOIN conta_cliente cc ON cli.cpf = cc.cpf_cliente
+WHERE
+    cpf <> '79488487552'
+	AND num_conta = SOME (SELECT 
+		num_conta
+	FROM
+		conta_cliente
+        WHERE
+            cpf_cliente = '79488487552');
 
 
 -- 3) Dada uma cidade, deseja-se saber:
