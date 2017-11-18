@@ -186,3 +186,19 @@ WHERE
 	a.cidade = 'Sobral'
 ORDER BY 
 	a.nome, f.cargo, f.salario;
+    
+    
+-- -------------------------------------------------------
+-- 3.3- Quais os nomes das agências e o salário montante 
+-- total dos funcionários que trabalham naquelas
+-- agências, ordenando-os por salário montante total;
+-- -------------------------------------------------------
+SELECT 
+	nome,
+    salario_montante
+FROM 
+	agencia 
+WHERE 
+	cidade = 'Sobral'
+ORDER BY 
+	salario_montante;
