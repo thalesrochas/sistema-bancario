@@ -136,6 +136,7 @@ CREATE TABLE IF NOT EXISTS `cliente` (
   `nome` VARCHAR(50) NOT NULL,
   `data_nasc` DATE NOT NULL,
   `cidade` VARCHAR(45) NOT NULL,
+  `endereco` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`cpf`),
   UNIQUE INDEX `RG_UNIQUE` (`rg` ASC))
 ENGINE = InnoDB;

@@ -129,7 +129,6 @@ FROM
 WHERE -- Pesquisa por CPF do cliente
     cpf = '84484848484';
 
-
 -- —---------------------------------------------------—
 -- 2.2- Quais os nomes dos clientes e seus CPFs com 
 -- os quais aquele cliente possui contas conjuntas;
@@ -155,8 +154,9 @@ WHERE
 -- 3.1- Quais os nomes e endereços dos clientes que moram
 -- naquela cidade, ordenando-os por idade;
 -- -------------------------------------------------------
-SELECT -- Cliente não possui campo endereço
+SELECT
     nome,
+    endereco,
     YEAR(FROM_DAYS(TO_DAYS(CURDATE()) - TO_DAYS(data_nasc))) AS idade
 FROM
     cliente
