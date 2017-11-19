@@ -192,6 +192,21 @@ USE `Equipe374876` ;
 CREATE TABLE IF NOT EXISTS `contas_gerente` (`mat_gerente` INT, `nome_cliente` INT, `tipo_conta` INT, `saldo` INT);
 
 -- -----------------------------------------------------
+-- Placeholder table for view `extrato_7dias`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `extrato_7dias` (`num_conta` INT, `num_transacao` INT, `data_hora` INT, `tipo` INT, `valor_transacao` INT);
+
+-- -----------------------------------------------------
+-- Placeholder table for view `extrato_30dias`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `extrato_30dias` (`num_conta` INT, `num_transacao` INT, `data_hora` INT, `tipo` INT, `valor_transacao` INT);
+
+-- -----------------------------------------------------
+-- Placeholder table for view `extrato_365dias`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `extrato_365dias` (`num_conta` INT, `num_transacao` INT, `data_hora` INT, `tipo` INT, `valor_transacao` INT);
+
+-- -----------------------------------------------------
 -- View `contas_gerente`
 -- -----------------------------------------------------
 DROP VIEW IF EXISTS `contas_gerente` ;
@@ -208,6 +223,69 @@ CREATE  OR REPLACE VIEW `contas_gerente` AS
         JOIN agencia a ON cc.num_agencia = a.numero)
         JOIN cliente cli ON cc.cpf_cliente = cli.cpf)
         JOIN conta c ON cc.num_conta = c.num_conta);
+
+-- -----------------------------------------------------
+-- View `extrato_7dias`
+-- -----------------------------------------------------
+DROP VIEW IF EXISTS `extrato_7dias` ;
+DROP TABLE IF EXISTS `extrato_7dias`;
+USE `Equipe374876`;
+CREATE  OR REPLACE VIEW `extrato_7dias` AS
+    SELECT 
+        c.num_conta,
+        t.num_transacao,
+        t.data_hora,
+        t.tipo,
+        t.valor_transacao
+    FROM
+        ((conta c
+        JOIN realiza r ON c.num_conta = r.num_conta)
+        JOIN transacao t ON t.num_transacao = r.num_transacao)
+    WHERE
+        (TO_DAYS(NOW()) - TO_DAYS(t.data_hora)) <= 7
+    ORDER BY c.num_conta, t.data_hora;
+
+-- -----------------------------------------------------
+-- View `extrato_30dias`
+-- -----------------------------------------------------
+DROP VIEW IF EXISTS `extrato_30dias` ;
+DROP TABLE IF EXISTS `extrato_30dias`;
+USE `Equipe374876`;
+CREATE  OR REPLACE VIEW `extrato_30dias` AS
+    SELECT 
+        c.num_conta,
+        t.num_transacao,
+        t.data_hora,
+        t.tipo,
+        t.valor_transacao
+    FROM
+        ((conta c
+        JOIN realiza r ON c.num_conta = r.num_conta)
+        JOIN transacao t ON t.num_transacao = r.num_transacao)
+    WHERE
+        (TO_DAYS(NOW()) - TO_DAYS(t.data_hora)) <= 30
+    ORDER BY c.num_conta, t.data_hora;
+
+-- -----------------------------------------------------
+-- View `extrato_365dias`
+-- -----------------------------------------------------
+DROP VIEW IF EXISTS `extrato_365dias` ;
+DROP TABLE IF EXISTS `extrato_365dias`;
+USE `Equipe374876`;
+CREATE  OR REPLACE VIEW `extrato_365dias` AS
+    SELECT 
+        c.num_conta,
+        t.num_transacao,
+        t.data_hora,
+        t.tipo,
+        t.valor_transacao
+    FROM
+        ((conta c
+        JOIN realiza r ON c.num_conta = r.num_conta)
+        JOIN transacao t ON t.num_transacao = r.num_transacao)
+    WHERE
+        (TO_DAYS(NOW()) - TO_DAYS(t.data_hora)) <= 365
+    ORDER BY c.num_conta, t.data_hora;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
