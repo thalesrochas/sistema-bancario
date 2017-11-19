@@ -111,7 +111,7 @@ GROUP BY c.num_conta;
 -- último mês (últimos 30 dias) e no último ano (últimos
 -- 365 dias);
 -- -------------------------------------------------------
-SELECT 
+SELECT -- todas as transações são convertidas para seu módulo com ABS()
     c.num_conta, ABS(SUM(t.valor_transacao)) AS valor_total
 FROM
     ((conta c
@@ -146,10 +146,10 @@ FROM
 WHERE -- Pesquisa por CPF do cliente
     cpf = '84484848484';
 
--- —---------------------------------------------------—
+-- -------------------------------------------------------
 -- 2.2- Quais os nomes dos clientes e seus CPFs com 
 -- os quais aquele cliente possui contas conjuntas;
--- —---------------------------------------------------—
+-- -------------------------------------------------------
 SELECT 
     cli.nome AS cliente, cli.cpf AS cpf
 FROM
@@ -164,6 +164,24 @@ WHERE -- Pesquisa por CPF do cliente
         WHERE -- Pesquisa por CPF do cliente
             cpf_cliente = '79488487552');
 
+-- -------------------------------------------------------
+-- 2.3- Quais as contas correntes deste cliente com maior
+-- número de transações na última semana (últimos 7 dias),
+-- no último mês (últimos 30 dias) e no último ano
+-- (últimos 365 dias);
+-- -------------------------------------------------------
+SELECT 
+    cc.num_conta, COUNT(t.num_transacao) AS num_transacoes
+FROM -- Left Outer Join para incluir contas que não possuem transações
+    (((conta_cliente cc
+    JOIN conta c ON cc.num_conta = c.num_conta)
+    LEFT OUTER JOIN realiza r ON c.num_conta = r.num_conta)
+    LEFT OUTER JOIN transacao t ON r.num_transacao = t.num_transacao)
+WHERE -- Pesquisa por CPF do cliente
+    cc.cpf_cliente = '76151230215'
+        AND c.tipo_conta = 'Conta Corrente'
+GROUP BY cc.num_conta
+ORDER BY num_transacoes DESC; -- Ordena do maior para o menor
 
 -- 3) Dada uma cidade, deseja-se saber:
 
