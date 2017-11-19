@@ -112,7 +112,7 @@ GROUP BY c.num_conta;
 -- 365 dias);
 -- -------------------------------------------------------
 SELECT 
-    c.num_conta, SUM(t.valor_transacao) AS valor_total
+    c.num_conta, ABS(SUM(t.valor_transacao)) AS valor_total
 FROM
     ((conta c
     JOIN realiza r ON c.num_conta = r.num_conta)
