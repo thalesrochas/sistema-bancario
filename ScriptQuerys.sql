@@ -138,13 +138,13 @@ SELECT
 FROM
     cliente cli
 	JOIN conta_cliente cc ON cli.cpf = cc.cpf_cliente
-WHERE
+WHERE -- Pesquisa por CPF do cliente
     cpf <> '79488487552'
 	AND num_conta = SOME (SELECT 
 		num_conta
 	FROM
 		conta_cliente
-        WHERE
+        WHERE -- Pesquisa por CPF do cliente
             cpf_cliente = '79488487552');
 
 
@@ -158,35 +158,34 @@ SELECT
     nome,
     endereco,
     YEAR(FROM_DAYS(TO_DAYS(CURDATE()) - TO_DAYS(data_nasc))) AS idade
+    -- Função CURDATE() retorna a data atual;
+    -- TO_DAYS() retorna a quantidade de dias em uma data;
+    -- FROM_DAYS() converte a quantidade de dias em uma data;
+    -- YEAR() converte uma data em anos.
 FROM
     cliente
 WHERE -- Pesquisa por cidade
     cidade = 'Sobral'
 ORDER BY idade, nome; -- Ordena por idade e por nome.
 
-
 -- -------------------------------------------------------
--- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 -- 3.2- Quais os nomes, endereços, cargos, salários e 
 -- agências dos funcionários que trabalham naquela cidade,
 -- agrupando-os por agência, por cargo e por salário;
--- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 -- -------------------------------------------------------
-SELECT 
-	f.nome,
+SELECT
+    a.nome AS nome_agência,
+	f.nome AS nome_funcionario,
     f.endereco,
     f.cargo,
-    f.salario,
-    a.nome AS nome_agência,    -- Pode-se utilizar nome ou
-    a.numero AS numero_agência -- numero da agência
+    f.salario
 FROM 
 	funcionario f 
     JOIN agencia a ON f.lotacao = a.numero
-WHERE 
+WHERE -- Pesquisa por cidade
 	a.cidade = 'Sobral'
-ORDER BY 
+ORDER BY -- Ordena por nome de agência, cargo de funcionário e salário
 	a.nome, f.cargo, f.salario;
-    
     
 -- -------------------------------------------------------
 -- 3.3- Quais os nomes das agências e o salário montante 
@@ -198,7 +197,7 @@ SELECT
     salario_montante
 FROM 
 	agencia 
-WHERE 
+WHERE -- Pesquisa por cidade
 	cidade = 'Sobral'
 ORDER BY 
 	salario_montante;
