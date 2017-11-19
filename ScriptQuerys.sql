@@ -105,6 +105,23 @@ WHERE
         AND (TO_DAYS(NOW()) - TO_DAYS(t.data_hora)) < 7
 GROUP BY c.num_conta;
 
+-- -------------------------------------------------------
+-- 1.6- Quais as contas com maior volume (valor total) de
+-- movimentações na última semana (últimos 7 dias), no
+-- último mês (últimos 30 dias) e no último ano (últimos
+-- 365 dias);
+-- -------------------------------------------------------
+SELECT 
+    c.num_conta, SUM(t.valor_transacao) AS valor_total
+FROM
+    ((conta c
+    JOIN realiza r ON c.num_conta = r.num_conta)
+    JOIN transacao t ON t.num_transacao = r.num_transacao)
+WHERE
+    (TO_DAYS(NOW()) - TO_DAYS(t.data_hora)) < 7
+GROUP BY c.num_conta -- Agrupa por número de conta
+ORDER BY valor_total DESC; -- Ordena do maior volume para o menor
+
 
 -- 2) Dado um cliente (seu CPF), deseja-se saber:
 
