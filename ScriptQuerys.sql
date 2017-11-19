@@ -180,6 +180,7 @@ FROM -- Left Outer Join para incluir contas que não possuem transações
 WHERE -- Pesquisa por CPF do cliente
     cc.cpf_cliente = '76151230215'
         AND c.tipo_conta = 'Conta Corrente'
+        AND (TO_DAYS(NOW()) - TO_DAYS(t.data_hora)) < 7
 GROUP BY cc.num_conta
 ORDER BY num_transacoes DESC; -- Ordena do maior para o menor
 
