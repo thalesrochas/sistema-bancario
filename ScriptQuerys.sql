@@ -102,7 +102,7 @@ FROM
 WHERE
     c.tipo_conta = 'Conta Corrente'
         -- Ajustar para 7, 30 ou 365
-        AND (TO_DAYS(NOW()) - TO_DAYS(t.data_hora)) < 7
+        AND (TO_DAYS(NOW()) - TO_DAYS(t.data_hora)) <= 7
 GROUP BY c.num_conta;
 
 -- -------------------------------------------------------
@@ -118,7 +118,7 @@ FROM
     JOIN realiza r ON c.num_conta = r.num_conta)
     JOIN transacao t ON t.num_transacao = r.num_transacao)
 WHERE
-    (TO_DAYS(NOW()) - TO_DAYS(t.data_hora)) < 7
+    (TO_DAYS(NOW()) - TO_DAYS(t.data_hora)) <= 7
 GROUP BY c.num_conta -- Agrupa por número de conta
 ORDER BY valor_total DESC; -- Ordena do maior volume para o menor
 
@@ -180,9 +180,29 @@ FROM -- Left Outer Join para incluir contas que não possuem transações
 WHERE -- Pesquisa por CPF do cliente
     cc.cpf_cliente = '76151230215'
         AND c.tipo_conta = 'Conta Corrente'
-        AND (TO_DAYS(NOW()) - TO_DAYS(t.data_hora)) < 7
+        AND (TO_DAYS(NOW()) - TO_DAYS(t.data_hora)) <= 7
 GROUP BY cc.num_conta
 ORDER BY num_transacoes DESC; -- Ordena do maior para o menor
+
+-- -------------------------------------------------------
+-- 2.4- Quais as contas deste cliente com maior volume
+-- (valor total) de movimentações na última semana
+-- (últimos 7 dias), no último mês (últimos 30 dias) e no
+-- último ano (últimos 365 dias);
+-- -------------------------------------------------------
+SELECT 
+    cc.num_conta, ABS(SUM(t.valor_transacao)) AS valor_total
+FROM
+    (((conta_cliente cc
+    JOIN conta c ON cc.num_conta = c.num_conta)
+    JOIN realiza r ON c.num_conta = r.num_conta)
+    JOIN transacao t ON r.num_transacao = t.num_transacao)
+WHERE -- Pesquisa por CPF do cliente
+    cc.cpf_cliente = '76151230215'
+        AND (TO_DAYS(NOW()) - TO_DAYS(t.data_hora)) <= 7
+GROUP BY cc.num_conta
+ORDER BY valor_total DESC; -- Ordena do maior volume para o menor
+
 
 -- 3) Dada uma cidade, deseja-se saber:
 
