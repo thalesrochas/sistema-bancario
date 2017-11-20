@@ -106,7 +106,7 @@ BEGIN
 		WHERE
 			num_conta = NEW.num_conta;
 	END IF;
-END$$
+END;$$
 
 
 USE `Equipe374876`$$
@@ -121,7 +121,7 @@ BEGIN
     IF (SELECT COUNT(*) FROM conta_cliente WHERE num_agencia = NEW.num_agencia AND cpf_cliente = NEW.cpf_cliente) = 1 THEN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Este cliente já possui uma conta nesta agência!';
 	END IF;
-END$$
+END;$$
 
 
 USE `Equipe374876`$$
@@ -134,5 +134,13 @@ BEGIN
     END IF;
 END;$$
 
+
+USE `Equipe374876`$$
+DROP TRIGGER IF EXISTS `transferencia_aft_ins` $$
+USE `Equipe374876`$$
+CREATE DEFINER = CURRENT_USER TRIGGER `Equipe374876`.`transferencia_aft_ins` AFTER INSERT ON `transacao` FOR EACH ROW
+BEGIN
+	INSERT INTO `transacao` (`valor_transacao`, `data_hora`, `tipo`) VALUES (-NEW.valor_transacao, now(), "Transferência");
+END;$$
 
 DELIMITER ;
