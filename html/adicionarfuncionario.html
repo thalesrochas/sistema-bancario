@@ -1,63 +1,67 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
-	<title>NullBank - Cadastrar cliente</title>
-	<meta charset="UTF-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
     <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../style.css">
+
+    <title>NullBank - Cadastrar Funcionário</title>
 </head>
-
 <body>
-<form>
-  <div class="form-row">
-    <div class="form-group col-md-6">
-      <label for="inputEmail4">Nome</label>
-      <input type="email" class="form-control" id="inputEmail4" placeholder="Nome completo">
-    </div>
-    <div class="form-group col-md-6">
-      <label for="inputPassword4">Matrícula</label>
-      <input type="number" class="form-control" id="inputPassword4">
-    </div>
-  </div>
-  <div class="form-group">
-      <label for="exampleFormControlSelect1">Sexo</label>
-      <select class="form-control" id="exampleFormControlSelect1">
-        <option></option>
-        <option>Feminino</option>
-        <option>Masculino</option>
-      </select>
-  </div>
-    <div class="form-group">
-      <label for="exampleFormControlSelect1">Cargo</label>
-      <select class="form-control" id="exampleFormControlSelect1">
-        <option></option>
-        <option>Gerente</option>
-        <option>Operador de caixa</option>
-        <option>Atendente</option>
-      </select>
-  </div>
-  <div class="form-group">
-    <label for="inputAddress">Endereço</label>
-    <input type="text" class="form-control" id="inputAddress" >
-  </div>
-  <div class="form-row">
-    <div class="form-group col-md-6">
-      <label for="inputCity">Cidade</label>
-      <input type="text" class="form-control" id="inputCity">
-    </div>
-    <div class="form-group col-md-6">
-      <label for="inputState" >Data de nascimento</label>
-      <input type="date" class="form-control">
-    </div>
-    <div class="form-group">
-      <label for="inputAddress">Salário</label>
-      <input type="text" class="form-control" id="inputAddress" >
-  </div>
-  </div>
-  <button type="submit" class="btn btn-success salvar">Salvar</button>
-</form>
-</body>
+    <form>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputEmail4">Nome</label>
+                <input type="email" class="form-control" id="inputEmail4" placeholder="Nome completo">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="inputPassword4">Matrícula</label>
+                <input type="number" class="form-control" id="inputPassword4">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="exampleFormControlSelect1">Sexo</label>
+            <select class="form-control" id="exampleFormControlSelect1">
+                <option></option>
+                <option>Feminino</option>
+                <option>Masculino</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="exampleFormControlSelect1">Cargo</label>
+            <select class="form-control" id="exampleFormControlSelect1">
+                <option></option>
+                <option>Gerente</option>
+                <option>Operador de caixa</option>
+                <option>Atendente</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="inputAddress">Endereço</label>
+            <input type="text" class="form-control" id="inputAddress" >
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputCity">Cidade</label>
+                <input type="text" class="form-control" id="inputCity">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="inputState" >Data de nascimento</label>
+                <input type="date" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="inputAddress">Salário</label>
+                <input type="text" class="form-control" id="inputAddress" >
+            </div>
+        </div>
+        <button type="submit" class="btn btn-success salvar">Salvar</button>
+    </form>
 
+    <!-- Scripts para Bootstrap -->
+    <script>let $ = require('../bootstrap/js/jquery-3.2.1.min.js');</script>
+    <script src="../bootstrap/js/popper.min.js"></script>
+    <script src="../bootstrap/js/bootstrap.js"></script>
+</body>
 </html>
