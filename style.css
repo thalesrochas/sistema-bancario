@@ -33,3 +33,15 @@
     color: midnightblue;
     font-size: 50pt;
 }
+
+.arruma {
+    width: 20em;
+    margin: auto;
+    margin-top: 20em;
+    text-align: center;
+}
+
+.salvar{
+    position: absolute;
+    right: 60px;
+}
