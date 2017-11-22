@@ -11,19 +11,51 @@
 </head>
 <body>
     <div align="center">
-        <form>
-            <label for="Host">Host:</label>
-            <input type="text" id="Host">
-            <br>
-            <label for="User">Usuário:</label>
-            <input type="text" id="User">
-            <br>
-            <label for="Senha">Senha:</label>
-            <input type="password" id="Senha">
-            <br> <br>
-            <button type="submit">Logar</button>
+        <form id="conectionBD">
+            <div>
+                <label for="Host">Host:</label>
+                <br>
+                <input type="text" id="host" value="localhost">
+            </div>
+            <div>
+                <label for="User">Usuário:</label>
+                <br>
+                <input type="text" id="user" value="root">
+            </div>
+            <div>    
+                <label for="Senha">Senha:</label>
+                <br>
+                <input type="password" id="senha" autofocus>
+            </div>
+            <div>
+                <br>
+                <button type="submit">Conectar</button>
+            </div>
         </form>
     </div>
+
+    <script>
+        const ipcRenderer = require('electron').ipcRenderer;
+
+        let form = document.getElementById('conectionBD');
+        let host = document.getElementById('host');
+        let user = document.getElementById('user');
+        let senha = document.getElementById('senha');
+
+        form.addEventListener('submit', function (e) {
+            // Cria objeto para a conexão
+            let conexao = {
+                host: host.value,
+                user: user.value,
+                password: senha.value,
+                database: 'Equipe374876'
+            }
+            
+            // Envia o objeto de conexão para main.js como evento 'conectarBD'
+            ipcRenderer.send('conectarBD', conexao);
+            e.preventDefault;
+        });
+    </script>
 
     <!-- Scripts para Bootstrap -->
     <script>let $ = require('../bootstrap/js/jquery-3.2.1.min.js');</script>
