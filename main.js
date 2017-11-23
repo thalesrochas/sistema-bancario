@@ -92,10 +92,21 @@ app.on('ready', function () {
                 protocol: 'file:',
                 slashes: true
             }));
+
+            connection.query(`SELECT numero, nome, cidade FROM agencia;`,
+                function (error, results, fields) {
+                    console.log(results);
+                    console.log('Enviando dados...');
+                    mainWindow.webContents.on('did-finish-load', () => {
+                        mainWindow.webContents.send('dataAgencia', results);
+                    });
+                    console.log('Dados enviados!');
+                }
+            );
         }
         else { // Executa uma query para buscar os dados de matricula e senha no banco
-            connection.query(`SELECT matricula, senha, cargo
-                FROM funcionario;`, function (error, results, fields) {
+            connection.query(`SELECT matricula, senha, cargo FROM funcionario;`,
+                function (error, results, fields) {
                     // Se houver alguma tupla correspondente no banco
                     if (results.some(element => element.matricula == loginData.matricula &&
                             element.senha == loginData.senha)) {
@@ -114,7 +125,8 @@ app.on('ready', function () {
                             detail: 'Matrícula ou senha inválida!'
                         });
                     }
-            });
+                }
+            );
         }
     });
 

@@ -6,24 +6,24 @@
     <!-- Bootstrap -->
     <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../style.css">
-
+    
     <title>NullBank</title>
 </head>
-<body>
+<body class="padding16">
     <div>
         <ul class="nav nav-tabs">
-            <h1 style="font-family:'roboto thin'" ; align="right">NullBank</h1>
+            <h1 style="font-family:'roboto thin'" align="right">NullBank</h1>
             <li class="nav-item">
-                <a class="nav-link active">Agência</a>
+                <a class="nav-link active" href="#">Agência</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" onclick="clickElement('funcionarioDBA')">Funcionários</a>
+                <a class="nav-link" href="#" onclick="clickElement('funcionarioDBA')">Funcionários</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" onclick="clickElement('clienteDBA')">Clientes</a>
+                <a class="nav-link" href="#" onclick="clickElement('clienteDBA')">Clientes</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" onclick="clickElement('contaDBA')">Contas</a>
+                <a class="nav-link" href="#" onclick="clickElement('contaDBA')">Contas</a>
             </li>
         </ul>
     </div>
@@ -36,25 +36,57 @@
                     <button class="btn btn-info" type="button">Pesquisar</button>
                 </span>
             </div>
-        </div class="container">
+            <div class="scrow">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Numero</th>
+                            <th scope="col">Nome</th>
+                            <th scope="col">Cidade</th>
+                        </tr>
+                    </thead>
+                    <tbody id="corpoTabela"></tbody>
+                </table>
+            </div>
+        </div>
         
         <div class="col">
             <button class="btn btn-success"><img src="../img/sync.png"> Atualizar</button>
             <button class="btn btn-danger"><img src="../img/delete.png"> Deletar</button>
         </div>
     </div>
-
+    
     <script>
         const ipcRenderer = require('electron').ipcRenderer;
-
+        
         function clickElement (element) {
             console.log(element);
             // Envia o evento 'trocarTelaDBA' para main.js
             ipcRenderer.send('trocarTelaDBA', element);
             console.log('Dados de troca de tela enviados!');
         }
-    </script>
+        
+        ipcRenderer.on('dataAgencia', function (event, dataAgencia) {
+            let tbody = document.getElementById('corpoTabela');
 
+            dataAgencia.forEach(element => {
+                let tr = document.createElement('tr');
+                let th = document.createElement('th');
+                let tdNome = document.createElement('td');
+                let tdCidade = document.createElement('td');
+
+                th.textContent = element.numero;
+                tdNome.textContent = element.nome;
+                tdCidade.textContent = element.cidade;
+
+                tr.appendChild(th);
+                tr.appendChild(tdNome);
+                tr.appendChild(tdCidade);
+                tbody.appendChild(tr);
+            });
+        });
+    </script>
+    
     <!-- Scripts para Bootstrap -->
     <script>let $ = require('../bootstrap/js/jquery-3.2.1.min.js');</script>
     <script src="../bootstrap/js/popper.min.js"></script>

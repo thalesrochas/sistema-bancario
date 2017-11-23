@@ -45,3 +45,11 @@
     position: absolute;
     right: 60px;
 }
+
+.scroll {
+    overflow: scroll;
+}
+
+.padding16 {
+    padding: 16px
+}
