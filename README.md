@@ -23,6 +23,8 @@ Ao baixar, executar os seguintes comandos na pasta do repositório:
 
 `npm install mysql`
 
+`npm install object-compare`
+
 Para executar:
 
 `npm start`

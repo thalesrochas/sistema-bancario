@@ -44,16 +44,18 @@
 
         form.addEventListener('submit', function (e) {
             // Cria objeto para a conexão
-            let conexao = {
+            let conexaoData = {
                 host: host.value,
                 user: user.value,
                 password: senha.value,
                 database: 'Equipe374876'
             }
-            
+            console.log(conexaoData);
+
             // Envia o objeto de conexão para main.js como evento 'conectarBD'
-            ipcRenderer.send('conectarBD', conexao);
+            ipcRenderer.send('conectarBD', conexaoData);
             e.preventDefault;
+            console.log('Dados de conexão ao banco enviados!');
         });
     </script>
 

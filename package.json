@@ -15,6 +15,7 @@
   "homepage": "https://bitbucket.org/thalesrochas/trabalhobd-2017_2-equipe374876#readme",
   "dependencies": {
     "electron": "^1.7.9",
-    "mysql": "^2.15.0"
+    "mysql": "^2.15.0",
+    "object-compare": "^1.0.1"
   }
 }

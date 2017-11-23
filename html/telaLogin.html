@@ -10,13 +10,12 @@
     <title>NullBank - Login</title>
 </head>
 <body background="../img/login.jpg">
-    <h1></h1>
-    <div  class="arruma">
-        <form >
+    <div class="arruma">
+        <form id="login">
             <div>
                 <label for="matricula">Matrícula</label>
                 <br>
-                <input type="text" id="matricula">
+                <input type="text" id="matricula" autofocus>
             </div>
             <div>
                 <label for="senha">Senha</label>
@@ -25,10 +24,32 @@
             </div>
             <div>
                 <br>
-                <button class="btn btn-primary">Logar</button>
+                <button type="submit" class="btn btn-primary">Logar</button>
             </div>
         </form>
     </div>
+
+    <script>
+        const ipcRenderer = require('electron').ipcRenderer;
+
+        let form = document.getElementById('login');
+        let matricula = document.getElementById('matricula');
+        let senha = document.getElementById('senha');
+
+        form.addEventListener('submit', function (e) {
+            // Cria um objeto com as credenciais inseridas nos campos
+            let loginData = {
+                matricula: matricula.value,
+                senha: senha.value
+            }
+            console.log(loginData);
+
+            // Envia os dados de login para main.js
+            ipcRenderer.send('userLogin', loginData);
+            e.preventDefault();
+            console.log('Dados de login enviados!');
+        });
+    </script>
 
     <!-- Scripts para Bootstrap -->
     <script>let $ = require('../bootstrap/js/jquery-3.2.1.min.js');</script>
