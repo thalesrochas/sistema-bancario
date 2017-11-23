@@ -118,6 +118,18 @@ app.on('ready', function () {
         }
     });
 
+    // Evento executa quando usuário navega entre as páginas do DBA
+    ipcMain.on('trocarTelaDBA', function (event, arg) {
+        console.log('Trocar Tela\nDados coletados:');
+        console.log(arg);
+
+        mainWindow.loadURL(url.format({
+            pathname: 'html/' + arg + '.html',
+            protocol: 'file:',
+            slashes: true
+        }));
+    });
+
     // Limpa a variável quando a tela é fechada
     mainWindow.on('closed', function () {
         mainWindow = null;

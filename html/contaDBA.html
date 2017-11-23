@@ -6,7 +6,7 @@
     <!-- Bootstrap -->
     <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../style.css">
-
+    
     <title>NullBank - Contas</title>
 </head>
 <body>
@@ -14,20 +14,20 @@
         <ul class="nav nav-tabs">
             <h1 style="font-family:'roboto thin'">NullBank</h1>
             <li class="nav-item">
-                <a class="nav-link" href="#">Agência</a>
+                <a class="nav-link" onclick="clickElement('agenciaDBA')">Agência</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Funcionários</a>
+                <a class="nav-link" onclick="clickElement('funcionarioDBA')">Funcionários</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Clientes</a>
+                <a class="nav-link" onclick="clickElement('clienteDBA')">Clientes</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" href="#">Contas</a>
+                <a class="nav-link active">Contas</a>
             </li>
         </ul>
     </div>
-
+    
     <div class="row justfy-content-center">
         <div class="container">
             <div class="input-group col">
@@ -44,7 +44,18 @@
             <button class="btn btn-danger" ><img src="../img/delete.png"> Deletar</button>
         </div>
     </div>
-
+    
+    <script>
+        const ipcRenderer = require('electron').ipcRenderer;
+        
+        function clickElement (element) {
+            console.log(element);
+            // Envia o evento 'trocarTelaDBA' para main.js
+            ipcRenderer.send('trocarTelaDBA', element);
+            console.log('Dados de troca de tela enviados!');
+        }
+    </script>
+    
     <!-- Scripts para Bootstrap -->
     <script>let $ = require('../bootstrap/js/jquery-3.2.1.min.js');</script>
     <script src="../bootstrap/js/popper.min.js"></script>
