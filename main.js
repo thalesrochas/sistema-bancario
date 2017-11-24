@@ -198,3 +198,24 @@ ipcMain.on('requestFields', function (event, arg) {
         console.log('Campos da tabela ' + arg.tabela + ' enviados.');
     });
 });
+
+ipcMain.on('abrirTela',function(event,arg){
+    // Criação de nova tela com algumas configurações
+    let newWindow = new BrowserWindow({
+        resizable: false,
+        maximizable: false,
+        autoHideMenuBar: true
+    });
+    
+    // Inicia a aplicação com a tela de conexão ao banco de dados
+    newWindow.loadURL(url.format({
+        pathname: 'html/' + arg + '.html',
+        protocol: 'file:',
+        slashes: true
+    }));
+
+    // Limpa a variável quando a tela é fechada
+    newWindow.on('closed', function () {
+        mainWindow = null;
+    });
+});

@@ -48,7 +48,10 @@
                     <tbody id="corpoTabela"></tbody>
                 </table>
             </div>
-            <button class="btn btn-primary" ><img src="../img/add.png">Adicionar</button>
+            <button class="btn btn-primary" onclick="adicionarCliente()">
+                <img src="../img/add.png">
+                Adicionar
+            </button>
         </div>
         
         <div class="col">
@@ -100,6 +103,11 @@
             ipcRenderer.send('trocarTelaDBA', element);
             console.log('Dados de troca de tela enviados!');
         }
+
+        function adicionarCliente(){
+            ipcRenderer.send('abrirTela','adicionarCliente');
+        }
+
     </script>
 
     <!-- Scripts para Bootstrap -->
