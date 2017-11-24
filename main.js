@@ -213,9 +213,4 @@ ipcMain.on('abrirTela',function(event,arg){
         protocol: 'file:',
         slashes: true
     }));
-
-    // Limpa a variável quando a tela é fechada
-    newWindow.on('closed', function () {
-        mainWindow = null;
-    });
 });
