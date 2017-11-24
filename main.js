@@ -21,22 +21,22 @@ app.on('ready', function () {
         maximizable: false,
         autoHideMenuBar: true
     });
-
+    
     // Inicia a aplicação com a tela de conexão ao banco de dados
     mainWindow.loadURL(url.format({
         pathname: 'html/conectarBD.html',
         protocol: 'file:',
         slashes: true
     }));
-
+    
     // Evento executa quando o usuário tenta iniciar conexão com o Banco de Dados
     ipcMain.on('conectarBD', function (event, conexaoData) {
         console.log('Dados de conexão coletados:');
         console.log(conexaoData);
-
+        
         // Iniciando conexão com o Banco de Dados
         connection = mysql.createConnection(conexaoData);
-
+        
         // Verifica se a conexão foi bem sucedida
         connection.connect(function (err) {
             if (err) {
@@ -60,7 +60,7 @@ app.on('ready', function () {
             }
         });
     });
-
+    
     // Evento executa quando o botão 'Acessar!' é clicado na mainWindow.html
     ipcMain.on('acessar', function (event, arg) {
         console.log(arg);
@@ -70,12 +70,12 @@ app.on('ready', function () {
             slashes: true
         }));
     });
-
+    
     // Evento executa quando usuário solicita login em telaLogin.html
     ipcMain.on('userLogin', function (event, loginData) {
         console.log('Dados de login coletados:');
         console.log(loginData);
-
+        
         // Testa se os dados correspondem a um DBA
         if (objectCompare(loginData, DBA)) {
             console.log('Login como DBA...');
@@ -92,54 +92,95 @@ app.on('ready', function () {
                 protocol: 'file:',
                 slashes: true
             }));
-
-            connection.query(`SELECT numero, nome, cidade FROM agencia;`,
-                function (error, results, fields) {
-                    console.log(results);
-                    console.log('Enviando dados...');
-                    mainWindow.webContents.on('did-finish-load', () => {
-                        mainWindow.webContents.send('dataAgencia', results);
-                    });
-                    console.log('Dados enviados!');
-                }
-            );
         }
         else { // Executa uma query para buscar os dados de matricula e senha no banco
-            connection.query(`SELECT matricula, senha, cargo FROM funcionario;`,
-                function (error, results, fields) {
-                    // Se houver alguma tupla correspondente no banco
-                    if (results.some(element => element.matricula == loginData.matricula &&
-                            element.senha == loginData.senha)) {
-                        dialog.showMessageBox({
-                            type: 'none',
-                            message: 'Abrir nova tela',
-                            detail: 'Abrir uma nova tela de acordo com o cargo do funcionário.'
-                        });
-                    }
-                    else {
-                        // Exibe mensagem de erro de login, caso todos os testes falhem
-                        dialog.showMessageBox({
-                            type: 'warning',
-                            title: 'Erro de Login',
-                            message: 'Erro de Login',
-                            detail: 'Matrícula ou senha inválida!'
-                        });
-                    }
+            connection.query('SELECT matricula, senha, cargo FROM funcionario;',
+            function (error, results, fields) {
+                // Se houver alguma tupla correspondente no banco
+                if (results.some(element => element.matricula == loginData.matricula &&
+                element.senha == loginData.senha)) {
+                    dialog.showMessageBox({
+                        type: 'none',
+                        message: 'Abrir nova tela',
+                        detail: 'Abrir uma nova tela de acordo com o cargo do funcionário.'
+                    });
                 }
-            );
+                else {
+                    // Exibe mensagem de erro de login, caso todos os testes falhem
+                    dialog.showMessageBox({
+                        type: 'warning',
+                        title: 'Erro de Login',
+                        message: 'Erro de Login',
+                        detail: 'Matrícula ou senha inválida!'
+                    });
+                }
+            });
         }
     });
-
+    
     // Evento executa quando usuário navega entre as páginas do DBA
     ipcMain.on('trocarTelaDBA', function (event, arg) {
         console.log('Trocar Tela\nDados coletados:');
         console.log(arg);
-
+        
         mainWindow.loadURL(url.format({
             pathname: 'html/' + arg + '.html',
             protocol: 'file:',
             slashes: true
         }));
+    });
+    
+    ipcMain.on('requestData', function (event, arg) {
+        switch (arg) {
+        case 'agencia':
+            connection.query('SELECT numero, nome, cidade FROM agencia;',
+            function (error, results, fields) {
+                console.log(results);
+                console.log('Enviando dados de Agência...');
+                mainWindow.webContents.on('did-finish-load', () => {
+                    mainWindow.webContents.send('dataAgencia', results);
+                });
+                console.log('Dados enviados!');
+            });
+            break;
+        
+        case 'funcionario':
+            connection.query('SELECT matricula, nome, cargo FROM funcionario;',
+            function (error, results, fields) {
+                console.log(results);
+                console.log('Enviando dados de Funcionário...');
+                mainWindow.webContents.on('did-finish-load', () => {
+                    mainWindow.webContents.send('dataFuncionario', results);
+                });
+                console.log('Dados enviados!');
+            });
+            break;
+
+        case 'cliente':
+            connection.query('SELECT cpf, nome, cidade FROM cliente;',
+            function (error, results, fields) {
+                console.log(results);
+                console.log('Enviando dados de Cliente...');
+                mainWindow.webContents.on('did-finish-load', () => {
+                    mainWindow.webContents.send('dataCliente', results);
+                });
+                console.log('Dados enviados!');
+            });
+            break;
+
+        case 'conta':
+            connection.query(`SELECT num_conta as numero,
+            num_agencia as agencia, tipo_conta as tipo FROM conta;`,
+            function (error, results, fields) {
+                console.log(results);
+                console.log('Enviando dados de Conta...');
+                mainWindow.webContents.on('did-finish-load', () => {
+                    mainWindow.webContents.send('dataConta', results);
+                });
+                console.log('Dados enviados!');
+            });
+            break;
+        }
     });
 
     // Limpa a variável quando a tela é fechada

@@ -7,9 +7,9 @@
     <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../style.css">
     
-    <title>NullBank - Clientes</title>
+    <title>NullBank DBA - Clientes</title>
 </head>
-<body>
+<body class="padding16">
     <div>
         <ul class="nav nav-tabs">
             <h1 style="font-family:'roboto thin'">NullBank</h1>
@@ -36,8 +36,20 @@
                     <button class="btn btn-info" type="button">Pesquisar</button>
                 </span>
             </div>
+            <div class="scrow">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">CPF</th>
+                            <th scope="col">Nome</th>
+                            <th scope="col">Cidade</th>
+                        </tr>
+                    </thead>
+                    <tbody id="corpoTabela"></tbody>
+                </table>
+            </div>
             <button class="btn btn-primary" ><img src="../img/add.png">Adicionar</button>
-        </div class="container">
+        </div>
         
         <div class="col">
             <button class="btn btn-success"><img src="../img/sync.png"> Atualizar</button>
@@ -45,9 +57,43 @@
         </div>
     </div>
     
+    <!-- Script de requisições de dados -->
     <script>
         const ipcRenderer = require('electron').ipcRenderer;
         
+        // Quando a página carrega, os dados são requisitados
+        ipcRenderer.send('requestData', 'cliente');
+
+        // Evento ocorre quando os dados são enviados por main.js
+        ipcRenderer.on('dataCliente', function (event, dataCliente) {
+            let tbody = document.getElementById('corpoTabela');
+
+            // Remove todos os elementos do corpo da tabela antes de inserir os novos
+            while (tbody.firstChild) {
+                tbody.removeChild(tbody.firstChild);
+            }
+
+            // Inserir os dados do banco na tabela
+            dataCliente.forEach(element => {
+                let tr = document.createElement('tr');
+                let th = document.createElement('th');
+                let tdNome = document.createElement('td');
+                let tdCidade = document.createElement('td');
+
+                th.textContent = element.cpf;
+                tdNome.textContent = element.nome;
+                tdCidade.textContent = element.cidade;
+
+                tr.appendChild(th);
+                tr.appendChild(tdNome);
+                tr.appendChild(tdCidade);
+                tbody.appendChild(tr);
+            });
+        });
+    </script>
+    
+    <!-- Script de funções da página -->
+    <script>
         function clickElement (element) {
             console.log(element);
             // Envia o evento 'trocarTelaDBA' para main.js
@@ -55,7 +101,7 @@
             console.log('Dados de troca de tela enviados!');
         }
     </script>
-    
+
     <!-- Scripts para Bootstrap -->
     <script>let $ = require('../bootstrap/js/jquery-3.2.1.min.js');</script>
     <script src="../bootstrap/js/popper.min.js"></script>

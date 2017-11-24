@@ -7,9 +7,9 @@
     <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../style.css">
     
-    <title>NullBank - Contas</title>
+    <title>NullBank DBA - Contas</title>
 </head>
-<body>
+<body class="padding16">
     <div>
         <ul class="nav nav-tabs">
             <h1 style="font-family:'roboto thin'">NullBank</h1>
@@ -36,6 +36,18 @@
                     <button class="btn btn-info" type="button">Pesquisar</button>
                 </span>
             </div>
+            <div class="scrow">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Número</th>
+                            <th scope="col">Agência</th>
+                            <th scope="col">Tipo</th>
+                        </tr>
+                    </thead>
+                    <tbody id="corpoTabela"></tbody>
+                </table>
+            </div>
             <button class="btn btn-primary" ><img src="../img/add.png">Adicionar</button>
         </div class="container">
         
@@ -45,9 +57,43 @@
         </div>
     </div>
     
+    <!-- Script de requisições de dados -->
     <script>
         const ipcRenderer = require('electron').ipcRenderer;
         
+        // Quando a página carrega, os dados são requisitados
+        ipcRenderer.send('requestData', 'conta');
+
+        // Evento ocorre quando os dados são enviados por main.js
+        ipcRenderer.on('dataConta', function (event, dataConta) {
+            let tbody = document.getElementById('corpoTabela');
+
+            // Remove todos os elementos do corpo da tabela antes de inserir os novos
+            while (tbody.firstChild) {
+                tbody.removeChild(tbody.firstChild);
+            }
+
+            // Inserir os dados do banco na tabela
+            dataConta.forEach(element => {
+                let tr = document.createElement('tr');
+                let th = document.createElement('th');
+                let tdAgencia = document.createElement('td');
+                let tdTipo = document.createElement('td');
+
+                th.textContent = element.numero;
+                tdAgencia.textContent = element.agencia;
+                tdTipo.textContent = element.tipo;
+
+                tr.appendChild(th);
+                tr.appendChild(tdAgencia);
+                tr.appendChild(tdTipo);
+                tbody.appendChild(tr);
+            });
+        });
+    </script>
+
+    <!-- Script de funções da página -->
+    <script>
         function clickElement (element) {
             console.log(element);
             // Envia o evento 'trocarTelaDBA' para main.js

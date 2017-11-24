@@ -7,7 +7,7 @@
     <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../style.css">
     
-    <title>NullBank</title>
+    <title>NullBank DBA - Agências</title>
 </head>
 <body class="padding16">
     <div>
@@ -40,7 +40,7 @@
                 <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th scope="col">Numero</th>
+                            <th scope="col">Número</th>
                             <th scope="col">Nome</th>
                             <th scope="col">Cidade</th>
                         </tr>
@@ -55,20 +55,24 @@
             <button class="btn btn-danger"><img src="../img/delete.png"> Deletar</button>
         </div>
     </div>
-    
+
+    <!-- Script de requisições de dados -->
     <script>
         const ipcRenderer = require('electron').ipcRenderer;
+
+        // Quando a página carrega, os dados são requisitados
+        ipcRenderer.send('requestData', 'agencia');
         
-        function clickElement (element) {
-            console.log(element);
-            // Envia o evento 'trocarTelaDBA' para main.js
-            ipcRenderer.send('trocarTelaDBA', element);
-            console.log('Dados de troca de tela enviados!');
-        }
-        
+        // Evento ocorre quando os dados são enviados por main.js
         ipcRenderer.on('dataAgencia', function (event, dataAgencia) {
             let tbody = document.getElementById('corpoTabela');
 
+            // Remove todos os elementos do corpo da tabela antes de inserir os novos
+            while (tbody.firstChild) {
+                tbody.removeChild(tbody.firstChild);
+            }
+
+            // Inserir os dados do banco na tabela
             dataAgencia.forEach(element => {
                 let tr = document.createElement('tr');
                 let th = document.createElement('th');
@@ -85,6 +89,16 @@
                 tbody.appendChild(tr);
             });
         });
+    </script>
+
+    <!-- Script de funções da página -->
+    <script>
+        function clickElement (element) {
+            console.log(element);
+            // Envia o evento 'trocarTelaDBA' para main.js
+            ipcRenderer.send('trocarTelaDBA', element);
+            console.log('Dados de troca de tela enviados!');
+        }
     </script>
     
     <!-- Scripts para Bootstrap -->
