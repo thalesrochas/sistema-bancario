@@ -51,5 +51,34 @@
 }
 
 .padding16 {
-    padding: 16px
+    padding-top: 16px;
+    padding-right: 16px;
+    padding-left: 16px;
+}
+
+.table-padding {
+    padding-top: 16px;
+    margin-right: 16px;
+    padding-left: 16px;
+}
+
+.table-padding-corpo {
+    margin-right: 16px;
+    padding-left: 16px;
+}
+
+.aui-group > .aui-item {
+    display: table-cell;
+    vertical-align: top;
+}
+
+.barra-vertical {
+    border-left: 1px solid #ccc;
+    padding: 16px;
+}
+
+.nullbank {
+    font-family:'roboto thin';
+    text-align: center;
+    height: 
 }
