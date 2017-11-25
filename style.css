@@ -99,3 +99,14 @@
 .background-div-form {
     background-color: rgba(255, 255, 255, 0.5)
 }
+
+.nullbank2{
+    font-family:'roboto thin';
+    text-align: center;
+    color: #0f5ea0;
+}
+
+.barra-horizontal {
+    border-top: 3px solid #ddd;
+    padding: 16px;
+}
