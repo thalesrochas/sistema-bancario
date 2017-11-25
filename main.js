@@ -19,7 +19,9 @@ app.on('ready', function () {
     mainWindow = new BrowserWindow({
         resizable: false,
         maximizable: false,
-        autoHideMenuBar: true
+        autoHideMenuBar: true,
+        width: 1280,
+        height: 720
     });
     
     // Inicia a aplicação com a tela de conexão ao banco de dados

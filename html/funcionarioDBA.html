@@ -9,10 +9,10 @@
     
     <title>NullBank DBA - Funcionários</title>
 </head>
-<body class="padding16">
-    <div>
+<body>
+    <div class="aui-group">
+        <h1 class="nullbank">NullBank</h1>
         <ul class="nav nav-tabs">
-            <h1 style="font-family:'roboto thin'">NullBank</h1>
             <li class="nav-item">
                 <a class="nav-link" href="#" onclick="clickElement('agenciaDBA')">Agência</a>
             </li>
@@ -28,15 +28,17 @@
         </ul>
     </div>
     
-    <div class="row justfy-content-center">
-        <div class="container">
-            <div class="input-group col">
+    <div class="aui-group">
+        <div class="aui-item column-width">
+            <div class="input-group padding16">
                 <input type="text" class="form-control" placeholder="Pesquisar..." aria-label="Search for...">
                 <span class="input-group-btn">
-                    <button class="btn btn-info" type="button">Pesquisar</button>
+                    <button class="btn btn-info" type="button">
+                        <img src="../img/search.png">
+                    </button>
                 </span>
             </div>
-            <div class="scrow">
+            <div class="table-padding">
                 <table class="table table-hover">
                     <thead>
                         <tr>
@@ -45,15 +47,24 @@
                             <th scope="col">Cargo</th>
                         </tr>
                     </thead>
+                </table>
+            </div>
+            <div class="table-padding-corpo" style="overflow:auto; height:380px">
+                <table class="table table-hover">
                     <tbody id="corpoTabela"></tbody>
                 </table>
             </div>
-            <button class="btn btn-primary" ><img src="../img/add.png">Adicionar</button>
+            <div class="padding16 center">
+                <button class="btn btn-primary" onclick="adicionarFuncionario()">
+                    <img src="../img/add.png">
+                    Cadastrar Funcionário
+                </button>
+            </div>
         </div>
         
-        <div class="col">
-            <button class="btn btn-success" ><img src="../img/sync.png"> Atualizar</button>
-            <button class="btn btn-danger" ><img src="../img/delete.png"> Deletar</button>
+        <div class="aui-item barra-vertical">
+            <button class="btn btn-success"><img src="../img/sync.png"> Atualizar</button>
+            <button class="btn btn-danger"><img src="../img/delete.png"> Deletar</button>
         </div>
     </div>
     
@@ -99,6 +110,10 @@
             // Envia o evento 'trocarTelaDBA' para main.js
             ipcRenderer.send('trocarTelaDBA', element);
             console.log('Dados de troca de tela enviados!');
+        }
+
+        function adicionarFuncionario(){
+            ipcRenderer.send('abrirTela','adicionarFuncionario');
         }
     </script>
     
