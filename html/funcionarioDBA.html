@@ -97,6 +97,8 @@
                 let tdNome = document.createElement('td');
                 let tdCargo = document.createElement('td');
 
+                // Cria atributo de onclick com numero da agencia como parâmetro
+                tr.setAttribute('onclick', 'selectFuncionario(' + element.matricula + ')');
                 th.textContent = element.matricula;
                 tdNome.textContent = element.nome;
                 tdCargo.textContent = element.cargo;
@@ -106,6 +108,11 @@
                 tr.appendChild(tdCargo);
                 tbody.appendChild(tr);
             });
+        });
+
+        // Evento ocorre quando os dados requisitados retornam do main.js
+        ipcRenderer.on('fieldsRequested', function (event, fields) {
+            console.log(fields);
         });
     </script>
 
@@ -118,7 +125,13 @@
             console.log('Dados de troca de tela enviados!');
         }
 
-        function adicionarFuncionario(){
+        function selectFuncionario(matricula) {
+            console.log('Clique no Funcionário ' + matricula);
+            ipcRenderer.send('requestFields', {tabela: 'funcionario', campo: 'matricula', id: matricula});
+            console.log('Dados do Funcionário ' + matricula + ' solicitados.');
+        }
+
+        function adicionarFuncionario() {
             ipcRenderer.send('abrirTela','adicionarFuncionario');
         }
     </script>

@@ -73,7 +73,7 @@
 }
 
 .barra-vertical {
-    border-left: 1px solid #ccc;
+    border-left: 1px solid #ddd;
     padding: 16px;
 }
 
@@ -81,7 +81,6 @@
     font-family:'roboto thin';
     text-align: left;
      color: #FCF8F8;
-    height: 
 }
 
 .column-width {
