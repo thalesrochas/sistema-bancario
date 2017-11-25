@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../style.css">
+    
+    <title>NullBank Atendente - Contas</title>
+</head>
+<body class="padding16">
+    <div>
+        <ul class="nav nav-tabs">
+            <h1 style="font-family:'roboto thin'" align="right">NullBank</h1>
+            <li class="nav-item">
+                <a class="nav-link active" href="#">Contas</a>
+            </li>
+        </ul>
+    </div>
+    
+    <div class="row justfy-content-center">
+        <div class="container">
+            <div class="input-group col">
+                <input type="text" class="form-control" placeholder="Pesquisar..." aria-label="Search for...">
+                <span class="input-group-btn">
+                    <button class="btn btn-info" type="button">Pesquisar</button>
+                </span>
+            </div>
+            <div class="scrow">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Número</th>
+                            <th scope="col">Nome</th>
+                            <th scope="col">Cidade</th>
+                        </tr>
+                    </thead>
+                    <tbody id="corpoTabela"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script de requisições de dados -->
+    <script>
+        const ipcRenderer = require('electron').ipcRenderer;
+
+        // Quando a página carrega, os dados são requisitados
+        ipcRenderer.send('requestData', 'agencia');
+        
+        // Evento ocorre quando os dados são enviados por main.js
+        ipcRenderer.on('dataAgencia', function (event, dataAgencia) {
+            let tbody = document.getElementById('corpoTabela');
+
+            // Remove todos os elementos do corpo da tabela antes de inserir os novos
+            while (tbody.firstChild) {
+                tbody.removeChild(tbody.firstChild);
+            }
+
+            // Inserir os dados do banco na tabela
+            dataAgencia.forEach(element => {
+                let tr = document.createElement('tr');
+                let th = document.createElement('th');
+                let tdNome = document.createElement('td');
+                let tdCidade = document.createElement('td');
+
+                // Cria atributo de onclick com numero da agencia como parâmetro
+                tr.setAttribute('onclick', 'selectAgencia(' + element.numero + ')');
+                th.textContent = element.numero;
+                tdNome.textContent = element.nome;
+                tdCidade.textContent = element.cidade;
+
+                tr.appendChild(th);
+                tr.appendChild(tdNome);
+                tr.appendChild(tdCidade);
+                tbody.appendChild(tr);
+            });
+        });
+
+        // Evento ocorre quando os dados requisitados retornam do main.js
+        ipcRenderer.on('fieldsRequested', function (event, fields) {
+            console.log(fields);
+        });
+    </script>
+
+    <!-- Script de funções da página -->
+    <script>
+        function clickElement (element) {
+            console.log(element);
+            // Envia o evento 'trocarTelaDBA' para main.js
+            ipcRenderer.send('trocarTelaDBA', element);
+            console.log('Dados de troca de tela enviados!');
+        }
+
+        function selectAgencia(numero) {
+            console.log('Clique na Agência ' + numero);
+            ipcRenderer.send('requestFields', {tabela: 'agencia', campo: 'numero', id: numero});
+            console.log('Dados da Agência ' + numero + ' solicitados.');
+        }
+    </script>
+    
+    <!-- Scripts para Bootstrap -->
+    <script>let $ = require('../bootstrap/js/jquery-3.2.1.min.js');</script>
+    <script src="../bootstrap/js/popper.min.js"></script>
+    <script src="../bootstrap/js/bootstrap.js"></script>
+</body>
+</html>
