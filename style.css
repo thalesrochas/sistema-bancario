@@ -77,11 +77,13 @@
 .aui-group > .aui-item {
     display: table-cell;
     vertical-align: top;
+    width: 640px;
 }
 
 .barra-vertical {
     border-left: 1px solid #ddd;
     padding: 16px;
+    padding-bottom: 0;
 }
 
 .nullbank {

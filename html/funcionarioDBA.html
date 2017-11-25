@@ -10,8 +10,11 @@
     <title>NullBank DBA - Funcionários</title>
 </head>
 <body>
-    <div class="aui-group">
-        <h1 class="nullbank">NullBank</h1>
+    <!-- Abas da página -->
+    <div>
+        <div style="background-color:#001173; padding-left: 16px;">
+            <h1 class="nullbank">NullBank</h1>   
+        </div>
         <ul class="nav nav-tabs">
             <li class="nav-item">
                 <a class="nav-link" href="#" onclick="clickElement('agenciaDBA')">Agência</a>
@@ -29,6 +32,7 @@
     </div>
     
     <div class="aui-group">
+        <!-- Coluna da tabela de Funcionários -->
         <div class="aui-item column-width">
             <div class="input-group padding16">
                 <input type="text" class="form-control" placeholder="Pesquisar..." aria-label="Search for...">
@@ -49,7 +53,7 @@
                     </thead>
                 </table>
             </div>
-            <div class="table-padding-corpo" style="overflow:auto; height:380px">
+            <div class="table-padding-corpo" style="overflow:auto; height:423px">
                 <table class="table table-hover">
                     <tbody id="corpoTabela"></tbody>
                 </table>
@@ -62,15 +66,77 @@
             </div>
         </div>
         
+        <!-- Coluna das informações do Funcionário selecionado -->
         <div class="aui-item barra-vertical">
-            <button class="btn btn-success">
-                <img src="../img/sync.png">
-                Atualizar
-            </button>
-            <button class="btn btn-danger">
-                <img src="../img/delete.png">
-                Deletar
-            </button>
+            <div class="padding16 rounded border border-secondary">
+                <h5>Dados Pessoais</h5>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="nome">Nome</label>
+                        <input type="text" class="form-control" id="nome" readonly>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label for="sexo">Sexo</label>
+                        <input type="text" class="form-control" id="sexo" readonly>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="nascimento">Data de Nascimento</label>
+                        <input type="text" class="form-control" id="nascimento" readonly>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-8">
+                        <label for="endereco">Endereço</label>
+                        <input type="text" class="form-control" id="endereco" readonly>
+                    </div> 
+                    <div class="form-group col-md-4">
+                        <label for="cidade">Cidade</label>
+                        <input type="text" class="form-control" id="cidade" readonly>
+                    </div>
+                </div>
+            </div>
+            <div class="padding16 margin-top16 rounded border border-secondary">
+                <h5>Dados de Funcionário</h5>
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label for="matricula">Matrícula</label>
+                        <input type="text" class="form-control" id="matricula" readonly>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="senha">Senha</label>
+                        <input type="text" class="form-control" id="senha" readonly>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="salario">Salário</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">R$</span>
+                            <input type="text" class="form-control" id="salario" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="cargo">Cargo</label>
+                        <input type="text" class="form-control" id="cargo" readonly>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="agencia">Agência</label>
+                        <input type="text" class="form-control" id="agencia" readonly>
+                    </div>
+                </div>
+            </div>
+            <div class="center margin-top16">
+                <button class="btn btn-success">
+                    <img src="../img/sync.png">
+                    Atualizar
+                </button>
+                <button class="btn btn-danger">
+                    <img src="../img/delete.png">
+                    Deletar
+                </button>
+            </div>
         </div>
     </div>
     
@@ -113,6 +179,30 @@
         // Evento ocorre quando os dados requisitados retornam do main.js
         ipcRenderer.on('fieldsRequested', function (event, fields) {
             console.log(fields);
+
+            let data_nasc = fields["0"].data_nasc;
+
+            let nome = document.getElementById('nome');
+            let sexo = document.getElementById('sexo');
+            let nascimento = document.getElementById('nascimento');
+            let endereco = document.getElementById('endereco');
+            let cidade = document.getElementById('cidade');
+            let matricula = document.getElementById('matricula');
+            let senha = document.getElementById('senha');
+            let salario = document.getElementById('salario');
+            let cargo = document.getElementById('cargo');
+            let agencia = document.getElementById('agencia');
+
+            nome.value = fields["0"].nome;
+            sexo.value = fields["0"].sexo;
+            nascimento.value = data_nasc.substring(8, 10) + '/' + data_nasc.substring(5, 7) + '/' + data_nasc.substring(0, 4);
+            endereco.value = fields["0"].endereco;
+            cidade.value = fields["0"].cidade;
+            matricula.value = fields["0"].matricula;
+            senha.value = fields["0"].senha;
+            salario.value = fields["0"].salario;
+            cargo.value = fields["0"].cargo;
+            agencia.value = fields["0"].lotacao;
         });
     </script>
 

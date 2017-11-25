@@ -21,7 +21,7 @@ app.on('ready', function () {
         maximizable: false,
         autoHideMenuBar: true,
         width: 1280,
-        height: 720
+        height: 761
     });
     
     // Inicia a aplicação com a tela de conexão ao banco de dados
