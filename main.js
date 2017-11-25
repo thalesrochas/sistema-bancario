@@ -206,7 +206,9 @@ ipcMain.on('abrirTela',function(event,arg){
     let newWindow = new BrowserWindow({
         resizable: false,
         maximizable: false,
-        autoHideMenuBar: true
+        autoHideMenuBar: true,
+        width: 800,
+        height: 665
     });
     
     // Inicia a aplicação com a tela de conexão ao banco de dados
