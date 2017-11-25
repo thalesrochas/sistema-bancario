@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../style.css">
+
+    <title>NullBank - Cadastrar Cliente</title>
+</head>
+<body>
+    <form>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputEmail4">Nome</label>
+                <input type="email" class="form-control" id="inputEmail4" placeholder="Nome completo">
+            </div>
+            <div class="form-group col-md-1">
+                <label for="inputPassword4">Idade</label>
+                <input type="number" class="form-control" id="inputPassword4">
+            </div>
+            </div>
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label for="exampleFormControlSelect1">Parentesco</label>
+                <select class="form-control" id="exampleFormControlSelect1">
+                    <option></option>
+                    <option>Genitor(a)</option>
+                    <option>Cônjuge</option>
+                    <option>Filho(a)</option>
+                </select>
+            </div> 
+            <div class="form-group col-md-6">
+                <label for="inputState" >Data de nascimento</label>
+                <input type="date" class="form-control">
+            </div>
+        </div>
+            <div class="form-row">
+            <div class="form-group col-md-2">
+                <label for="inputmat">Matrícula</label>
+                <input type="number" class="form-control" id="inputmat" >
+        </div>
+        <button type="submit" class="btn btn-success salvar">Salvar</button>
+    </div>
+    </form>
+
+    <!-- Scripts para Bootstrap -->
+    <script>let $ = require('../bootstrap/js/jquery-3.2.1.min.js');</script>
+    <script src="../bootstrap/js/popper.min.js"></script>
+    <script src="../bootstrap/js/bootstrap.js"></script>
+</body>
+</html>
