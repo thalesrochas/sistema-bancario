@@ -220,7 +220,7 @@
                     cancelId: 1,
                     title: 'Confirmar Remoção de Agência',
                     message: 'Você tem certeza que deseja remover a Agência ' + nome.value + '?',
-                    detail: 'Todos os dados dessa agência serão perdidos!'
+                    detail: 'Essa ação não pode ser desfeita.\nTodos os dados dessa agência serão perdidos!'
                 }, function (response) {
                     if (!response) {
                         ipcRenderer.send('delete', {tabela: 'agencia', campo: 'numero', id: id});

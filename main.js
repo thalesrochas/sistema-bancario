@@ -31,9 +31,9 @@ app.on('ready', function () {
         slashes: true
     }));
 
-    // Limpa a variável quando a tela é fechada
+    // Encerra a aplicação quando a tela principal é fechada
     mainWindow.on('closed', function () {
-        mainWindow = null;
+        app.exit();
     });
 });
 
@@ -72,6 +72,7 @@ ipcMain.on('conectarBD', function (event, conexaoData) {
 // Evento executa quando o botão 'Acessar!' é clicado na mainWindow.html
 ipcMain.on('acessar', function (event, arg) {
     console.log(arg);
+    // Carrega a tela de login
     mainWindow.loadURL(url.format({
         pathname: 'html/telaLogin.html',
         protocol: 'file:',
@@ -87,14 +88,14 @@ ipcMain.on('userLogin', function (event, loginData) {
     // Testa se os dados correspondem a um DBA
     if (objectCompare(loginData, DBA)) {
         console.log('Login como DBA...');
-        // Informe com messageBox
+        // Informe de usuário DBA
         dialog.showMessageBox({
             type: 'none',
             title: 'Login feito por DBA',
             message: 'Login feito por DBA',
             detail: 'Acesso total aos dados.'
         });
-        // Se for, carrega tela de DBA
+        // Se for DBA, carrega tela de DBA
         mainWindow.loadURL(url.format({
             pathname: 'html/agenciaDBA.html',
             protocol: 'file:',
@@ -107,6 +108,7 @@ ipcMain.on('userLogin', function (event, loginData) {
             // Se houver alguma tupla correspondente no banco
             if (results.some(element => element.matricula == loginData.matricula &&
             element.senha == loginData.senha)) {
+                // TODO Abrir tela de usuário correspondente
                 dialog.showMessageBox({
                     type: 'none',
                     message: 'Abrir nova tela',
@@ -131,6 +133,7 @@ ipcMain.on('trocarTelaDBA', function (event, arg) {
     console.log('Trocar Tela\nDados coletados:');
     console.log(arg);
     
+    // Seleciona qual tela deve-se carregar a partir do 'arg'
     mainWindow.loadURL(url.format({
         pathname: 'html/' + arg + '.html',
         protocol: 'file:',
@@ -138,8 +141,12 @@ ipcMain.on('trocarTelaDBA', function (event, arg) {
     }));
 });
 
+/* Evento ocorre quando a tela correspondente solicita os dados a serem
+ * impressos na tabela.
+ */
 ipcMain.on('requestData', function (event, arg) {
     switch (arg) {
+    // Seleciona os dados de todas as agências
     case 'agencia':
         connection.query('SELECT numero, nome, cidade FROM agencia;',
         function (error, results, fields) {
@@ -151,7 +158,8 @@ ipcMain.on('requestData', function (event, arg) {
             console.log('Dados enviados!');
         });
         break;
-    
+
+    // Seleciona os dados de todos os funcionários
     case 'funcionario':
         connection.query('SELECT matricula, nome, cargo FROM funcionario;',
         function (error, results, fields) {
@@ -164,6 +172,7 @@ ipcMain.on('requestData', function (event, arg) {
         });
         break;
 
+    // Seleciona os dados de todos os clientes
     case 'cliente':
         connection.query('SELECT cpf, nome, cidade FROM cliente;',
         function (error, results, fields) {
@@ -176,6 +185,7 @@ ipcMain.on('requestData', function (event, arg) {
         });
         break;
 
+    // Seleciona os dados de todas as contas
     case 'conta':
         connection.query(`SELECT num_conta as numero,
         num_agencia as agencia, tipo_conta as tipo FROM conta;`,
@@ -191,6 +201,9 @@ ipcMain.on('requestData', function (event, arg) {
     }
 });
 
+/* Evento ocorre quando o usuário clida em uma linha da tabela
+ * para consultar todos os elementos de uma tupla da tabela.
+ */
 ipcMain.on('requestFields', function (event, arg) {
     connection.query('SELECT * FROM ' + arg.tabela + ' WHERE ' + arg.campo + ' = ?;', arg.id,
     function (error, results, fields) {
@@ -201,10 +214,13 @@ ipcMain.on('requestFields', function (event, arg) {
     });
 });
 
+// Evento é chamado quando é solicitada a deleção de uma tupla de uma tabela
 ipcMain.on('delete', function (event, arg) {
+    // Tenta realizar a deleção
     connection.query('DELETE FROM ' + arg.tabela + ' WHERE ' + arg.campo + ' = ?;', arg.id,
     function (error, results, fields) {
         if (error) {
+            // Exibe caixa de mensagem caso tenha ocorrido erro na deleção
             dialog.showMessageBox({
                 type: 'error',
                 title: 'Erro ao Remover Agência',
@@ -214,17 +230,20 @@ ipcMain.on('delete', function (event, arg) {
             console.log('A Agência ' + arg.id + ' não pode ser removida!');
         }
         else {
+            // Caso tenha sido removido com sucesso, informa ao usuário
             dialog.showMessageBox({
                 type: 'info',
                 title: 'Remoção Confirmada',
                 message: 'A Agência ' + arg.id + ' foi removida com sucesso!'
             });
+            // Atualiza os dados da página após a remoção
             mainWindow.webContents.reload();
             console.log('Campo da tabela ' + arg.tabela + ', id: ' + arg.id +  ', deletado.');
         }
     });
 });
 
+// Evento ocorre quando usuário solicita a inserção de tuplas em alguma tabela
 ipcMain.on('abrirTela', function (event,arg){
     // Criação de nova tela com algumas configurações
     let newWindow = new BrowserWindow({
@@ -235,7 +254,7 @@ ipcMain.on('abrirTela', function (event,arg){
         height: 665
     });
     
-    // Inicia a aplicação com a tela de conexão ao banco de dados
+    // Carrega a tela correspondente
     newWindow.loadURL(url.format({
         pathname: 'html/' + arg + '.html',
         protocol: 'file:',
