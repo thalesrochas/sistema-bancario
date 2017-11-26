@@ -34,14 +34,16 @@
     <div class="aui-group">
         <!-- Coluna da tabela de Clientes -->
         <div class="aui-item column-width">
-            <div class="input-group padding16">
-                <input type="text" class="form-control" placeholder="Pesquisar...">
-                <span class="input-group-btn">
-                    <button class="btn btn-info" type="button">
-                        <img src="../img/search.png">
-                    </button>
-                </span>
-            </div>
+            <form id="pesquisar">
+                <div class="input-group padding16">
+                    <input id="pesquisa" type="text" class="form-control" placeholder="Pesquisar..." autofocus>
+                    <span class="input-group-btn">
+                        <button class="btn btn-info" type="submit">
+                            <img src="../img/search.png">
+                        </button>
+                    </span>
+                </div>
+            </form>
             <div class="table-padding">
                 <table class="table table-hover">
                     <thead>
@@ -172,6 +174,22 @@
             nascimento.value = data_nasc.substring(8, 10) + '/' + data_nasc.substring(5, 7) + '/' + data_nasc.substring(0, 4);
             endereco.value = fields["0"].endereco;
             cidade.value = fields["0"].cidade;
+        });
+    </script>
+
+    <!-- Script de pesquisa -->
+    <script>
+        let form = document.getElementById('pesquisar');
+        let pesquisa = document.getElementById('pesquisa');
+
+        form.addEventListener('submit', function (e) {
+            let dadosPesquisa = {
+                tabela: 'cliente',
+                txt: pesquisa.value
+            };
+
+            ipcRenderer.send('pesquisar', dadosPesquisa);
+            e.preventDefault();
         });
     </script>
     

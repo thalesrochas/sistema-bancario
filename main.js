@@ -244,7 +244,7 @@ ipcMain.on('delete', function (event, arg) {
 });
 
 // Evento ocorre quando usuário solicita a inserção de tuplas em alguma tabela
-ipcMain.on('abrirTela', function (event,arg){
+ipcMain.on('abrirTela', function (event, arg){
     // Criação de nova tela com algumas configurações
     let newWindow = new BrowserWindow({
         resizable: false,
@@ -260,4 +260,62 @@ ipcMain.on('abrirTela', function (event,arg){
         protocol: 'file:',
         slashes: true
     }));
+});
+
+// Evento é chamado quando o usuário solicitar pesquisa em uma tela
+ipcMain.on('pesquisar', function (event, arg) {
+    switch (arg.tabela) {
+    // Seleciona os dados de todas as agências
+    case 'agencia':
+        connection.query(`SELECT numero, nome, cidade FROM agencia
+        WHERE numero LIKE ? OR nome LIKE ? OR cidade LIKE ?;`,
+        ['%' + arg.txt + '%', '%' + arg.txt + '%', '%' + arg.txt + '%'],
+        function (error, results, fields) {
+            console.log(results);
+            console.log('Enviando dados de Agência...');
+            mainWindow.webContents.send('dataAgencia', results);
+            console.log('Dados enviados!');
+        });
+        break;
+
+    // Seleciona os dados de todos os funcionários
+    case 'funcionario':
+        connection.query(`SELECT matricula, nome, cargo FROM funcionario
+        WHERE matricula LIKE ? OR nome LIKE ? OR cargo LIKE ?;`,
+        ['%' + arg.txt + '%', '%' + arg.txt + '%', '%' + arg.txt + '%'],
+        function (error, results, fields) {
+            console.log(results);
+            console.log('Enviando dados de Funcionário...');
+            mainWindow.webContents.send('dataFuncionario', results);
+            console.log('Dados enviados!');
+        });
+        break;
+
+    // Seleciona os dados de todos os clientes
+    case 'cliente':
+        connection.query(`SELECT cpf, nome, cidade FROM cliente
+        WHERE cpf LIKE ? OR nome LIKE ? OR cidade LIKE ?;`,
+        ['%' + arg.txt + '%', '%' + arg.txt + '%', '%' + arg.txt + '%'],
+        function (error, results, fields) {
+            console.log(results);
+            console.log('Enviando dados de Cliente...');
+            mainWindow.webContents.send('dataCliente', results);
+            console.log('Dados enviados!');
+        });
+        break;
+
+    // Seleciona os dados de todas as contas
+    case 'conta':
+        connection.query(`SELECT num_conta as numero,
+        num_agencia as agencia, tipo_conta as tipo FROM conta
+        WHERE num_conta LIKE ? OR num_agencia LIKE ? OR tipo_conta LIKE ?;`,
+        ['%' + arg.txt + '%', '%' + arg.txt + '%', '%' + arg.txt + '%'],
+        function (error, results, fields) {
+            console.log(results);
+            console.log('Enviando dados de Conta...');
+            mainWindow.webContents.send('dataConta', results);
+            console.log('Dados enviados!');
+        });
+        break;
+    }
 });

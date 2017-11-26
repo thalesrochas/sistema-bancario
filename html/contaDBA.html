@@ -34,14 +34,16 @@
     <div class="aui-group">
         <!-- Coluna da tabela de Contas -->
         <div class="aui-item column-width">
-            <div class="input-group padding16">
-                <input type="text" class="form-control" placeholder="Pesquisar...">
-                <span class="input-group-btn">
-                    <button class="btn btn-info" type="button">
+            <form id="pesquisar">
+                <div class="input-group padding16">
+                    <input id="pesquisa" type="text" class="form-control" placeholder="Pesquisar..." autofocus>
+                    <span class="input-group-btn">
+                        <button class="btn btn-info" type="submit">
                             <img src="../img/search.png">
-                    </button>
-                </span>
-            </div>
+                        </button>
+                    </span>
+                </div>
+            </form>
             <div class="table-padding">
                 <table class="table table-hover">
                     <thead>
@@ -189,6 +191,22 @@
             tipo.value = fields["0"].tipo_conta;
             juros.value = fields["0"].taxa_juros ? fields["0"].taxa_juros : '-';
             credito.value = fields["0"].limite_credito ? fields["0"].limite_credito : '-';
+        });
+    </script>
+
+    <!-- Script de pesquisa -->
+    <script>
+        let form = document.getElementById('pesquisar');
+        let pesquisa = document.getElementById('pesquisa');
+
+        form.addEventListener('submit', function (e) {
+            let dadosPesquisa = {
+                tabela: 'conta',
+                txt: pesquisa.value
+            };
+
+            ipcRenderer.send('pesquisar', dadosPesquisa);
+            e.preventDefault();
         });
     </script>
 
