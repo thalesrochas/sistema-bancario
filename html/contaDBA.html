@@ -17,7 +17,7 @@
         </div>
         <ul class="nav nav-tabs">
             <li class="nav-item">
-                <a class="nav-link" href="#" onclick="clickElement('agenciaDBA')">Agência</a>
+                <a class="nav-link" href="#" onclick="clickElement('agenciaDBA')">Agências</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#" onclick="clickElement('funcionarioDBA')">Funcionários</a>
@@ -119,7 +119,7 @@
         
             <!-- Botões -->
             <div class="center margin-top16">
-                <button class="btn btn-success">
+                <button onclick="onClickAtualizar(-1)" id="atualizar" class="btn btn-success">
                     <img src="../img/sync.png">
                     Atualizar
                 </button>
@@ -127,9 +127,9 @@
                     <img src="../img/swap_horiz.png">
                     Nova transação
                 </button>
-                <button class="btn btn-danger">
+                <button onclick="onClickDeletar(-1)" id="deletar" class="btn btn-danger">
                     <img src="../img/delete.png">
-                    Deletar
+                    Remover
                 </button>
             </div>
         </div>
@@ -194,6 +194,8 @@
 
     <!-- Script de funções da página -->
     <script>
+        const dialog = require('electron').remote.dialog;
+
         function clickElement (element) {
             console.log(element);
             // Envia o evento 'trocarTelaDBA' para main.js
@@ -205,10 +207,64 @@
             console.log('Clique na Conta ' + numero);
             ipcRenderer.send('requestFields', {tabela: 'tipo_conta', campo: 'num_conta', id: numero});
             console.log('Dados da Conta ' + numero + ' solicitados.');
+
+            let botaoAtualizar = document.getElementById('atualizar');
+            let botaoDeletar = document.getElementById('deletar');
+
+            botaoAtualizar.setAttribute('onclick', 'onClickAtualizar(' + numero + ')');
+            botaoDeletar.setAttribute('onclick', 'onClickDeletar(' + numero + ')');
         }
 
         function adicionarConta(){
             ipcRenderer.send('abrirTela','adicionarConta');
+        }
+
+        function onClickAtualizar(id) {
+            if (id == -1) {
+                console.error('Nenhuma conta selecionada');
+            }
+            else {
+                console.log('Conta Atualizada!');
+            }
+        }
+
+        function onClickDeletar(id) {
+            // Verifica se há alguma linha da tabela selecionada
+            if (id == -1) {
+                console.error('Nenhuma conta selecionada');
+                dialog.showMessageBox({
+                    type: 'error',
+                    title: 'Erro ao Remover Conta',
+                    message: 'Nenhuma conta selecionada!',
+                    detail: 'Selecione uma conta antes de tentar remover.'
+                });
+            }   
+            else {
+                // Requisita confirmação do usuário sobre a deleção da tupla
+                dialog.showMessageBox({
+                    type: 'question',
+                    buttons: ['Remover', 'Cancelar'],
+                    defaultId: 0,
+                    cancelId: 1,
+                    title: 'Confirmar Remoção de Conta',
+                    message: 'Você tem certeza que deseja remover a Conta ' + numero.value + '?',
+                    detail: 'Essa ação não pode ser desfeita.\nTodos os dados dessa conta serão perdidos!'
+                }, function (response) {
+                    /* Se o usuário confirmar deleção, dados de tabela e id
+                     * são enviados para main.js para tratar a deleção
+                     */
+                    if (!response) {
+                        ipcRenderer.send('delete', {
+                            tabela: 'conta',
+                            campo: 'num_conta',
+                            id: id,
+                            nome_tabela: 'Conta',
+                            nome: numero.value,
+                            detail: 'Podem haver clientes associados a essa conta.'
+                        });
+                    }
+                });
+            }
         }
     </script>
     

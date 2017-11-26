@@ -17,7 +17,7 @@
         </div>
         <ul class="nav nav-tabs">
             <li class="nav-item">
-                <a class="nav-link" href="#" onclick="clickElement('agenciaDBA')">Agência</a>
+                <a class="nav-link" href="#" onclick="clickElement('agenciaDBA')">Agências</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#" onclick="clickElement('funcionarioDBA')">Funcionários</a>
@@ -178,7 +178,7 @@
     <!-- Script de funções da página -->
     <script>
         const dialog = require('electron').remote.dialog;
-        
+
         function clickElement (element) {
             console.log(element);
             // Envia o evento 'trocarTelaDBA' para main.js
