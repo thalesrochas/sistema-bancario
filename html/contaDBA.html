@@ -66,19 +66,72 @@
             </div>
         </div>
         
+        <!-- Coluna das informações da Conta selecionada -->
         <div class="aui-item barra-vertical">
-            <button class="btn btn-success">
-                <img src="../img/sync.png">
-                Atualizar
-            </button>
-            <button class="btn btn-warning">
-                <img src="../img/swap_horiz.png">
-                Nova transação
-            </button>
-            <button class="btn btn-danger">
-                <img src="../img/delete.png">
-                Deletar
-            </button>
+            <div style="margin-bottom:127px"></div>
+            <div class="padding16 rounded border border-secondary">
+                <h5>Dados da Conta</h5>
+                <div class="form-row">
+                    <div class="form-group col-md-5">
+                        <label for="numero">Número da Conta</label>
+                        <input type="text" class="form-control" id="numero" readonly>
+                    </div>
+                    <div class="form-group col-md-5">
+                        <label for="agencia">Agência</label>
+                        <input type="text" class="form-control" id="agencia" readonly>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="saldo">Saldo</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">R$</span>
+                            <input type="text" class="form-control" id="saldo" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="senha">Senha</label>
+                        <input type="text" class="form-control" id="senha" readonly>
+                    </div> 
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-5">
+                        <label for="tipo">Tipo de Conta</label>
+                        <input type="text" class="form-control" id="tipo" readonly>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="credito">Limite de Crédito</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">R$</span>
+                            <input type="text" class="form-control" id="credito" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="juros">Taxa de Juros</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="juros" readonly>
+                            <span class="input-group-addon">%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="margin-bottom:127px"></div>
+        
+            <!-- Botões -->
+            <div class="center margin-top16">
+                <button class="btn btn-success">
+                    <img src="../img/sync.png">
+                    Atualizar
+                </button>
+                <button class="btn btn-warning">
+                    <img src="../img/swap_horiz.png">
+                    Nova transação
+                </button>
+                <button class="btn btn-danger">
+                    <img src="../img/delete.png">
+                    Deletar
+                </button>
+            </div>
         </div>
     </div>
     
@@ -105,6 +158,8 @@
                 let tdAgencia = document.createElement('td');
                 let tdTipo = document.createElement('td');
 
+                // Cria atributo de onclick com numero da agencia como parâmetro
+                tr.setAttribute('onclick', 'selectConta(' + element.numero + ')');
                 th.textContent = element.numero;
                 tdAgencia.textContent = element.agencia;
                 tdTipo.textContent = element.tipo;
@@ -115,6 +170,26 @@
                 tbody.appendChild(tr);
             });
         });
+
+        ipcRenderer.on('fieldsRequested', function (event, fields) {
+            console.log(fields);
+
+            let numero = document.getElementById('numero');
+            let agencia = document.getElementById('agencia');
+            let saldo = document.getElementById('saldo');
+            let senha = document.getElementById('senha');
+            let tipo = document.getElementById('tipo');
+            let juros = document.getElementById('juros');
+            let credito = document.getElementById('credito');
+
+            numero.value = fields["0"].num_conta;
+            agencia.value = fields["0"].num_agencia;
+            saldo.value = fields["0"].saldo;
+            senha.value = fields["0"].senha;
+            tipo.value = fields["0"].tipo_conta;
+            juros.value = fields["0"].taxa_juros ? fields["0"].taxa_juros : '-';
+            credito.value = fields["0"].limite_credito ? fields["0"].limite_credito : '-';
+        });
     </script>
 
     <!-- Script de funções da página -->
@@ -124,6 +199,12 @@
             // Envia o evento 'trocarTelaDBA' para main.js
             ipcRenderer.send('trocarTelaDBA', element);
             console.log('Dados de troca de tela enviados!');
+        }
+
+        function selectConta(numero) {
+            console.log('Clique na Conta ' + numero);
+            ipcRenderer.send('requestFields', {tabela: 'tipo_conta', campo: 'num_conta', id: numero});
+            console.log('Dados da Conta ' + numero + ' solicitados.');
         }
 
         function adicionarConta(){
