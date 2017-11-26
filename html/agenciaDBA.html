@@ -103,13 +103,13 @@
         
             <!-- Botões -->
             <div class="center margin-top16">
-                <button class="btn btn-success">
+                <button onclick="onClickAtualizar(-1)" id="atualizar" class="btn btn-success">
                     <img src="../img/sync.png">
                     Atualizar
                 </button>
-                <button class="btn btn-danger">
+                <button onclick="onClickDeletar(-1)" id="deletar" class="btn btn-danger">
                     <img src="../img/delete.png">
-                    Deletar
+                    Remover
                 </button>
             </div>
         </div>
@@ -171,6 +171,9 @@
 
     <!-- Script de funções da página -->
     <script>
+
+        const dialog = require('electron').remote.dialog;
+
         function clickElement (element) {
             console.log(element);
             // Envia o evento 'trocarTelaDBA' para main.js
@@ -182,6 +185,48 @@
             console.log('Clique na Agência ' + numero);
             ipcRenderer.send('requestFields', {tabela: 'agencia', campo: 'numero', id: numero});
             console.log('Dados da Agência ' + numero + ' solicitados.');
+
+            let botaoAtualizar = document.getElementById('atualizar');
+            let botaoDeletar = document.getElementById('deletar');
+
+            botaoAtualizar.setAttribute('onclick', 'onClickAtualizar(' + numero + ')');
+            botaoDeletar.setAttribute('onclick', 'onClickDeletar(' + numero + ')');
+        }
+
+        function onClickAtualizar(id) {
+            if (id == -1) {
+                console.error('Nenhuma agência selecionada');
+            }
+            else {
+                console.log('Agência Atualizada!');
+            }
+        }
+
+        function onClickDeletar(id) {
+            if (id == -1) {
+                console.error('Nenhuma agência selecionada');
+                dialog.showMessageBox({
+                    type: 'error',
+                    title: 'Erro ao Remover Agência',
+                    message: 'Nenhuma agência selecionada!',
+                    detail: 'Selecione uma agência antes de tentar remover.'
+                });
+            }
+            else {
+                dialog.showMessageBox({
+                    type: 'question',
+                    buttons: ['Remover', 'Cancelar'],
+                    defaultId: 0,
+                    cancelId: 1,
+                    title: 'Confirmar Remoção de Agência',
+                    message: 'Você tem certeza que deseja remover a Agência ' + nome.value + '?',
+                    detail: 'Todos os dados dessa agência serão perdidos!'
+                }, function (response) {
+                    if (!response) {
+                        ipcRenderer.send('delete', {tabela: 'agencia', campo: 'numero', id: id});
+                    }
+                });
+            }
         }
     </script>
     

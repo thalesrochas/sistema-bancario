@@ -201,7 +201,31 @@ ipcMain.on('requestFields', function (event, arg) {
     });
 });
 
-ipcMain.on('abrirTela',function(event,arg){
+ipcMain.on('delete', function (event, arg) {
+    connection.query('DELETE FROM ' + arg.tabela + ' WHERE ' + arg.campo + ' = ?;', arg.id,
+    function (error, results, fields) {
+        if (error) {
+            dialog.showMessageBox({
+                type: 'error',
+                title: 'Erro ao Remover Agência',
+                message: 'A Agência ' + arg.id + ' não pode ser removida!',
+                detail: 'Podem haver funcionários lotados nessa agência.'
+            });
+            console.log('A Agência ' + arg.id + ' não pode ser removida!');
+        }
+        else {
+            dialog.showMessageBox({
+                type: 'info',
+                title: 'Remoção Confirmada',
+                message: 'A Agência ' + arg.id + ' foi removida com sucesso!'
+            });
+            mainWindow.webContents.reload();
+            console.log('Campo da tabela ' + arg.tabela + ', id: ' + arg.id +  ', deletado.');
+        }
+    });
+});
+
+ipcMain.on('abrirTela', function (event,arg){
     // Criação de nova tela com algumas configurações
     let newWindow = new BrowserWindow({
         resizable: false,
