@@ -130,13 +130,13 @@
 
             <!-- Botões -->
             <div class="center margin-top16">
-                <button class="btn btn-success">
+                <button onclick="onClickAtualizar(-1)" id="atualizar" class="btn btn-success">
                     <img src="../img/sync.png">
                     Atualizar
                 </button>
-                <button class="btn btn-danger">
+                <button onclick="onClickDeletar(-1)" id="deletar" class="btn btn-danger">
                     <img src="../img/delete.png">
-                    Deletar
+                    Remover
                 </button>
             </div>
         </div>
@@ -210,6 +210,8 @@
 
     <!-- Script de funções da página -->
     <script>
+        const dialog = require('electron').remote.dialog;
+
         function clickElement(element) {
             console.log(element);
             // Envia o evento 'trocarTelaDBA' para main.js
@@ -221,10 +223,64 @@
             console.log('Clique no Funcionário ' + matricula);
             ipcRenderer.send('requestFields', {tabela: 'funcionario', campo: 'matricula', id: matricula});
             console.log('Dados do Funcionário ' + matricula + ' solicitados.');
+
+            let botaoAtualizar = document.getElementById('atualizar');
+            let botaoDeletar = document.getElementById('deletar');
+
+            botaoAtualizar.setAttribute('onclick', 'onClickAtualizar(' + matricula + ')');
+            botaoDeletar.setAttribute('onclick', 'onClickDeletar(' + matricula + ')');
         }
 
         function adicionarFuncionario() {
             ipcRenderer.send('abrirTela','adicionarFuncionario');
+        }
+
+        function onClickAtualizar(id) {
+            if (id == -1) {
+                console.error('Nenhum funcionário selecionado');
+            }
+            else {
+                console.log('Funcionário Atualizado!');
+            }
+        }
+
+        function onClickDeletar(id) {
+            // Verifica se há alguma linha da tabela selecionada
+            if (id == -1) {
+                console.error('Nenhum funcionário selecionado');
+                dialog.showMessageBox({
+                    type: 'error',
+                    title: 'Erro ao Remover Funcionário',
+                    message: 'Nenhum funcionário selecionado!',
+                    detail: 'Selecione um funcionário antes de tentar remover.'
+                });
+            }   
+            else {
+                // Requisita confirmação do usuário sobre a deleção da tupla
+                dialog.showMessageBox({
+                    type: 'question',
+                    buttons: ['Remover', 'Cancelar'],
+                    defaultId: 0,
+                    cancelId: 1,
+                    title: 'Confirmar Remoção de Funcionário',
+                    message: 'Você tem certeza que deseja remover o Funcionário ' + nome.value + '?',
+                    detail: 'Essa ação não pode ser desfeita.\nTodos os dados desse funcionário serão perdidos!'
+                }, function (response) {
+                    /* Se o usuário confirmar deleção, dados de tabela e id
+                     * são enviados para main.js para tratar a deleção
+                     */
+                    if (!response) {
+                        ipcRenderer.send('delete', {
+                            tabela: 'funcionario',
+                            campo: 'matricula',
+                            id: id,
+                            nome_tabela: 'Funcionário',
+                            nome: nome.value,
+                            detail: 'Pode ser que esse funcionário seja um Gerente.'
+                        });
+                    }
+                });
+            }
         }
     </script>
     

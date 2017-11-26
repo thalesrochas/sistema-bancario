@@ -223,18 +223,18 @@ ipcMain.on('delete', function (event, arg) {
             // Exibe caixa de mensagem caso tenha ocorrido erro na deleção
             dialog.showMessageBox({
                 type: 'error',
-                title: 'Erro ao Remover Agência',
-                message: 'A Agência ' + arg.id + ' não pode ser removida!',
-                detail: 'Podem haver funcionários lotados nessa agência.'
+                title: 'Erro ao Remover ' + arg.nome_tabela,
+                message: arg.nome_tabela + ' ' + arg.nome + ' não pode ser removido!',
+                detail: arg.detail
             });
-            console.log('A Agência ' + arg.id + ' não pode ser removida!');
+            console.log(arg.nome_tabela + ' ' + arg.nome + ' não pode ser removido!');
         }
         else {
             // Caso tenha sido removido com sucesso, informa ao usuário
             dialog.showMessageBox({
                 type: 'info',
                 title: 'Remoção Confirmada',
-                message: 'A Agência ' + arg.id + ' foi removida com sucesso!'
+                message: arg.nome_tabela + ' ' + arg.nome + ' foi removido com sucesso!'
             });
             // Atualiza os dados da página após a remoção
             mainWindow.webContents.reload();

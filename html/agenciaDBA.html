@@ -171,7 +171,6 @@
 
     <!-- Script de funções da página -->
     <script>
-
         const dialog = require('electron').remote.dialog;
 
         function clickElement (element) {
@@ -203,6 +202,7 @@
         }
 
         function onClickDeletar(id) {
+            // Verifica se há alguma linha da tabela selecionada
             if (id == -1) {
                 console.error('Nenhuma agência selecionada');
                 dialog.showMessageBox({
@@ -211,8 +211,9 @@
                     message: 'Nenhuma agência selecionada!',
                     detail: 'Selecione uma agência antes de tentar remover.'
                 });
-            }
+            }   
             else {
+                // Requisita confirmação do usuário sobre a deleção da tupla
                 dialog.showMessageBox({
                     type: 'question',
                     buttons: ['Remover', 'Cancelar'],
@@ -222,8 +223,18 @@
                     message: 'Você tem certeza que deseja remover a Agência ' + nome.value + '?',
                     detail: 'Essa ação não pode ser desfeita.\nTodos os dados dessa agência serão perdidos!'
                 }, function (response) {
+                    /* Se o usuário confirmar deleção, dados de tabela e id
+                     * são enviados para main.js para tratar a deleção
+                     */
                     if (!response) {
-                        ipcRenderer.send('delete', {tabela: 'agencia', campo: 'numero', id: id});
+                        ipcRenderer.send('delete', {
+                            tabela: 'agencia',
+                            campo: 'numero',
+                            id: id,
+                            nome_tabela: 'Agência',
+                            nome: nome.value,
+                            detail: 'Podem haver funcionários lotados nessa agência.'
+                        });
                     }
                 });
             }
