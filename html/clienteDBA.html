@@ -67,14 +67,53 @@
         </div>
         
         <div class="aui-item barra-vertical">
-            <button class="btn btn-success">
-                <img src="../img/sync.png">
-                Atualizar
-            </button>
-            <button class="btn btn-danger">
-                <img src="../img/delete.png">
-                Deletar
-            </button>
+            <div style="margin-bottom:127px"></div>
+            <div class="padding16 rounded border border-secondary">
+                <h5>Dados Pessoais</h5>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="nome">Nome</label>
+                        <input type="text" class="form-control" id="nome" readonly>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="cpf">CPF</label>
+                        <input type="text" class="form-control" id="cpf" readonly>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="rg">RG</label>
+                        <input type="text" class="form-control" id="rg" readonly>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="nascimento">Data de Nascimento</label>
+                        <input type="text" class="form-control" id="nascimento" readonly>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-8">
+                        <label for="endereco">Endereço</label>
+                        <input type="text" class="form-control" id="endereco" readonly>
+                    </div> 
+                    <div class="form-group col-md-4">
+                        <label for="cidade">Cidade</label>
+                        <input type="text" class="form-control" id="cidade" readonly>
+                    </div>
+                </div>
+            </div>
+            <div style="margin-bottom:127px"></div>
+
+            <!-- Botões -->
+            <div class="center margin-top16">
+                <button class="btn btn-success">
+                    <img src="../img/sync.png">
+                    Atualizar
+                </button>
+                <button class="btn btn-danger">
+                    <img src="../img/delete.png">
+                    Deletar
+                </button>
+            </div>
         </div>
     </div>
     
@@ -101,6 +140,8 @@
                 let tdNome = document.createElement('td');
                 let tdCidade = document.createElement('td');
 
+                // Cria atributo de onclick com numero da agencia como parâmetro
+                tr.setAttribute('onclick', 'selectCliente(' + element.cpf + ')');
                 th.textContent = element.cpf;
                 tdNome.textContent = element.nome;
                 tdCidade.textContent = element.cidade;
@@ -111,6 +152,27 @@
                 tbody.appendChild(tr);
             });
         });
+
+        // Evento ocorre quando os dados requisitados retornam do main.js
+        ipcRenderer.on('fieldsRequested', function (event, fields) {
+            console.log(fields);
+
+            let data_nasc = fields["0"].data_nasc;
+
+            let nome = document.getElementById('nome');
+            let cpf = document.getElementById('cpf');
+            let rg = document.getElementById('rg');
+            let nascimento = document.getElementById('nascimento');
+            let endereco = document.getElementById('endereco');
+            let cidade = document.getElementById('cidade');
+            
+            nome.value = fields["0"].nome;
+            cpf.value = fields["0"].cpf;
+            rg.value = fields["0"].rg;
+            nascimento.value = data_nasc.substring(8, 10) + '/' + data_nasc.substring(5, 7) + '/' + data_nasc.substring(0, 4);
+            endereco.value = fields["0"].endereco;
+            cidade.value = fields["0"].cidade;
+        });
     </script>
     
     <!-- Script de funções da página -->
@@ -120,6 +182,12 @@
             // Envia o evento 'trocarTelaDBA' para main.js
             ipcRenderer.send('trocarTelaDBA', element);
             console.log('Dados de troca de tela enviados!');
+        }
+
+        function selectCliente(cpf) {
+            console.log('Clique no Funcionário ' + cpf);
+            ipcRenderer.send('requestFields', {tabela: 'cliente', campo: 'cpf', id: cpf});
+            console.log('Dados do Cliente ' + cpf + ' solicitados.');
         }
 
         function adicionarCliente(){
