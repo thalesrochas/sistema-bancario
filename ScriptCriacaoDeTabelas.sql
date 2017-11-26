@@ -207,6 +207,11 @@ CREATE TABLE IF NOT EXISTS `extrato_30dias` (`num_conta` INT, `num_transacao` IN
 CREATE TABLE IF NOT EXISTS `extrato_365dias` (`num_conta` INT, `num_transacao` INT, `data_hora` INT, `tipo` INT, `valor_transacao` INT);
 
 -- -----------------------------------------------------
+-- Placeholder table for view `tipo_conta`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `tipo_conta` (`*` INT, `taxa_juros` INT, `limite_credito` INT);
+
+-- -----------------------------------------------------
 -- View `contas_gerente`
 -- -----------------------------------------------------
 DROP VIEW IF EXISTS `contas_gerente` ;
@@ -286,6 +291,21 @@ CREATE  OR REPLACE VIEW `extrato_365dias` AS
     WHERE
         (TO_DAYS(NOW()) - TO_DAYS(t.data_hora)) <= 365
     ORDER BY c.num_conta, t.data_hora;
+
+-- -----------------------------------------------------
+-- View `tipo_conta`
+-- -----------------------------------------------------
+DROP VIEW IF EXISTS `tipo_conta` ;
+DROP TABLE IF EXISTS `tipo_conta`;
+USE `Equipe374876`;
+CREATE  OR REPLACE VIEW `tipo_conta` AS
+    SELECT 
+        c.*, cp.taxa_juros, ce.limite_credito
+    FROM
+        (conta c
+        LEFT OUTER JOIN conta_poupanca cp ON c.num_conta = cp.num_conta)
+            LEFT OUTER JOIN
+        conta_especial ce ON c.num_conta = ce.num_conta;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
