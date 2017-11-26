@@ -35,7 +35,7 @@
         <!-- Coluna da tabela de Agências -->
         <div class="aui-item column-width">
             <div class="input-group padding16">
-                <input type="text" class="form-control" placeholder="Pesquisar..." aria-label="Search for...">
+                <input type="text" class="form-control" placeholder="Pesquisar...">
                 <span class="input-group-btn">
                     <button class="btn btn-info" type="button">
                         <img src="../img/search.png">
@@ -53,7 +53,7 @@
                     </thead>
                 </table>
             </div>
-            <div class="table-padding-corpo" style="overflow:auto; height:380px">
+            <div class="table-padding-corpo" style="overflow:auto; height:423px">
                 <table class="table table-hover">
                     <tbody id="corpoTabela"></tbody>
                 </table>
@@ -66,15 +66,51 @@
             </div>
         </div>
         
+        <!-- Coluna das informações do Funcionário selecionado -->
         <div class="aui-item barra-vertical">
-            <button class="btn btn-success">
-                <img src="../img/sync.png">
-                Atualizar
-            </button>
-            <button class="btn btn-danger">
-                <img src="../img/delete.png">
-                Deletar
-            </button>
+            <div class="padding16 rounded border border-secondary">
+                <h5>Dados da Agência</h5>
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label for="numero">Número</label>
+                        <input type="text" class="form-control" id="numero" readonly>
+                    </div>
+                    <div class="form-group col-md-9">
+                        <label for="nome">Nome</label>
+                        <input type="text" class="form-control" id="nome" readonly>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label for="gerente">Gerente</label>
+                        <input type="text" class="form-control" id="gerente" readonly>
+                    </div> 
+                    <div class="form-group col-md-4">
+                        <label for="salario">Salário Montante</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">R$</span>
+                            <input type="text" class="form-control" id="salario" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-5">
+                        <label for="cidade">Cidade</label>
+                        <input type="text" class="form-control" id="cidade" readonly>
+                    </div>
+                </div>
+            </div>
+            <div style="margin-bottom:340px"></div>
+        
+            <!-- Botões -->
+            <div class="center margin-top16">
+                <button class="btn btn-success">
+                    <img src="../img/sync.png">
+                    Atualizar
+                </button>
+                <button class="btn btn-danger">
+                    <img src="../img/delete.png">
+                    Deletar
+                </button>
+            </div>
         </div>
     </div>
 
@@ -117,6 +153,18 @@
         // Evento ocorre quando os dados requisitados retornam do main.js
         ipcRenderer.on('fieldsRequested', function (event, fields) {
             console.log(fields);
+
+            let numero = document.getElementById('numero');
+            let nome = document.getElementById('nome');
+            let gerente = document.getElementById('gerente');
+            let salario = document.getElementById('salario');
+            let cidade = document.getElementById('cidade');
+
+            numero.value = fields["0"].numero;
+            nome.value = fields["0"].nome;
+            gerente.value = fields["0"].mat_gerente;
+            salario.value = fields["0"].salario_montante;
+            cidade.value = fields["0"].cidade;
         });
     </script>
 
