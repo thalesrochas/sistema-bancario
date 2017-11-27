@@ -65,55 +65,73 @@
         </div>
         
         <!-- Coluna das informações da Conta selecionada -->
-        <div class="aui-item barra-vertical">
-            <div style="margin-bottom:127px"></div>
-            <div class="padding16 rounded border border-secondary">
-                <h5>Dados da Conta</h5>
-                <div class="form-row">
-                    <div class="form-group col-md-5">
-                        <label for="numero">Número da Conta</label>
-                        <input type="text" class="form-control" id="numero" disabled>
+        <div class="aui-item barra-vertical" style="padding-right:0; padding-top:0;">
+            <div style="overflow:auto; height:562px; padding-right:16px; padding-top:16px">
+                <div class="padding16 rounded border border-secondary">
+                    <h5>Dados da Conta</h5>
+                    <div class="form-row">
+                        <div class="form-group col-md-5">
+                            <label for="numero">Número da Conta</label>
+                            <input type="text" class="form-control" id="numero" disabled>
+                        </div>
+                        <div class="form-group col-md-5">
+                            <label for="agencia">Agência</label>
+                            <input type="text" class="form-control" id="agencia" disabled>
+                        </div>
                     </div>
-                    <div class="form-group col-md-5">
-                        <label for="agencia">Agência</label>
-                        <input type="text" class="form-control" id="agencia" disabled>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="saldo">Saldo</label>
+                            <div class="input-group">
+                                <span class="input-group-addon">R$</span>
+                                <input type="text" class="form-control" id="saldo" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="senha">Senha</label>
+                            <input type="text" class="form-control" id="senha" disabled>
+                        </div> 
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-5">
+                            <label for="tipo">Tipo de Conta</label>
+                            <input type="text" class="form-control" id="tipo" disabled>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="credito">Limite de Crédito</label>
+                            <div class="input-group">
+                                <span class="input-group-addon">R$</span>
+                                <input type="text" class="form-control" id="credito" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="juros">Taxa de Juros</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="juros" disabled>
+                                <span class="input-group-addon">%</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="form-row">
-                    <div class="form-group col-md-4">
-                        <label for="saldo">Saldo</label>
-                        <div class="input-group">
-                            <span class="input-group-addon">R$</span>
-                            <input type="text" class="form-control" id="saldo" disabled>
-                        </div>
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label for="senha">Senha</label>
-                        <input type="text" class="form-control" id="senha" disabled>
-                    </div> 
+                <div class="padding16 margin-top16 rounded border border-secondary" id="clientes">
+                    <h5>Clientes</h5>
                 </div>
-                <div class="form-row">
-                    <div class="form-group col-md-5">
-                        <label for="tipo">Tipo de Conta</label>
-                        <input type="text" class="form-control" id="tipo" disabled>
-                    </div>
-                    <div class="form-group col-md-4">
-                        <label for="credito">Limite de Crédito</label>
-                        <div class="input-group">
-                            <span class="input-group-addon">R$</span>
-                            <input type="text" class="form-control" id="credito" disabled>
-                        </div>
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label for="juros">Taxa de Juros</label>
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="juros" disabled>
-                            <span class="input-group-addon">%</span>
-                        </div>
-                    </div>
+                <div class="padding16 margin-top16 rounded border border-secondary">
+                    <h5>Transações</h5>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Nº</th>
+                                    <th scope="col">Valor</th>
+                                    <th scope="col">Data</th>
+                                    <th scope="col">Hora</th>
+                                    <th scope="col">Tipo</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabelaTransacao"></tbody>
+                        </table>
                 </div>
             </div>
-            <div style="margin-bottom:127px"></div>
         
             <!-- Botões -->
             <div class="center margin-top16">
@@ -188,6 +206,111 @@
             juros.value = fields["0"].taxa_juros ? fields["0"].taxa_juros : '-';
             credito.value = fields["0"].limite_credito ? fields["0"].limite_credito : '-';
         });
+
+        ipcRenderer.on('requestedContaDoCliente', function (event, fields) {
+            console.log(fields);
+
+            let div = document.getElementById('clientes');
+            let h5 = document.createElement('h5');
+
+            // Remove todos os elementos do corpo da tabela antes de inserir os novos
+            while (div.firstChild) {
+                div.removeChild(div.firstChild);
+            }
+
+            h5.textContent = 'Clientes';
+            div.appendChild(h5);
+
+            fields.forEach(element => {
+                let divCliente = document.createElement('div');
+                let divCpf = document.createElement('div');
+                let divNome = document.createElement('div');
+                let divCidade = document.createElement('div');
+                let labelCpf = document.createElement('label');
+                let labelNome = document.createElement('label');
+                let labelCidade = document.createElement('label');
+                let inputCpf = document.createElement('input');
+                let inputNome = document.createElement('input');
+                let inputCidade = document.createElement('input');
+
+                divCliente.setAttribute('class', 'form-row');
+                divCpf.setAttribute('class', 'form-group col-md-4');
+                divNome.setAttribute('class', 'form-group col-md-4');
+                divCidade.setAttribute('class', 'form-group col-md-4');
+                labelCpf.textContent = 'CPF';
+                labelNome.textContent = 'Nome';
+                labelCidade.textContent = 'Cidade';
+                inputCpf.setAttribute('class', 'form-control');
+                inputNome.setAttribute('class', 'form-control');
+                inputCidade.setAttribute('class', 'form-control');
+                inputCpf.setAttribute('disabled', null);
+                inputNome.setAttribute('disabled', null);
+                inputCidade.setAttribute('disabled', null);
+
+                inputCpf.value = element.cpf;
+                inputNome.value = element.nome;
+                inputCidade.value = element.cidade;
+
+                divCpf.appendChild(labelCpf);
+                divCpf.appendChild(inputCpf);
+                divNome.appendChild(labelNome);
+                divNome.appendChild(inputNome);
+                divCidade.appendChild(labelCidade);
+                divCidade.appendChild(inputCidade);
+                divCliente.appendChild(divCpf);
+                divCliente.appendChild(divNome);
+                divCliente.appendChild(divCidade);
+                div.appendChild(divCliente);
+            });
+        });
+
+        ipcRenderer.on('requestedTransacaoDoCliente', function (event, fields) {
+            console.log(fields);
+            let tbody = document.getElementById('tabelaTransacao');
+
+            // Remove todos os elementos do corpo da tabela antes de inserir os novos
+            while (tbody.firstChild) {
+                tbody.removeChild(tbody.firstChild);
+            }
+
+            // Inserir os dados do banco na tabela
+            fields.forEach(element => {
+                let tr = document.createElement('tr');
+                let thNumero = document.createElement('th');
+                let tdValor = document.createElement('td');
+                let tdData = document.createElement('td');
+                let tdHora = document.createElement('td');
+                let tdTipo = document.createElement('td');
+
+                let data = element.data_hora.substring(8,10) + '/' + element.data_hora.substring(5,7) +
+                '/' + element.data_hora.substring(0,4);
+
+                let hora = element.data_hora.substring(11,19)
+
+                thNumero.textContent = element.num_transacao;
+                tdValor.textContent = 'R$' + element.valor_transacao;
+                tdData.textContent = data;
+                tdHora.textContent = hora;
+                tdTipo.textContent = element.tipo;
+
+                if (element.tipo == 'Estorno') {
+                    tr.setAttribute('class', 'table-info');
+                }
+                else if (element.valor_transacao > 0) {
+                    tr.setAttribute('class', 'table-success');
+                }
+                else {
+                    tr.setAttribute('class', 'table-danger');
+                }
+
+                tr.appendChild(thNumero);
+                tr.appendChild(tdValor);
+                tr.appendChild(tdData);
+                tr.appendChild(tdHora);
+                tr.appendChild(tdTipo);
+                tbody.appendChild(tr);
+            });
+        });
     </script>
 
     <!-- Script de pesquisa -->
@@ -217,7 +340,21 @@
 
         function selectConta(numero) {
             console.log('Clique na Conta ' + numero);
-            ipcRenderer.send('requestFields', {tabela: 'tipo_conta', campo: 'num_conta', id: numero});
+            ipcRenderer.send('requestFields', {
+                tabela: 'tipo_conta',
+                campo: 'num_conta',
+                id: numero
+            });
+            ipcRenderer.send('requestContaDoCliente', {
+                tabela: 'conta_do_cliente',
+                campo: 'num_conta',
+                id: numero
+            });
+            ipcRenderer.send('requestTransacaoDoCliente', {
+                tabela: 'transacao_do_cliente',
+                campo: 'num_conta',
+                id: numero
+            });
             console.log('Dados da Conta ' + numero + ' solicitados.');
 
             let botaoAtualizar = document.getElementById('atualizar');

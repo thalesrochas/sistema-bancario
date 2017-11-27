@@ -215,6 +215,32 @@ ipcMain.on('requestFields', function (event, arg) {
     });
 });
 
+/* Evento ocorre quando o usuário clida em uma linha da tabela
+ * para consultar todos os elementos de uma tupla da tabela.
+ */
+ipcMain.on('requestContaDoCliente', function (event, arg) {
+    connection.query('SELECT * FROM ' + arg.tabela + ' WHERE ' + arg.campo + ' = ?;', arg.id,
+    function (error, results, fields) {
+        console.log(results);
+        // Envia os campos solicitados para o html que solicitou
+        mainWindow.webContents.send('requestedContaDoCliente', results);
+        console.log('Campos da tabela ' + arg.tabela + ' enviados.');
+    });
+});
+
+/* Evento ocorre quando o usuário clida em uma linha da tabela
+ * para consultar todos os elementos de uma tupla da tabela.
+ */
+ipcMain.on('requestTransacaoDoCliente', function (event, arg) {
+    connection.query('SELECT * FROM ' + arg.tabela + ' WHERE ' + arg.campo + ' = ?;', arg.id,
+    function (error, results, fields) {
+        console.log(results);
+        // Envia os campos solicitados para o html que solicitou
+        mainWindow.webContents.send('requestedTransacaoDoCliente', results);
+        console.log('Campos da tabela ' + arg.tabela + ' enviados.');
+    });
+});
+
 // Evento é chamado quando é solicitada a deleção de uma tupla de uma tabela
 ipcMain.on('delete', function (event, arg) {
     // Tenta realizar a deleção
