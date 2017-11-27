@@ -10,38 +10,44 @@
     <title>NullBank - Cadastrar Cliente</title>
 </head>
 <body class="padding16 fundo-login">
-    <form id="cliente">
+    <form id="cliente" novalidate>
         <div style="margin-bottom:121px"></div>
         <div class="padding16 rounded background-div-form">
             <h5>Dados Pessoais</h5>
             <div class="form-row">
                 <div class="form-group col-md-12">
                     <label for="nome">Nome</label>
-                    <input type="text" class="form-control" id="nome" placeholder="Nome Completo" autofocus>
+                    <input type="text" class="form-control" id="nome" placeholder="Nome Completo" maxlength="50" autofocus required>
+                    <div class="invalid-feedback">Por favor, insira um nome válido.</div>
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-4">
-                    <label for="cpf">CPF</label>
-                    <input type="number" class="form-control" id="cpf">
+                    <label for="cpf">CPF</label><small> (Somente números)</small>
+                    <input type="text" class="form-control" id="cpf" maxlength="11" minlength="11" required>
+                    <div class="invalid-feedback">Por favor, insira um CPF válido.</div>
                 </div>
                 <div class="form-group col-md-4">
                     <label for="rg">RG</label>
-                    <input type="number" class="form-control" id="rg">
+                    <input type="text" class="form-control" id="rg" maxlength="25" required>
+                    <div class="invalid-feedback">Por favor, insira um RG válido.</div>
                 </div>
                 <div class="form-group col-md-4">
                     <label for="nascimento">Data de Nascimento</label>
-                    <input type="date" class="form-control" id="nascimento">
+                    <input type="date" class="form-control" id="nascimento" required>
+                    <div class="invalid-feedback">Por favor, insira uma data válida.</div>
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-8">
                     <label for="endereco">Endereço</label>
-                    <input type="text" class="form-control" id="endereco" placeholder="Rua B">
+                    <input type="text" class="form-control" id="endereco" placeholder="Rua B" maxlength="45" required>
+                    <div class="invalid-feedback">Por favor, insira um Endereço válido.</div>
                 </div> 
                 <div class="form-group col-md-4">
                     <label for="cidade">Cidade</label>
-                    <input type="text" class="form-control" id="cidade">
+                    <input type="text" class="form-control" id="cidade" maxlength="45" required>
+                    <div class="invalid-feedback">Por favor, insira uma Cidade válida.</div>
                 </div>
             </div>
         </div>
@@ -59,16 +65,64 @@
 
     <script>
         const remote = require('electron').remote;
+        const ipcRenderer = require('electron').ipcRenderer;
+        const dialog = require('electron').remote.dialog;
 
         let form = document.getElementById('cliente');
 
         form.addEventListener('submit', function (e) {
+            if (form.checkValidity() === true) {
+                console.log('OK');
 
+                let nome = document.getElementById('nome');
+                let cpf = document.getElementById('cpf');
+                let rg = document.getElementById('rg');
+                let nascimento = document.getElementById('nascimento');
+                let endereco = document.getElementById('endereco');
+                let cidade = document.getElementById('cidade');
+
+                let dadosCliente = [
+                    cpf.value,
+                    rg.value,
+                    nome.value,
+                    nascimento.value,
+                    cidade.value,
+                    endereco.value
+                ];
+
+                ipcRenderer.send('insertCliente', dadosCliente);
+                console.log('Dados enviados');
+            }
+            form.classList.add('was-validated');
+            e.preventDefault();
         });
 
         function onClickCancelar() {
             remote.getCurrentWindow().close();
         }
+
+        ipcRenderer.on('clienteInserido', function (event, error) {
+            console.log(error);
+            if (error == null) {
+                dialog.showMessageBox({
+                    type: 'info',
+                    title: 'Cliente Cadastrado',
+                    message: 'Cliente cadastrado com sucesso!',
+                });
+                remote.getCurrentWindow().close();
+            }
+            else {
+                dialog.showMessageBox({
+                    type: 'error',
+                    title: 'Cliente não Cadastrado',
+                    message: 'Erro ao Cadastrar Cliente!',
+                    detail: 'Já existe um cliente com este cpf.'
+                });
+                let cpf = document.getElementById('cpf');
+                cpf.value = '';
+                cpf.focus();
+            }
+        })
     </script>
 
     <!-- Scripts para Bootstrap -->

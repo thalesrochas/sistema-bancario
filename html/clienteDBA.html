@@ -140,7 +140,8 @@
 
                 // Cria atributo de onclick com numero da agencia como parâmetro
                 tr.setAttribute('onclick', 'selectCliente(' + element.cpf + ')');
-                th.textContent = element.cpf;
+                th.textContent = element.cpf.substring(0,3) + '.' + element.cpf.substring(3,6) +
+                '.' + element.cpf.substring(6,9) + '-' + element.cpf.substring(9,11);
                 tdNome.textContent = element.nome;
                 tdCidade.textContent = element.cidade;
 
@@ -165,7 +166,8 @@
             let cidade = document.getElementById('cidade');
             
             nome.value = fields["0"].nome;
-            cpf.value = fields["0"].cpf;
+            cpf.value = fields["0"].cpf.substring(0,3) + '.' + fields["0"].cpf.substring(3,6) +
+            '.' + fields["0"].cpf.substring(6,9) + '-' + fields["0"].cpf.substring(9,11);
             rg.value = fields["0"].rg;
             nascimento.value = data_nasc.substring(8, 10) + '/' + data_nasc.substring(5, 7) + '/' + data_nasc.substring(0, 4);
             endereco.value = fields["0"].endereco;

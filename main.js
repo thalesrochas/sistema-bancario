@@ -297,6 +297,9 @@ ipcMain.on('abrirTela', function (event, arg){
         });
     });
 
+    newWindow.on('closed', function () {
+        mainWindow.webContents.reload();
+    });
 });
 
 ipcMain.on('requestAgencias', function (event, arg) {
@@ -367,4 +370,12 @@ ipcMain.on('pesquisar', function (event, arg) {
         });
         break;
     }
+});
+
+ipcMain.on('insertCliente', function (event, arg) {
+    console.log(arg);
+     connection.query('INSERT INTO cliente values (?, ?, ?, ?, ?, ?)', arg,
+    function (error, results, fields) {
+        event.sender.send('clienteInserido', error);
+    });
 });
