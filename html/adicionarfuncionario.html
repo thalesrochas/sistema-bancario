@@ -23,7 +23,6 @@
                 <div class="form-group col-md-3">
                     <label for="sexo">Sexo</label>
                     <select class="form-control" id="sexo">
-                        <option>Selecione...</option>
                         <option>Feminino</option>
                         <option>Masculino</option>
                     </select>
@@ -49,7 +48,7 @@
             <div class="form-row">
                 <div class="form-group col-md-3">
                     <label for="matricula">Matrícula</label>
-                    <input type="number" class="form-control" id="matricula">
+                    <input type="number" class="form-control" id="matricula" disabled>
                 </div>
                 <div class="form-group col-md-3">
                     <label for="senha">Senha</label>
@@ -71,14 +70,13 @@
                 <div class="form-group col-md-4">
                     <label for="cargo">Cargo</label>
                     <select class="form-control" id="cargo">
-                        <option>Selecione...</option>
+                        <option>Atendente</option>
                         <option>Gerente</option>
                         <option>Operador de Caixa</option>
-                        <option>Atendente</option>
                     </select>
                 </div>
                 <div class="form-group col-md-4">
-                    <label for="agencia">Agência</label>
+                    <label for="agencia">Agência de Lotação</label>
                     <select class="form-control" id="agencia"></select>
                 </div>
             </div>
@@ -96,6 +94,35 @@
     </form>
 
     <script>
+        const ipcRenderer = require('electron').ipcRenderer;
+
+        let matricula = document.getElementById('matricula');
+
+        // Inicia o campo de número da agência com o próximo valor de ID.
+        ipcRenderer.on('max', function (event, max) {
+            matricula.value = max + 1;
+        });
+
+        ipcRenderer.send('requestAgencias', 'agencia');
+
+        ipcRenderer.on('dataAgencia', function (event, dataAgencia){
+            let agencia = document.getElementById('agencia');
+
+            // Remove todos os elementos do select
+            while (agencia.firstChild) {
+                agencia.removeChild(agencia.firstChild);
+            }
+
+            dataAgencia.forEach(element => {
+                let option = document.createElement('option');
+                option.text = element.numero;
+
+                agencia.appendChild(option);
+            });
+        });
+    </script>
+
+    <script>
         const remote = require('electron').remote;
 
         let form = document.getElementById('funcionario');
@@ -107,6 +134,11 @@
         function onClickCancelar() {
             remote.getCurrentWindow().close();
         }
+    </script>
+
+    <!-- Requisita os números de agências -->
+    <script>
+        
     </script>
 
     <!-- Scripts para Bootstrap -->

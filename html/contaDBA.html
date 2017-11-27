@@ -228,7 +228,11 @@
         }
 
         function adicionarConta(){
-            ipcRenderer.send('abrirTela','adicionarConta');
+            ipcRenderer.send('abrirTela', {
+                tela: 'adicionarConta',
+                tabela: 'conta',
+                campo: 'num_conta'
+            });
         }
 
         function onCLickTransacao() {

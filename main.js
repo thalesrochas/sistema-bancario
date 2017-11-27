@@ -12,6 +12,7 @@ const dialog = electron.dialog;
 const DBA = {matricula: 'dba', senha: 'dba'};
 
 let mainWindow;
+let newWindow;
 let connection;
 
 app.on('ready', function () {
@@ -246,7 +247,7 @@ ipcMain.on('delete', function (event, arg) {
 // Evento ocorre quando usuário solicita a inserção de tuplas em alguma tabela
 ipcMain.on('abrirTela', function (event, arg){
     // Criação de nova tela com algumas configurações
-    let newWindow = new BrowserWindow({
+    newWindow = new BrowserWindow({
         resizable: false,
         maximizable: false,
         autoHideMenuBar: true,
@@ -256,10 +257,32 @@ ipcMain.on('abrirTela', function (event, arg){
     
     // Carrega a tela correspondente
     newWindow.loadURL(url.format({
-        pathname: 'html/' + arg + '.html',
+        pathname: 'html/' + arg.tela + '.html',
         protocol: 'file:',
         slashes: true
     }));
+
+    // Envia para a tela o maior ID da tabela associada
+    newWindow.webContents.on('did-finish-load', () => {
+        connection.query('SELECT MAX(' + arg.campo + ') AS max FROM ' + arg.tabela + ';',
+        function(error, results, fields) {
+            console.log('Maior número de ' + arg.tabela + ': ' + results[0].max);
+            newWindow.webContents.send('max', results[0].max);
+        });
+    });
+
+});
+
+ipcMain.on('requestAgencias', function (event, arg) {
+    connection.query('SELECT numero FROM agencia;',
+    function (error, results, fields) {
+        console.log(results);
+        console.log('Enviando dados de Agência...');
+        newWindow.webContents.on('did-finish-load', () => {
+            newWindow.webContents.send('dataAgencia', results);
+        });
+        console.log('Dados enviados!');
+    });
 });
 
 // Evento é chamado quando o usuário solicitar pesquisa em uma tela

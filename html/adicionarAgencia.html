@@ -21,7 +21,7 @@
                 </div>
                 <div class="form-group col-md-9">
                     <label for="nome">Nome</label>
-                    <input type="text" class="form-control" id="nome">
+                    <input type="text" class="form-control" id="nome" autofocus>
                 </div>
             </div>
             <div class="form-row">
@@ -29,16 +29,16 @@
                     <label for="gerente">Gerente</label>
                     <input type="number" class="form-control" id="gerente">
                 </div> 
+                <div class="form-group col-md-5">
+                    <label for="cidade">Cidade</label>
+                    <input type="text" class="form-control" id="cidade">
+                </div>
                 <div class="form-group col-md-4">
                     <label for="salario">Salário Montante</label>
                     <div class="input-group">
                         <span class="input-group-addon">R$</span>
-                        <input type="number" class="form-control" id="salario">
+                        <input type="number" class="form-control" id="salario" value="0.00" disabled>
                     </div>
-                </div>
-                <div class="form-group col-md-5">
-                    <label for="cidade">Cidade</label>
-                    <input type="text" class="form-control" id="cidade">
                 </div>
             </div>
         </div>
@@ -53,6 +53,17 @@
             </button>
         </div>
     </form>
+
+    <script>
+        const ipcRenderer = require('electron').ipcRenderer;
+
+        let numero = document.getElementById('numero');
+
+        // Inicia o campo de número da agência com o próximo valor de ID.
+        ipcRenderer.on('max', function (event, max) {
+            numero.value = max + 1;
+        });
+    </script>
 
     <script>
         const remote = require('electron').remote;

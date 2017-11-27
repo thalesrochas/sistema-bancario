@@ -244,7 +244,11 @@
         }
 
         function adicionarFuncionario() {
-            ipcRenderer.send('abrirTela','adicionarFuncionario');
+            ipcRenderer.send('abrirTela', {
+                tela: 'adicionarFuncionario',
+                tabela: 'funcionario',
+                campo: 'matricula'
+            });
         }
 
         function onClickAtualizar(id) {
