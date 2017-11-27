@@ -76,11 +76,11 @@
                 <div class="form-row">
                     <div class="form-group col-md-5">
                         <label for="numero">Número da Conta</label>
-                        <input type="text" class="form-control" id="numero" readonly>
+                        <input type="text" class="form-control" id="numero" disabled>
                     </div>
                     <div class="form-group col-md-5">
                         <label for="agencia">Agência</label>
-                        <input type="text" class="form-control" id="agencia" readonly>
+                        <input type="text" class="form-control" id="agencia" disabled>
                     </div>
                 </div>
                 <div class="form-row">
@@ -88,30 +88,30 @@
                         <label for="saldo">Saldo</label>
                         <div class="input-group">
                             <span class="input-group-addon">R$</span>
-                            <input type="text" class="form-control" id="saldo" readonly>
+                            <input type="text" class="form-control" id="saldo" disabled>
                         </div>
                     </div>
                     <div class="form-group col-md-3">
                         <label for="senha">Senha</label>
-                        <input type="text" class="form-control" id="senha" readonly>
+                        <input type="text" class="form-control" id="senha" disabled>
                     </div> 
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-5">
                         <label for="tipo">Tipo de Conta</label>
-                        <input type="text" class="form-control" id="tipo" readonly>
+                        <input type="text" class="form-control" id="tipo" disabled>
                     </div>
                     <div class="form-group col-md-4">
                         <label for="credito">Limite de Crédito</label>
                         <div class="input-group">
                             <span class="input-group-addon">R$</span>
-                            <input type="text" class="form-control" id="credito" readonly>
+                            <input type="text" class="form-control" id="credito" disabled>
                         </div>
                     </div>
                     <div class="form-group col-md-3">
                         <label for="juros">Taxa de Juros</label>
                         <div class="input-group">
-                            <input type="text" class="form-control" id="juros" readonly>
+                            <input type="text" class="form-control" id="juros" disabled>
                             <span class="input-group-addon">%</span>
                         </div>
                     </div>
@@ -125,7 +125,7 @@
                     <img src="../img/sync.png">
                     Atualizar
                 </button>
-                <button class="btn btn-warning">
+                <button onclick="onCLickTransacao()" class="btn btn-warning">
                     <img src="../img/swap_horiz.png">
                     Nova transação
                 </button>
@@ -235,6 +235,10 @@
 
         function adicionarConta(){
             ipcRenderer.send('abrirTela','adicionarConta');
+        }
+
+        function onCLickTransacao() {
+            ipcRenderer.send('abrirTela','novaTransacao');
         }
 
         function onClickAtualizar(id) {
