@@ -9,8 +9,8 @@
 
     <title>NullBank - Cadastrar Funcionário</title>
 </head>
-<body class="padding16" background="../img/login.jpg">
-    <form>
+<body class="padding16 fundo-login">
+    <form id="funcionario">
         <div class="padding16 rounded background-div-form">
             <h5>Dados Pessoais</h5>
             <div class="form-row">
@@ -88,12 +88,26 @@
                 <img src="../img/check.png">
                 Salvar
             </button>
-            <button type="submit" class="btn btn-danger">
+            <button onclick="onClickCancelar()" class="btn btn-danger">
                 <img src="../img/clear.png">
                 Cancelar
             </button>
         </div>
     </form>
+
+    <script>
+        const remote = require('electron').remote;
+
+        let form = document.getElementById('funcionario');
+
+        form.addEventListener('submit', function (e) {
+
+        });
+
+        function onClickCancelar() {
+            remote.getCurrentWindow().close();
+        }
+    </script>
 
     <!-- Scripts para Bootstrap -->
     <script>let $ = require('../bootstrap/js/jquery-3.2.1.min.js');</script>

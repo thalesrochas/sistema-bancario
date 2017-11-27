@@ -9,41 +9,67 @@
 
     <title>NullBank - Cadastrar Cliente</title>
 </head>
-<body>
-    <form>
-        <div class="form-row">
-            <div class="form-group col-md-6">
-                <label for="inputEmail4">Nome</label>
-                <input type="email" class="form-control" id="inputEmail4" placeholder="Nome completo">
+<body class="padding16 fundo-login">
+    <form id="cliente">
+        <div style="margin-bottom:121px"></div>
+        <div class="padding16 rounded background-div-form">
+            <h5>Dados Pessoais</h5>
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label for="nome">Nome</label>
+                    <input type="text" class="form-control" id="nome" placeholder="Nome Completo" autofocus>
+                </div>
             </div>
-            <div class="form-group col-md-6">
-                <label for="inputPassword4">CPF</label>
-                <input type="number" class="form-control" id="inputPassword4">
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="cpf">CPF</label>
+                    <input type="number" class="form-control" id="cpf">
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="rg">RG</label>
+                    <input type="number" class="form-control" id="rg">
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="nascimento">Data de Nascimento</label>
+                    <input type="date" class="form-control" id="nascimento">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-8">
+                    <label for="endereco">Endereço</label>
+                    <input type="text" class="form-control" id="endereco" placeholder="Rua B">
+                </div> 
+                <div class="form-group col-md-4">
+                    <label for="cidade">Cidade</label>
+                    <input type="text" class="form-control" id="cidade">
+                </div>
             </div>
         </div>
-        <div class="form-group">
-            <label for="inputAddress2">RG</label>
-            <input type="number" class="form-control" id="inputAddress2">
+        <div class="center margin-top16">
+            <button type="submit" class="btn btn-success">
+                <img src="../img/check.png">
+                Salvar
+            </button>
+            <button onclick="onClickCancelar()" class="btn btn-danger">
+                <img src="../img/clear.png">
+                Cancelar
+            </button>
         </div>
-        <div class="form-group">
-            <label for="inputAddress">Endereço</label>
-            <input type="text" class="form-control" id="inputAddress" >
-        </div>
-        <div class="form-row">
-            <div class="form-group col-md-6">
-                <label for="inputCity">Cidade</label>
-                <input type="text" class="form-control" id="inputCity">
-            </div>
-            <div class="form-group col-md-6">
-                <label for="inputState" >Data de nascimento</label>
-                <input type="date" class="form-control">
-            </div>
-        </div>
-        <button type="submit" class="btn btn-success salvar">
-            <img src="../img/check.png">
-            Salvar
-        </button>
     </form>
+
+    <script>
+        const remote = require('electron').remote;
+
+        let form = document.getElementById('cliente');
+
+        form.addEventListener('submit', function (e) {
+
+        });
+
+        function onClickCancelar() {
+            remote.getCurrentWindow().close();
+        }
+    </script>
 
     <!-- Scripts para Bootstrap -->
     <script>let $ = require('../bootstrap/js/jquery-3.2.1.min.js');</script>

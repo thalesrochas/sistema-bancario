@@ -10,11 +10,8 @@
     width: 600px;
 }
 
-.fundo-acessarBD {
-    background-image: url('img/login.jpg');
-    background-size:100%;
-    height: 439px;
-    width: 600px;
+.fundo-login {
+    background: url('img/login.jpg');
 }
 
 .bottom-right {
@@ -42,9 +39,9 @@
 }
 
 .arruma {
-    width: 20em;
+    width: 350px;
     margin: auto;
-    margin-top: 10em;
+    margin-top: 210px;
     text-align: center;
 }
 
@@ -113,6 +110,10 @@
     font-family:'roboto thin';
     text-align: center;
     color: #0B81CF;
+    border-top: 1px solid #0B81CF;
+    border-bottom: 1px solid #0B81CF;
+    padding: 8px;
+    font-size: 25pt;
 }
 
 .barra-horizontal {
@@ -124,12 +125,10 @@
     position: absolute;
     bottom: 20px;
     right: 20px;
-    margin-top: 30em;
 }
 
-.arruma2 {
-    width: 20em;
-    margin: 33em;
-    margin-top: 10em;
-    text-align: center;
+.degrade {
+    /*background-image: linear-gradient(45deg, #001173, #0B81CF);*/
+    background-color: #001173;
+    padding-left: 16px;
 }

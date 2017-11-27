@@ -7,40 +7,122 @@
     <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../style.css">
 
-    <title>NullBank - Cadastrar nova conta</title>
+    <title>NullBank - Nova Conta</title>
 </head>
-<body>
-    <form>
-         <div class="form-group col-md-4">
-            <label for="inputEmail4">Número</label>
-            <input type="number" class="form-control" id="inputEmail4" placeholder="Nome completo">
+<body class="padding16 fundo-login">
+    <form id="conta">
+        <div style="margin-bottom:121px"></div>
+        <div class="padding16 rounded background-div-form">
+            <h5>Dados da Conta</h5>
+            <div class="form-row">
+                <div class="form-group col-md-5">
+                    <label for="numero">Número da Conta</label>
+                    <input type="number" class="form-control" id="numero" autofocus>
+                </div>
+                <div class="form-group col-md-5">
+                    <label for="agencia">Agência</label>
+                    <input type="number" class="form-control" id="agencia">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="saldo">Saldo</label>
+                    <div class="input-group">
+                        <span class="input-group-addon">R$</span>
+                        <input type="number" class="form-control" id="saldo">
+                    </div>
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="senha">Senha</label>
+                    <input type="password" class="form-control" id="senha">
+                </div> 
+                <div class="form-group col-md-3">
+                    <label for="confSenha">Confirmar Senha</label>
+                    <input type="password" class="form-control" id="confSenha">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-5">
+                    <label for="tipo">Tipo de Conta</label>
+                    <select class="form-control" id="tipo" onchange="ativarCampos()">
+                        <option>Selecione...</option>
+                        <option>Conta Corrente</option>
+                        <option>Conta Poupança</option>
+                        <option>Conta Especial</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="credito">Limite de Crédito</label>
+                    <div class="input-group">
+                        <span class="input-group-addon">R$</span>
+                        <input type="number" class="form-control" id="credito" disabled>
+                    </div>
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="juros">Taxa de Juros</label>
+                    <div class="input-group">
+                        <input type="number" class="form-control" id="juros" disabled>
+                        <span class="input-group-addon">%</span>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="form-group col-md-3">
-            <label for="inputPassword4">Saldo</label>
-            <input type="number" class="form-control" id="inputPassword4">
+        <div class="center margin-top16">
+            <button type="submit" class="btn btn-success">
+                <img src="../img/check.png">
+                Salvar
+            </button>
+            <button onclick="onClickCancelar()" class="btn btn-danger">
+                <img src="../img/clear.png">
+                Cancelar
+            </button>
         </div>
-        <div class="form-group col-md-3">
-            <label for="inputsenha">Senha</label>
-            <input type="text" class="form-control" id="inputsenha" >
-        </div>
-        <div class="form-group col-md-2">
-            <label for="">Número da agência</label>
-            <input type="number" class="form-control" id="inputagencia">
-        </div>
-        <div class="form-group col-md-3">
-            <label for="exampleFormControlSelect1">Tipo da conta</label>
-            <select class="form-control" id="exampleFormControlSelect1">
-                <option></option>
-                <option>Corrente</option>
-                <option>Poupança</option>
-                <option>Conta especial</option>
-            </select>
-        </div> 
-        <button type="submit" class="btn btn-success salvar">
-            <img src="../img/check.png">
-            Salvar
-        </button>
     </form>
+
+    <script>
+        const remote = require('electron').remote;
+
+        let form = document.getElementById('conta');
+
+        form.addEventListener('submit', function (e) {
+
+        });
+
+        function onClickCancelar() {
+            remote.getCurrentWindow().close();
+        }
+    </script>
+
+    <script>
+        let tipoConta = document.getElementById('tipo');
+        let credito = document.getElementById('credito');
+        let juros = document.getElementById('juros');
+
+        function ativarCampos() {
+            switch (tipoConta.value) {
+            case 'Conta Poupança':
+                juros.value = '';
+                juros.removeAttribute('disabled');
+                credito.value = '0.00';
+                credito.setAttribute('disabled', null);
+                break;
+            
+            case 'Conta Especial':
+                juros.value = '0';
+                juros.setAttribute('disabled', null);
+                credito.value = '';
+                credito.removeAttribute('disabled');
+                break;
+
+            default:
+            juros.value = '0';
+                juros.setAttribute('disabled', null);
+                credito.value = '0.00';
+                credito.setAttribute('disabled', null);
+                break;
+            }
+        }
+    </script>
 
     <!-- Scripts para Bootstrap -->
     <script>let $ = require('../bootstrap/js/jquery-3.2.1.min.js');</script>
