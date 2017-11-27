@@ -103,11 +103,11 @@
 
             <!-- Botões -->
             <div class="center margin-top16">
-                <button onclick="onClickAtualizar(-1)" id="atualizar" class="btn btn-success">
+                <button id="atualizar" class="btn btn-success" disabled>
                     <img src="../img/sync.png">
                     Atualizar
                 </button>
-                <button onclick="onClickDeletar(-1)" id="deletar" class="btn btn-danger">
+                <button id="deletar" class="btn btn-danger" disabled>
                     <img src="../img/delete.png">
                     Remover
                 </button>
@@ -210,6 +210,8 @@
 
             botaoAtualizar.setAttribute('onclick', 'onClickAtualizar(' + cpf + ')');
             botaoDeletar.setAttribute('onclick', 'onClickDeletar(' + cpf + ')');
+            botaoAtualizar.removeAttribute('disabled');
+            botaoDeletar.removeAttribute('disabled');
         }
 
         function adicionarCliente(){
@@ -221,51 +223,34 @@
         }
 
         function onClickAtualizar(id) {
-            if (id == -1) {
-                console.error('Nenhum cliente selecionado');
-            }
-            else {
-                console.log('Cliente Atualizado!');
-            }
+            console.log('Cliente Atualizado!');
         }
 
         function onClickDeletar(id) {
-            // Verifica se há alguma linha da tabela selecionada
-            if (id == -1) {
-                console.error('Nenhum cliente selecionado');
-                dialog.showMessageBox({
-                    type: 'error',
-                    title: 'Erro ao Remover Cliente',
-                    message: 'Nenhum Cliente selecionado!',
-                    detail: 'Selecione um cliente antes de tentar remover.'
-                });
-            }   
-            else {
-                // Requisita confirmação do usuário sobre a deleção da tupla
-                dialog.showMessageBox({
-                    type: 'question',
-                    buttons: ['Remover', 'Cancelar'],
-                    defaultId: 0,
-                    cancelId: 1,
-                    title: 'Confirmar Remoção de Cliente',
-                    message: 'Você tem certeza que deseja remover o Cliente ' + nome.value + '?',
-                    detail: 'Essa ação não pode ser desfeita.\nTodos os dados desse cliente serão perdidos!'
-                }, function (response) {
-                    /* Se o usuário confirmar deleção, dados de tabela e id
-                     * são enviados para main.js para tratar a deleção
-                     */
-                    if (!response) {
-                        ipcRenderer.send('delete', {
-                            tabela: 'cliente',
-                            campo: 'cpf',
-                            id: id,
-                            nome_tabela: 'Cliente',
-                            nome: nome.value,
-                            detail: null
-                        });
-                    }
-                });
-            }
+            // Requisita confirmação do usuário sobre a deleção da tupla
+            dialog.showMessageBox({
+                type: 'question',
+                buttons: ['Remover', 'Cancelar'],
+                defaultId: 0,
+                cancelId: 1,
+                title: 'Confirmar Remoção de Cliente',
+                message: 'Você tem certeza que deseja remover o Cliente ' + nome.value + '?',
+                detail: 'Essa ação não pode ser desfeita.\nTodos os dados desse cliente serão perdidos!'
+            }, function (response) {
+                /* Se o usuário confirmar deleção, dados de tabela e id
+                    * são enviados para main.js para tratar a deleção
+                    */
+                if (!response) {
+                    ipcRenderer.send('delete', {
+                        tabela: 'cliente',
+                        campo: 'cpf',
+                        id: id,
+                        nome_tabela: 'Cliente',
+                        nome: nome.value,
+                        detail: null
+                    });
+                }
+            });
         }
     </script>
 
