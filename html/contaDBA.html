@@ -34,16 +34,12 @@
     <div class="aui-group">
         <!-- Coluna da tabela de Contas -->
         <div class="aui-item column-width">
-            <form id="pesquisar">
-                <div class="input-group padding16">
-                    <input id="pesquisa" type="text" class="form-control" placeholder="Pesquisar..." autofocus>
-                    <span class="input-group-btn">
-                        <button class="btn btn-info" type="submit">
-                            <img src="../img/search.png">
-                        </button>
-                    </span>
-                </div>
-            </form>
+            <div class="input-group padding16">
+                <input id="pesquisa" type="text" oninput="pesquisar()" class="form-control" placeholder="Pesquisar..." autofocus>
+                <span class="input-group-addon badge-info">
+                    <img src="../img/search.png">
+                </span>
+            </div>
             <div class="table-padding">
                 <table class="table table-hover">
                     <thead>
@@ -196,18 +192,16 @@
 
     <!-- Script de pesquisa -->
     <script>
-        let form = document.getElementById('pesquisar');
         let pesquisa = document.getElementById('pesquisa');
-
-        form.addEventListener('submit', function (e) {
+        
+        function pesquisar() {
             let dadosPesquisa = {
                 tabela: 'conta',
                 txt: pesquisa.value
             };
 
             ipcRenderer.send('pesquisar', dadosPesquisa);
-            e.preventDefault();
-        });
+        }
     </script>
 
     <!-- Script de funções da página -->
