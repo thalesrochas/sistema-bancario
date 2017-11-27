@@ -274,6 +274,8 @@ ipcMain.on('delete', function (event, arg) {
 ipcMain.on('abrirTela', function (event, arg){
     // Criação de nova tela com algumas configurações
     newWindow = new BrowserWindow({
+        parent: mainWindow,
+        modal: true,
         resizable: false,
         maximizable: false,
         autoHideMenuBar: true,
@@ -374,8 +376,16 @@ ipcMain.on('pesquisar', function (event, arg) {
 
 ipcMain.on('insertCliente', function (event, arg) {
     console.log(arg);
-     connection.query('INSERT INTO cliente values (?, ?, ?, ?, ?, ?)', arg,
+    connection.query('INSERT INTO cliente VALUES (?, ?, ?, ?, ?, ?)', arg,
     function (error, results, fields) {
         event.sender.send('clienteInserido', error);
+    });
+});
+
+ipcMain.on('insertConta', function (event, arg) {
+    console.log(arg);
+    connection.query('INSERT INTO conta VALUES (?, ?, ?, ?, ?)', arg.slice(0,5),
+    function (error, results, fields) {
+        event.sender.send('contaInserida', error);
     });
 });

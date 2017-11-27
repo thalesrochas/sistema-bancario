@@ -115,6 +115,20 @@
                 </div>
                 <div class="padding16 margin-top16 rounded border border-secondary" id="clientes">
                     <h5>Clientes</h5>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label>CPF</label>
+                            <input class="form-control" disabled>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label>Nome</label>
+                            <input class="form-control" disabled>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label>Cidade</label>
+                            <input class="form-control" disabled>
+                        </div>
+                    </div>
                 </div>
                 <div class="padding16 margin-top16 rounded border border-secondary">
                     <h5>Transações</h5>
@@ -135,15 +149,19 @@
         
             <!-- Botões -->
             <div class="center margin-top16">
-                <button onclick="onClickAtualizar(-1)" id="atualizar" class="btn btn-success">
+                <button id="atualizar" class="btn btn-success" disabled>
                     <img src="../img/sync.png">
                     Atualizar
                 </button>
-                <button onclick="onCLickTransacao()" class="btn btn-warning">
-                    <img src="../img/swap_horiz.png">
-                    Nova transação
+                <button id="associar" class="btn btn-info" disabled>
+                    <img src="../img/person_add.png">
+                    Associar Cliente
                 </button>
-                <button onclick="onClickDeletar(-1)" id="deletar" class="btn btn-danger">
+                <button id="transacao" class="btn btn-warning" disabled>
+                    <img src="../img/swap_horiz.png">
+                    Nova Transação
+                </button>
+                <button id="deletar" class="btn btn-danger" disabled>
                     <img src="../img/delete.png">
                     Remover
                 </button>
@@ -220,6 +238,13 @@
 
             h5.textContent = 'Clientes';
             div.appendChild(h5);
+
+            if (fields.length == 0) {
+                console.log('Conta sem Cliente');
+                let h6 = document.createElement('h6');
+                h6.textContent = 'Não há cliente associado a esta conta.';
+                div.appendChild(h6);
+            }
 
             fields.forEach(element => {
                 let divCliente = document.createElement('div');
@@ -358,10 +383,19 @@
             console.log('Dados da Conta ' + numero + ' solicitados.');
 
             let botaoAtualizar = document.getElementById('atualizar');
+            let botaoAssociar = document.getElementById('associar');
+            let botaoTransacao = document.getElementById('transacao');
             let botaoDeletar = document.getElementById('deletar');
 
             botaoAtualizar.setAttribute('onclick', 'onClickAtualizar(' + numero + ')');
+            botaoDeletar.setAttribute('onclick', 'onClickAssociar(' + numero + ')');
+            botaoTransacao.setAttribute('onclick', 'onClickTransacao(' + numero + ')');
             botaoDeletar.setAttribute('onclick', 'onClickDeletar(' + numero + ')');
+            
+            botaoAtualizar.removeAttribute('disabled');
+            botaoAssociar.removeAttribute('disabled');
+            botaoTransacao.removeAttribute('disabled');
+            botaoDeletar.removeAttribute('disabled');
         }
 
         function adicionarConta(){
@@ -372,56 +406,43 @@
             });
         }
 
-        function onCLickTransacao() {
+        function onClickAtualizar(id) {
+            console.log('Conta Atualizada!');
+        }
+
+        function onClickAssociar(id) {
+            
+        }
+        
+        function onClickTransacao(id) { // Enviar id
             ipcRenderer.send('abrirTela','novaTransacao');
         }
 
-        function onClickAtualizar(id) {
-            if (id == -1) {
-                console.error('Nenhuma conta selecionada');
-            }
-            else {
-                console.log('Conta Atualizada!');
-            }
-        }
-
         function onClickDeletar(id) {
-            // Verifica se há alguma linha da tabela selecionada
-            if (id == -1) {
-                console.error('Nenhuma conta selecionada');
-                dialog.showMessageBox({
-                    type: 'error',
-                    title: 'Erro ao Remover Conta',
-                    message: 'Nenhuma conta selecionada!',
-                    detail: 'Selecione uma conta antes de tentar remover.'
-                });
-            }   
-            else {
-                // Requisita confirmação do usuário sobre a deleção da tupla
-                dialog.showMessageBox({
-                    type: 'question',
-                    buttons: ['Remover', 'Cancelar'],
-                    defaultId: 0,
-                    cancelId: 1,
-                    title: 'Confirmar Remoção de Conta',
-                    message: 'Você tem certeza que deseja remover a Conta ' + numero.value + '?',
-                    detail: 'Essa ação não pode ser desfeita.\nTodos os dados dessa conta serão perdidos!'
-                }, function (response) {
-                    /* Se o usuário confirmar deleção, dados de tabela e id
-                     * são enviados para main.js para tratar a deleção
-                     */
-                    if (!response) {
-                        ipcRenderer.send('delete', {
-                            tabela: 'conta',
-                            campo: 'num_conta',
-                            id: id,
-                            nome_tabela: 'Conta',
-                            nome: numero.value,
-                            detail: 'Podem haver clientes associados a essa conta.'
-                        });
-                    }
-                });
-            }
+            // Requisita confirmação do usuário sobre a deleção da tupla
+            dialog.showMessageBox({
+                type: 'question',
+                buttons: ['Remover', 'Cancelar'],
+                defaultId: 0,
+                cancelId: 1,
+                title: 'Confirmar Remoção de Conta',
+                message: 'Você tem certeza que deseja remover a Conta ' + numero.value + '?',
+                detail: 'Essa ação não pode ser desfeita.\nTodos os dados dessa conta serão perdidos!'
+            }, function (response) {
+                /* Se o usuário confirmar deleção, dados de tabela e id
+                    * são enviados para main.js para tratar a deleção
+                    */
+                if (!response) {
+                    ipcRenderer.send('delete', {
+                        tabela: 'conta',
+                        campo: 'num_conta',
+                        id: id,
+                        nome_tabela: 'Conta',
+                        nome: numero.value,
+                        detail: 'Podem haver clientes associados a essa conta.'
+                    });
+                }
+            });
         }
     </script>
     
