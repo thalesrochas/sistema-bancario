@@ -31,11 +31,11 @@
                     <small style="padding-left: 30px">Valor Inicial: R$0,00</small>
                     <div class="input-group">
                         <span class="input-group-addon">R$</span>
-                        <input type="number" class="form-control" id="saldo" placeholder="0.00">
+                        <input type="number" class="form-control" id="saldo" min="0" max="999999999.99" step="0.01" placeholder="0.00">
                     </div>
                 </div>
                 <div class="form-group col-md-3">
-                    <label for="senha">Senha</label>
+                    <label for="senha">Senha</label><small> (6 Dígitos)</small>
                     <input type="password" class="form-control" id="senha" maxlength="6" minlength="6" required>
                     <div class="invalid-feedback">Por favor, insira uma senha.</div>
                 </div> 
@@ -58,13 +58,13 @@
                     <label for="credito">Limite de Crédito</label>
                     <div class="input-group">
                         <span class="input-group-addon">R$</span>
-                        <input type="number" class="form-control" id="credito" value="0.00" disabled required>
+                        <input type="number" class="form-control" id="credito" min="0.01" max="9999999.99" step="0.01" value="0.00" disabled required>
                     </div>
                 </div>
                 <div class="form-group col-md-3">
                     <label for="juros">Taxa de Juros</label>
                     <div class="input-group">
-                        <input type="number" class="form-control" id="juros" value="0" disabled required>
+                        <input type="number" class="form-control" id="juros" min="0.01" max="99999.99" step="0.01" value="0" disabled required>
                         <span class="input-group-addon">%</span>
                     </div>
                 </div>

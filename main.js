@@ -376,7 +376,7 @@ ipcMain.on('pesquisar', function (event, arg) {
 
 ipcMain.on('insertCliente', function (event, arg) {
     console.log(arg);
-    connection.query('INSERT INTO cliente VALUES (?, ?, ?, ?, ?, ?)', arg,
+    connection.query('INSERT INTO cliente VALUES (?, ?, ?, ?, ?, ?);', arg,
     function (error, results, fields) {
         event.sender.send('clienteInserido', error);
     });
@@ -384,8 +384,25 @@ ipcMain.on('insertCliente', function (event, arg) {
 
 ipcMain.on('insertConta', function (event, arg) {
     console.log(arg);
-    connection.query('INSERT INTO conta VALUES (?, ?, ?, ?, ?)', arg.slice(0,5),
+    connection.query('INSERT INTO conta VALUES (?, ?, ?, ?, ?);', arg.slice(0,5),
     function (error, results, fields) {
         event.sender.send('contaInserida', error);
     });
+
+    switch(arg[4]) { // Tipo de Conta
+    case 'Conta Corrente':
+        connection.query('INSERT INTO conta_corrente VALUES (?);', arg[0],
+        function (error, results, fields) {});
+        break;
+    
+    case 'Conta Poupança':
+        connection.query('INSERT INTO conta_poupanca VALUES (?, ?);', [arg[0], arg[6]],
+        function (error, results, fields) {});
+        break;
+
+    case 'Conta Especial':
+        connection.query('INSERT INTO conta_especial VALUES (?, ?);', [arg[0], arg[5]],
+        function (error, results, fields) {});
+        break;
+    }
 });
