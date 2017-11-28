@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../style.css">
+
+    <title>NullBank - Associar Cliente</title>
+</head>
+<body class="padding16 fundo-login">
+    <form id="associar" novalidate>
+        <div style="margin-bottom:155px"></div>
+        <div class="padding16 rounded background-div-form">
+            <h5>Conta</h5>
+            <div class="form-row">
+                <div class="form-group col-md-1"></div>
+                <div class="form-group col-md-5">
+                    <label for="numero">Número da Conta</label>
+                    <input type="text" class="form-control" id="numero" disabled>
+                </div>
+                <div class="form-group col-md-5">
+                    <label for="agencia">Agência</label>
+                    <input type="text" class="form-control" id="agencia" disabled>
+                </div>
+            </div>
+        </div>
+        <div class="padding16 rounded background-div-form margin-top16">
+            <h5>Cliente</h5>
+            <div class="form-row">
+                <div class="form-group col-md-5">
+                    <label for="cpf">CPF</label><small> (Somente números)</small>
+                    <input type="text" class="form-control" id="cpf" maxlength="11" minlength="11" required autofocus>
+                    <div class="invalid-feedback">Por favor, insira um CPF válido.</div>
+                </div>
+            </div>
+        </div>
+        <div class="center margin-top16">
+            <button type="submit" class="btn btn-success">
+                <img src="../img/check.png">
+                Salvar
+            </button>
+            <button onclick="onClickCancelar()" class="btn btn-danger">
+                <img src="../img/clear.png">
+                Cancelar
+            </button>
+        </div>
+    </form>
+
+    <script>
+        const remote = require('electron').remote;
+        const ipcRenderer = require('electron').ipcRenderer;
+        const dialog = require('electron').remote.dialog;
+
+        let form = document.getElementById('associar');
+        let cpf = document.getElementById('cpf');
+        let numero = document.getElementById('numero');
+        let agencia = document.getElementById('agencia');
+
+        form.addEventListener('submit', function(e) {
+            if (form.checkValidity() === true) {
+                console.log('OK');
+
+                let contaCliente = [
+                    cpf.value,
+                    numero.value,
+                    agencia.value
+                ];
+
+                ipcRenderer.send('insertContaCliente', contaCliente);
+                console.log('Dados enviados');
+            }
+            form.classList.add('was-validated');
+            e.preventDefault();
+        });
+
+        function onClickCancelar() {
+            remote.getCurrentWindow().close();
+        }
+
+        ipcRenderer.on('campos', function (event, fields) {
+            console.log(fields);
+
+            numero.value = fields['0'].num_conta;
+            agencia.value = fields['0'].num_agencia;
+        });
+
+        ipcRenderer.on('contaClienteInserido', function (event, error) {
+            console.log(error);
+            if (error == null) {
+                dialog.showMessageBox({
+                    type: 'info',
+                    title: 'Conta Associada',
+                    message: 'Conta associada com sucesso!',
+                });
+                remote.getCurrentWindow().close();
+            }
+            else if (error.code == 'ER_NO_REFERENCED_ROW_2') {
+                dialog.showMessageBox({
+                    type: 'error',
+                    title: 'Cliente não Cadastrado',
+                    message: 'Cliente não Existe!'
+                });
+                let cpf = document.getElementById('cpf');
+                cpf.value = '';
+                cpf.focus();
+            }
+            else {
+                dialog.showMessageBox({
+                    type: 'error',
+                    title: 'Associação Inválida',
+                    message: 'Associação Inválida!',
+                    detail: error.sqlMessage
+                });
+                remote.getCurrentWindow().close();
+            }
+        });
+    </script>
+
+    <!-- Scripts para Bootstrap -->
+    <script>let $ = require('../bootstrap/js/jquery-3.2.1.min.js');</script>
+    <script src="../bootstrap/js/popper.min.js"></script>
+    <script src="../bootstrap/js/bootstrap.js"></script>
+</body>
+</html>

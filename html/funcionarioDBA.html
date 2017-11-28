@@ -246,8 +246,11 @@
         function adicionarFuncionario() {
             ipcRenderer.send('abrirTela', {
                 tela: 'adicionarFuncionario',
-                tabela: 'funcionario',
-                campo: 'matricula'
+                tipo: 'insert',
+                args: {
+                    tabela: 'funcionario',
+                    campo: 'matricula'
+                }
             });
         }
 

@@ -217,8 +217,8 @@
         function adicionarCliente(){
             ipcRenderer.send('abrirTela', {
                 tela: 'adicionarCliente',
-                tabela: 'cliente',
-                campo: 'cpf'
+                tipo: null,
+                args: null
             });
         }
 

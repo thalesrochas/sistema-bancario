@@ -292,11 +292,23 @@ ipcMain.on('abrirTela', function (event, arg){
 
     // Envia para a tela o maior ID da tabela associada
     newWindow.webContents.on('did-finish-load', () => {
-        connection.query('SELECT MAX(' + arg.campo + ') AS max FROM ' + arg.tabela + ';',
-        function(error, results, fields) {
-            console.log('Maior número de ' + arg.tabela + ': ' + results[0].max);
-            newWindow.webContents.send('max', results[0].max);
-        });
+        switch (arg.tipo) {
+        case 'insert':
+            connection.query('SELECT MAX(' + arg.args.campo + ') AS max FROM ' + arg.args.tabela + ';',
+            function (error, results, fields) {
+                console.log('Maior número de ' + arg.args.tabela + ': ' + results[0].max);
+                newWindow.webContents.send('max', results[0].max);
+            });
+            break;
+
+        case 'associar':
+            connection.query('SELECT * FROM ' + arg.args.tabela +
+            ' WHERE ' + arg.args.campo + ' = ?;', arg.args.id,
+            function (error, results, fields) {
+                console.log(results);
+                newWindow.webContents.send('campos', results);
+            });
+        }
     });
 
     newWindow.on('closed', function () {
@@ -405,4 +417,12 @@ ipcMain.on('insertConta', function (event, arg) {
         function (error, results, fields) {});
         break;
     }
+});
+
+ipcMain.on('insertContaCliente', function (event, arg) {
+    console.log(arg);
+    connection.query('INSERT INTO conta_cliente VALUES (?, ?, ?)', arg,
+    function (error, results, fields) {
+        event.sender.send('contaClienteInserido', error);
+    });
 });

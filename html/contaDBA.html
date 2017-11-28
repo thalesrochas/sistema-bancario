@@ -388,7 +388,7 @@
             let botaoDeletar = document.getElementById('deletar');
 
             botaoAtualizar.setAttribute('onclick', 'onClickAtualizar(' + numero + ')');
-            botaoDeletar.setAttribute('onclick', 'onClickAssociar(' + numero + ')');
+            botaoAssociar.setAttribute('onclick', 'onClickAssociar(' + numero + ')');
             botaoTransacao.setAttribute('onclick', 'onClickTransacao(' + numero + ')');
             botaoDeletar.setAttribute('onclick', 'onClickDeletar(' + numero + ')');
             
@@ -401,8 +401,11 @@
         function adicionarConta(){
             ipcRenderer.send('abrirTela', {
                 tela: 'adicionarConta',
-                tabela: 'conta',
-                campo: 'num_conta'
+                tipo: 'insert',
+                args: {
+                    tabela: 'conta',
+                    campo: 'num_conta'
+                }
             });
         }
 
@@ -411,10 +414,28 @@
         }
 
         function onClickAssociar(id) {
-            
+            console.log('Associar Cliente clicado');
+            ipcRenderer.send('abrirTela', {
+                tela: 'associarCliente',
+                tipo: 'associar',
+                args: {
+                    tabela: 'conta',
+                    campo: 'num_conta',
+                    id: id
+                }
+            });
         }
         
         function onClickTransacao(id) { // Enviar id
+            ipcRenderer.send('abrirTela', {
+                tela: 'novaTransacao',
+                tipo: 'associar',
+                args: {
+                    tabela: 'transacao',
+                    campo: 'num_conta',
+                    id: id
+                }
+            });
             ipcRenderer.send('abrirTela','novaTransacao');
         }
 
