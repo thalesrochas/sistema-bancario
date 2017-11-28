@@ -7,33 +7,154 @@
     <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../style.css">
 
-    <title>NullBank - Cadastrar nova conta</title>
+    <title>NullBank - Nova Transação</title>
 </head>
-<body>
-    <form>
-         <div class="form-group col-md-3">
-            <label for="inputEmail4">Número</label>
-            <input type="number" class="form-control" id="inputEmail4" placeholder="Nome completo">
+<body class="padding16 fundo-login">
+    <form id="transacao" novalidate>
+        <div style="margin-bottom:60px"></div>
+        <div class="padding16 rounded background-div-form">
+            <h5>Conta</h5>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="numeroConta">Número da Conta</label>
+                    <input type="text" class="form-control" id="numeroConta" disabled>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="agencia">Agência</label>
+                    <input type="text" class="form-control" id="agencia" disabled>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="saldo">Saldo</label>
+                    <div class="input-group">
+                        <span class="input-group-addon">R$</span>
+                        <input type="text" class="form-control" id="saldo" disabled>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="form-group col-md-3">
-            <label for="inputPassword4">Valor</label>
-            <input type="number" class="form-control" id="inputPassword4">
+        <div class="padding16 rounded background-div-form margin-top16">
+            <h5>Transação</h5>
+            <div class="form-row">
+                <div class="form-group col-md-2">
+                    <label for="numeroTransacao">Número</label>
+                    <input type="number" class="form-control" id="numeroTransacao" disabled>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="valor">Valor</label>
+                    <small> (> R$0,00)</small>
+                    <div class="input-group">
+                        <span class="input-group-addon">R$</span>
+                        <input type="number" class="form-control" id="valor" min="0.01" max="99999999.99" step="0.01" required autofocus>
+                    </div>
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="tipo">Tipo da transação</label>
+                    <select class="form-control" id="tipo" onchange="toggleBeneficiado()">
+                        <option>Depósito</option>
+                        <option>Saque</option>
+                        <option>Transferência</option>
+                        <option>Estorno</option>
+                    </select>
+                </div>
+            </div>
         </div>
-        <div class="form-group col-md-3">
-            <label for="inputsenha">Data</label>
-            <input type="date" class="form-control" id="inputsenha" >
+        <div id="contaBeneficiada" class="padding16 rounded background-div-form margin-top16" style="display: none">
+            <h5>Conta Beneficiada</h5>
+            <div class="form-row">
+                <div class="form-group col-md-5">
+                    <label for="numeroBen">Número da Conta</label>
+                    <input type="number" class="form-control" id="numeroBen">
+                    <div class="invalid-feedback">Por favor, insira um Número de Conta válido.</div>
+                </div>
+                <div class="form-group col-md-5">
+                    <label for="agenciaBen">Agência</label>
+                    <select class="form-control" id="agenciaBen"></select>
+                </div>
+            </div>
         </div>
-        <div class="form-group col-md-3">
-            <label for="exampleFormControlSelect1">Tipo da transação</label>
-            <select class="form-control" id="exampleFormControlSelect1">
-                <option></option>
-                <option>Saque</option>
-                <option>Estorno</option>
-                <option>Transferência</option>
-            </select>
-        </div> 
-        <button type="submit" class="btn btn-success salvar">Salvar</button>
+        <div class="center margin-top16">
+            <button type="submit" class="btn btn-success">
+                <img src="../img/check.png">
+                Salvar
+            </button>
+            <button onclick="onClickCancelar()" class="btn btn-danger">
+                <img src="../img/clear.png">
+                Cancelar
+            </button>
+        </div>
     </form>
+
+    <script>
+        const remote = require('electron').remote;
+        const ipcRenderer = require('electron').ipcRenderer;
+
+        let form = document.getElementById('transacao');
+
+        ipcRenderer.send('requestAgencias', 'agencia');
+
+        ipcRenderer.on('dataAgencia', function (event, dataAgencia){
+            let agencia = document.getElementById('agenciaBen');
+
+            // Remove todos os elementos do select
+            while (agencia.firstChild) {
+                agencia.removeChild(agencia.firstChild);
+            }
+
+            dataAgencia.forEach(element => {
+                let option = document.createElement('option');
+                option.textContent = element.numero;
+
+                agencia.appendChild(option);
+            });
+        });
+
+        ipcRenderer.on('campos', function (event, dataTransacao) {
+            console.log(dataTransacao);
+
+            let numeroConta = document.getElementById('numeroConta');
+            let agencia = document.getElementById('agencia');
+            let saldo = document.getElementById('saldo');
+            let numeroTransacao = document.getElementById('numeroTransacao');
+
+            numeroConta.value = dataTransacao['0']['0'].num_conta;
+            agencia.value = dataTransacao['0']['0'].num_agencia;
+            saldo.value = dataTransacao['0']['0'].saldo;
+            numeroTransacao.value = dataTransacao['1'];
+        });
+
+        form.addEventListener('submit', function(e) {
+            if (form.checkValidity() === true) {
+                console.log('OK');
+
+                let transacao = [
+
+                ];
+                // TEM QUE TERMINAR AQUI
+            }
+            form.classList.add('was-validated');
+            e.preventDefault();
+        });
+
+        function toggleBeneficiado() {
+            let tipo = document.getElementById('tipo');
+            let divBeneficiado = document.getElementById('contaBeneficiada');
+            let numeroBen = document.getElementById('numeroBen');
+
+            switch (tipo.value) {
+            case 'Transferência':
+                divBeneficiado.removeAttribute('style');
+                numeroBen.setAttribute('required', null);
+                break;
+            default:
+                divBeneficiado.setAttribute('style', 'display: none');
+                numeroBen.removeAttribute('required');
+            }
+        }
+
+        function onClickCancelar() {
+            remote.getCurrentWindow().close();
+        }
+    </script>
 
     <!-- Scripts para Bootstrap -->
     <script>let $ = require('../bootstrap/js/jquery-3.2.1.min.js');</script>

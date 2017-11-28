@@ -305,8 +305,17 @@ ipcMain.on('abrirTela', function (event, arg){
             connection.query('SELECT * FROM ' + arg.args.tabela +
             ' WHERE ' + arg.args.campo + ' = ?;', arg.args.id,
             function (error, results, fields) {
-                console.log(results);
-                newWindow.webContents.send('campos', results);
+                if (arg.args.trans) {
+                    connection.query('SELECT MAX(num_transacao) AS max FROM transacao;',
+                    function (error, maxTransacao, fields) {
+                        console.log(maxTransacao['0'].max);
+                        newWindow.webContents.send('campos', [results, maxTransacao['0'].max]);
+                    });
+                }
+                else {
+                    console.log(results);
+                    newWindow.webContents.send('campos', results);
+                }
             });
         }
     });

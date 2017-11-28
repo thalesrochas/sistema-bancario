@@ -421,7 +421,8 @@
                 args: {
                     tabela: 'conta',
                     campo: 'num_conta',
-                    id: id
+                    id: id,
+                    trans: false
                 }
             });
         }
@@ -431,12 +432,12 @@
                 tela: 'novaTransacao',
                 tipo: 'associar',
                 args: {
-                    tabela: 'transacao',
+                    tabela: 'conta',
                     campo: 'num_conta',
-                    id: id
+                    id: id,
+                    trans: true
                 }
             });
-            ipcRenderer.send('abrirTela','novaTransacao');
         }
 
         function onClickDeletar(id) {
@@ -460,7 +461,7 @@
                         id: id,
                         nome_tabela: 'Conta',
                         nome: numero.value,
-                        detail: 'Podem haver clientes associados a essa conta.'
+                        detail: 'Pode haver clientes associados a essa conta.'
                     });
                 }
             });
