@@ -230,19 +230,16 @@
                     type: 'info',
                     title: 'Conta Atualizada',
                     message: 'Conta atualizada com sucesso!',
-                });
-                remote.getCurrentWindow().close();
+                });                
             }
             else {
                 dialog.showMessageBox({
                     type: 'error',
                     title: 'Conta não Atualizada',
-                    message: 'Erro ao Atualizar Conta!',
-                    detail: 'Já existe uma conta com este número.'
+                    message: 'Erro ao Atualizar Conta!'
                 });
-                numero.value = '';
-                numero.focus();
             }
+            remote.getCurrentWindow().close();
         });
 
         function onClickCancelar() {

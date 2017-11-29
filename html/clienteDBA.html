@@ -222,8 +222,17 @@
             });
         }
 
-        function onClickAtualizar(id) {
-            console.log('Cliente Atualizado!');
+        function onClickAtualizar(cpf) {
+            ipcRenderer.send('abrirTela', {
+                tela: 'adicionarCliente',
+                tipo: 'associar',
+                args: {
+                    tabela: 'cliente',
+                    campo: 'cpf',
+                    id: cpf,
+                    trans: false
+                }
+            });
         }
 
         function onClickDeletar(id) {

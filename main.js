@@ -456,7 +456,8 @@ ipcMain.on('insertContaCliente', function (event, arg) {
 
 ipcMain.on('insertDependente', function (event, arg) {
     console.log(arg);
-    connection.query(`INSERT INTO dependente VALUES (?, ?, ?, ?, YEAR(FROM_DAYS(TO_DAYS(CURDATE()) - TO_DAYS(?))));`, arg,
+    connection.query(`INSERT INTO dependente VALUES (?, ?, ?, ?,
+        YEAR(FROM_DAYS(TO_DAYS(CURDATE()) - TO_DAYS(?))));`, arg,
     function (error, results, fields) {
         event.sender.send('dependenteInserido', error);
     });
@@ -492,5 +493,15 @@ ipcMain.on('updateConta', function (event, arg) {
         }
 
         event.sender.send('contaUpdated', error);
+    });
+});
+
+ipcMain.on('updateCliente', function (event, arg) {
+    console.log(arg);
+    connection.query(`UPDATE cliente SET rg = ?, nome = ?,
+    data_nasc = ?, cidade = ?, endereco = ? WHERE cpf = ?`,
+    [arg[1], arg[2], arg[3], arg[4], arg[5], arg[0]],
+    function (error, results, fields) {
+        event.sender.send('clienteUpdated', error);
     });
 });

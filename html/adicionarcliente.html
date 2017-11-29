@@ -7,7 +7,7 @@
     <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../style.css">
 
-    <title>NullBank - Cadastrar Cliente</title>
+    <title id="titulo">NullBank - Cadastrar Cliente</title>
 </head>
 <body class="padding16 fundo-login">
     <form id="cliente" novalidate>
@@ -69,17 +69,18 @@
         const dialog = require('electron').remote.dialog;
 
         let form = document.getElementById('cliente');
+        let titulo = document.getElementById('titulo');
+
+        let nome = document.getElementById('nome');
+        let cpf = document.getElementById('cpf');
+        let rg = document.getElementById('rg');
+        let nascimento = document.getElementById('nascimento');
+        let endereco = document.getElementById('endereco');
+        let cidade = document.getElementById('cidade');
 
         form.addEventListener('submit', function (e) {
             if (form.checkValidity() === true) {
                 console.log('OK');
-
-                let nome = document.getElementById('nome');
-                let cpf = document.getElementById('cpf');
-                let rg = document.getElementById('rg');
-                let nascimento = document.getElementById('nascimento');
-                let endereco = document.getElementById('endereco');
-                let cidade = document.getElementById('cidade');
 
                 let dadosCliente = [
                     cpf.value,
@@ -90,11 +91,50 @@
                     endereco.value
                 ];
 
-                ipcRenderer.send('insertCliente', dadosCliente);
+                if (titulo.value = 'NullBank - Atualizar Cliente') {
+                    ipcRenderer.send('updateCliente', dadosCliente);
+                }
+                else {
+                    ipcRenderer.send('insertCliente', dadosCliente);
+                }
                 console.log('Dados enviados');
             }
             form.classList.add('was-validated');
             e.preventDefault();
+        });
+
+        ipcRenderer.on('campos', function (event, dataCliente) {
+            titulo.textContent = 'NullBank - Atualizar Cliente';
+
+            let data_nasc = dataCliente["0"].data_nasc;
+
+            cpf.value = dataCliente["0"].cpf;
+            rg.value = dataCliente['0'].rg;
+            nome.value = dataCliente['0'].nome;
+            nascimento.value = data_nasc.substring(0, 4) + '-' + data_nasc.substring(5, 7) + '-' + data_nasc.substring(8, 10);
+            cidade.value = dataCliente['0'].cidade;
+            endereco.value = dataCliente['0'].endereco;
+
+            cpf.setAttribute('disabled', null);
+        });
+
+        ipcRenderer.on('clienteUpdated', function (event, error) {
+            console.log(error);
+            if (error == null) {
+                dialog.showMessageBox({
+                    type: 'info',
+                    title: 'Cliente Atualizado',
+                    message: 'Dados do cliente atualizados com sucesso!',
+                });
+            }
+            else {
+                dialog.showMessageBox({
+                    type: 'error',
+                    title: 'Cliente não Atualizado',
+                    message: 'Erro ao Atualizar Cliente!'
+                });
+            }
+            remote.getCurrentWindow().close();
         });
 
         function onClickCancelar() {
