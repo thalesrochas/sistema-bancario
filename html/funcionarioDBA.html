@@ -128,11 +128,15 @@
 
             <!-- Botões -->
             <div class="center margin-top16">
-                <button onclick="onClickAtualizar(-1)" id="atualizar" class="btn btn-success">
+                <button id="atualizar" class="btn btn-success" disabled>
                     <img src="../img/sync.png">
                     Atualizar
                 </button>
-                <button onclick="onClickDeletar(-1)" id="deletar" class="btn btn-danger">
+                <button id="dependente" class="btn btn-info" disabled>
+                    <img src="../img/person_add.png">
+                    Cadastrar Dependente
+                </button>
+                <button id="deletar" class="btn btn-danger" disabled>
                     <img src="../img/delete.png">
                     Remover
                 </button>
@@ -237,10 +241,15 @@
             console.log('Dados do Funcionário ' + matricula + ' solicitados.');
 
             let botaoAtualizar = document.getElementById('atualizar');
+            let botaoDependente = document.getElementById('dependente');
             let botaoDeletar = document.getElementById('deletar');
 
             botaoAtualizar.setAttribute('onclick', 'onClickAtualizar(' + matricula + ')');
+            botaoDependente.setAttribute('onclick', 'onClickDependente(' + matricula + ')');
             botaoDeletar.setAttribute('onclick', 'onClickDeletar(' + matricula + ')');
+            // botaoAtualizar.removeAttribute('disabled');
+            botaoDependente.removeAttribute('disabled');
+            botaoDeletar.removeAttribute('disabled');
         }
 
         function adicionarFuncionario() {
@@ -255,51 +264,47 @@
         }
 
         function onClickAtualizar(id) {
-            if (id == -1) {
-                console.error('Nenhum funcionário selecionado');
-            }
-            else {
-                console.log('Funcionário Atualizado!');
-            }
+            console.log('Funcionário Atualizado!');
+        }
+
+        function onClickDependente(id) {
+            ipcRenderer.send('abrirTela', {
+                tela: 'dependente',
+                tipo: 'associar',
+                args: {
+                    tabela: 'funcionario',
+                    campo: 'matricula',
+                    id: id,
+                    trans: false
+                }
+            });
         }
 
         function onClickDeletar(id) {
-            // Verifica se há alguma linha da tabela selecionada
-            if (id == -1) {
-                console.error('Nenhum funcionário selecionado');
-                dialog.showMessageBox({
-                    type: 'error',
-                    title: 'Erro ao Remover Funcionário',
-                    message: 'Nenhum funcionário selecionado!',
-                    detail: 'Selecione um funcionário antes de tentar remover.'
-                });
-            }   
-            else {
-                // Requisita confirmação do usuário sobre a deleção da tupla
-                dialog.showMessageBox({
-                    type: 'question',
-                    buttons: ['Remover', 'Cancelar'],
-                    defaultId: 0,
-                    cancelId: 1,
-                    title: 'Confirmar Remoção de Funcionário',
-                    message: 'Você tem certeza que deseja remover o Funcionário ' + nome.value + '?',
-                    detail: 'Essa ação não pode ser desfeita.\nTodos os dados desse funcionário serão perdidos!'
-                }, function (response) {
-                    /* Se o usuário confirmar deleção, dados de tabela e id
-                     * são enviados para main.js para tratar a deleção
-                     */
-                    if (!response) {
-                        ipcRenderer.send('delete', {
-                            tabela: 'funcionario',
-                            campo: 'matricula',
-                            id: id,
-                            nome_tabela: 'Funcionário',
-                            nome: nome.value,
-                            detail: 'Pode ser que esse funcionário seja um Gerente.'
-                        });
-                    }
-                });
-            }
+            // Requisita confirmação do usuário sobre a deleção da tupla
+            dialog.showMessageBox({
+                type: 'question',
+                buttons: ['Remover', 'Cancelar'],
+                defaultId: 0,
+                cancelId: 1,
+                title: 'Confirmar Remoção de Funcionário',
+                message: 'Você tem certeza que deseja remover o Funcionário ' + nome.value + '?',
+                detail: 'Essa ação não pode ser desfeita.\nTodos os dados desse funcionário serão perdidos!'
+            }, function (response) {
+                /* Se o usuário confirmar deleção, dados de tabela e id
+                    * são enviados para main.js para tratar a deleção
+                    */
+                if (!response) {
+                    ipcRenderer.send('delete', {
+                        tabela: 'funcionario',
+                        campo: 'matricula',
+                        id: id,
+                        nome_tabela: 'Funcionário',
+                        nome: nome.value,
+                        detail: 'Pode ser que esse funcionário seja um Gerente.'
+                    });
+                }
+            });
         }
     </script>
     

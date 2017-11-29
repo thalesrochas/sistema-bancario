@@ -435,3 +435,11 @@ ipcMain.on('insertContaCliente', function (event, arg) {
         event.sender.send('contaClienteInserido', error);
     });
 });
+
+ipcMain.on('insertDependente', function (event, arg) {
+    console.log(arg);
+    connection.query(`INSERT INTO dependente VALUES (?, ?, ?, ?, YEAR(FROM_DAYS(TO_DAYS(CURDATE()) - TO_DAYS(?))));`, arg,
+    function (error, results, fields) {
+        event.sender.send('dependenteInserido', error);
+    });
+});
