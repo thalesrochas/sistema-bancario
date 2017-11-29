@@ -461,3 +461,36 @@ ipcMain.on('insertDependente', function (event, arg) {
         event.sender.send('dependenteInserido', error);
     });
 });
+
+ipcMain.on('updateConta', function (event, arg) {
+    console.log(arg);
+    connection.query('UPDATE conta SET saldo = ?, senha = ?, tipo_conta = ? WHERE num_conta = ?',
+    [arg[2], arg[3], arg[4], arg[0]],
+    function (error, results, fields) {
+        connection.query('DELETE FROM conta_corrente WHERE num_conta = ?', arg[0],
+        function (error, results, fields) {});
+        connection.query('DELETE FROM conta_poupanca WHERE num_conta = ?', arg[0],
+        function (error, results, fields) {});
+        connection.query('DELETE FROM conta_especial WHERE num_conta = ?', arg[0],
+        function (error, results, fields) {});
+
+        switch(arg[4]) { // Tipo de Conta
+            case 'Conta Corrente':
+                connection.query('INSERT INTO conta_corrente VALUES (?);', arg[0],
+                function (error, results, fields) {});
+                break;
+            
+            case 'Conta Poupança':
+                connection.query('INSERT INTO conta_poupanca VALUES (?, ?);', [arg[0], arg[6]],
+                function (error, results, fields) {});
+                break;
+        
+            case 'Conta Especial':
+                connection.query('INSERT INTO conta_especial VALUES (?, ?);', [arg[0], arg[5]],
+                function (error, results, fields) {});
+                break;
+        }
+
+        event.sender.send('contaUpdated', error);
+    });
+});

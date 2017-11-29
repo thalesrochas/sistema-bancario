@@ -7,7 +7,7 @@
     <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../style.css">
 
-    <title>NullBank - Nova Conta</title>
+    <title id="titulo">NullBank - Nova Conta</title>
 </head>
 <body class="padding16 fundo-login">
     <form id="conta" novalidate>
@@ -111,6 +111,41 @@
                 agencia.appendChild(option);
             });
         });
+
+        ipcRenderer.on('campos', function (event, dataConta) {
+            let titulo = document.getElementById('titulo');
+            titulo.textContent = 'NullBank - Atualizar Conta';
+
+            let numero = document.getElementById('numero');
+            let agencia = document.getElementById('agencia');
+            let saldo = document.getElementById('saldo');
+            let senha = document.getElementById('senha');
+            let confSenha = document.getElementById('confSenha');
+            let tipo = document.getElementById('tipo');
+            let credito = document.getElementById('credito');
+            let juros = document.getElementById('juros');
+
+            numero.value = dataConta['0'].num_conta;
+            agencia.value = dataConta['0'].num_agencia;
+            saldo.value = dataConta['0'].saldo;
+            senha.value = dataConta['0'].senha;
+            confSenha.value = dataConta['0'].senha;
+            tipo.value = dataConta['0'].tipo_conta;
+
+            numero.setAttribute('disabled', null);
+            agencia.setAttribute('disabled', null);
+
+            switch (tipo.value) {
+            case 'Conta Poupança':
+                juros.value = dataConta['0'].taxa_juros;
+                juros.removeAttribute('disabled');
+                break;
+            case 'Conta Especial':
+                credito.value = dataConta['0'].limite_credito;
+                credito.removeAttribute('disabled');
+                break;
+            }
+        });
     </script>
 
     <script>
@@ -123,6 +158,7 @@
             if (form.checkValidity() === true) {
                 console.log('OK');
 
+                let titulo = document.getElementById('titulo');
                 let numero = document.getElementById('numero');
                 let agencia = document.getElementById('agencia');
                 let saldo = document.getElementById('saldo');
@@ -152,7 +188,12 @@
                         juros.value
                     ];
 
-                    ipcRenderer.send('insertConta', dadosConta);
+                    if (titulo.value = 'NullBank - Atualizar Conta') {
+                        ipcRenderer.send('updateConta', dadosConta);
+                    }
+                    else {
+                        ipcRenderer.send('insertConta', dadosConta);
+                    }
                     console.log('Dados enviados');
                 }
             }
@@ -175,6 +216,28 @@
                     type: 'error',
                     title: 'Cliente não Cadastrado',
                     message: 'Erro ao Cadastrar Cliente!',
+                    detail: 'Já existe uma conta com este número.'
+                });
+                numero.value = '';
+                numero.focus();
+            }
+        });
+
+        ipcRenderer.on('contaUpdated', function (event, error) {
+            console.log(error);
+            if (error == null) {
+                dialog.showMessageBox({
+                    type: 'info',
+                    title: 'Conta Atualizada',
+                    message: 'Conta atualizada com sucesso!',
+                });
+                remote.getCurrentWindow().close();
+            }
+            else {
+                dialog.showMessageBox({
+                    type: 'error',
+                    title: 'Conta não Atualizada',
+                    message: 'Erro ao Atualizar Conta!',
                     detail: 'Já existe uma conta com este número.'
                 });
                 numero.value = '';

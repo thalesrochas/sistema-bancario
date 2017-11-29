@@ -272,7 +272,8 @@
                 inputNome.setAttribute('disabled', null);
                 inputCidade.setAttribute('disabled', null);
 
-                inputCpf.value = element.cpf;
+                inputCpf.value = element.cpf.substring(0,3) + '.' + element.cpf.substring(3,6) +
+                '.' + element.cpf.substring(6,9) + '-' + element.cpf.substring(9,11);
                 inputNome.value = element.nome;
                 inputCidade.value = element.cidade;
 
@@ -410,7 +411,16 @@
         }
 
         function onClickAtualizar(id) {
-            console.log('Conta Atualizada!');
+            ipcRenderer.send('abrirTela', {
+                tela: 'adicionarConta',
+                tipo: 'associar',
+                args: {
+                    tabela: 'tipo_conta',
+                    campo: 'num_conta',
+                    id: id,
+                    trans: false
+                }
+            });
         }
 
         function onClickAssociar(id) {
