@@ -210,33 +210,24 @@ ipcMain.on('requestFields', function (event, arg) {
     function (error, results, fields) {
         console.log(results);
         // Envia os campos solicitados para o html que solicitou
-        mainWindow.webContents.send('fieldsRequested', results);
-        console.log('Campos da tabela ' + arg.tabela + ' enviados.');
-    });
-});
+        let evento;
+        switch(arg.tabela) {
+        case 'conta_do_cliente':
+            evento = 'requestedContaDoCliente';
+            break;
 
-/* Evento ocorre quando o usuário clida em uma linha da tabela
- * para consultar todos os elementos de uma tupla da tabela.
- */
-ipcMain.on('requestContaDoCliente', function (event, arg) {
-    connection.query('SELECT * FROM ' + arg.tabela + ' WHERE ' + arg.campo + ' = ?;', arg.id,
-    function (error, results, fields) {
-        console.log(results);
-        // Envia os campos solicitados para o html que solicitou
-        mainWindow.webContents.send('requestedContaDoCliente', results);
-        console.log('Campos da tabela ' + arg.tabela + ' enviados.');
-    });
-});
+        case 'transacao_do_cliente':
+            evento = 'requestedTransacaoDoCliente';
+            break;
 
-/* Evento ocorre quando o usuário clida em uma linha da tabela
- * para consultar todos os elementos de uma tupla da tabela.
- */
-ipcMain.on('requestTransacaoDoCliente', function (event, arg) {
-    connection.query('SELECT * FROM ' + arg.tabela + ' WHERE ' + arg.campo + ' = ?;', arg.id,
-    function (error, results, fields) {
-        console.log(results);
-        // Envia os campos solicitados para o html que solicitou
-        mainWindow.webContents.send('requestedTransacaoDoCliente', results);
+        case 'dependente':
+            evento = 'requestedDependente';
+            break;
+
+        default:
+            evento = 'fieldsRequested';
+        }
+        mainWindow.webContents.send(evento, results);
         console.log('Campos da tabela ' + arg.tabela + ' enviados.');
     });
 });

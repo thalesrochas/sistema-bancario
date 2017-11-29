@@ -65,63 +65,97 @@
         </div>
         
         <!-- Coluna das informações do Funcionário selecionado -->
-        <div class="aui-item barra-vertical">
-            <div class="padding16 rounded border border-secondary">
-                <h5>Dados Pessoais</h5>
-                <div class="form-row">
-                    <div class="form-group col-md-12">
-                        <label for="nome">Nome</label>
-                        <input type="text" class="form-control" id="nome" disabled>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-md-3">
-                        <label for="sexo">Sexo</label>
-                        <input type="text" class="form-control" id="sexo" disabled>
-                    </div>
-                    <div class="form-group col-md-4">
-                        <label for="nascimento">Data de Nascimento</label>
-                        <input type="text" class="form-control" id="nascimento" disabled>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-md-8">
-                        <label for="endereco">Endereço</label>
-                        <input type="text" class="form-control" id="endereco" disabled>
-                    </div> 
-                    <div class="form-group col-md-4">
-                        <label for="cidade">Cidade</label>
-                        <input type="text" class="form-control" id="cidade" disabled>
-                    </div>
-                </div>
-            </div>
-            <div class="padding16 margin-top16 rounded border border-secondary">
-                <h5>Dados de Funcionário</h5>
-                <div class="form-row">
-                    <div class="form-group col-md-3">
-                        <label for="matricula">Matrícula</label>
-                        <input type="text" class="form-control" id="matricula" disabled>
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label for="senha">Senha</label>
-                        <input type="text" class="form-control" id="senha" disabled>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-md-4">
-                        <label for="salario">Salário</label>
-                        <div class="input-group">
-                            <span class="input-group-addon">R$</span>
-                            <input type="text" class="form-control" id="salario" disabled>
+        <div class="aui-item barra-vertical" style="padding-right:0; padding-top:0;">
+            <div style="overflow:auto; height:562px; padding-right:16px; padding-top:16px">
+                <div class="padding16 rounded border border-secondary">
+                    <h5>Dados de Funcionário</h5>
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label for="matricula">Matrícula</label>
+                            <input type="text" class="form-control" id="matricula" disabled>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="senha">Senha</label>
+                            <input type="text" class="form-control" id="senha" disabled>
                         </div>
                     </div>
-                    <div class="form-group col-md-4">
-                        <label for="cargo">Cargo</label>
-                        <input type="text" class="form-control" id="cargo" disabled>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="salario">Salário</label>
+                            <div class="input-group">
+                                <span class="input-group-addon">R$</span>
+                                <input type="text" class="form-control" id="salario" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="cargo">Cargo</label>
+                            <input type="text" class="form-control" id="cargo" disabled>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="agencia">Agência</label>
+                            <input type="text" class="form-control" id="agencia" disabled>
+                        </div>
                     </div>
-                    <div class="form-group col-md-4">
-                        <label for="agencia">Agência</label>
-                        <input type="text" class="form-control" id="agencia" disabled>
+                </div>
+                <div class="padding16 margin-top16 rounded border border-secondary">
+                    <h5>Dados Pessoais</h5>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="nome">Nome</label>
+                            <input type="text" class="form-control" id="nome" disabled>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label for="sexo">Sexo</label>
+                            <input type="text" class="form-control" id="sexo" disabled>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="nascimento">Data de Nascimento</label>
+                            <input type="text" class="form-control" id="nascimento" disabled>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-8">
+                            <label for="endereco">Endereço</label>
+                            <input type="text" class="form-control" id="endereco" disabled>
+                        </div> 
+                        <div class="form-group col-md-4">
+                            <label for="cidade">Cidade</label>
+                            <input type="text" class="form-control" id="cidade" disabled>
+                        </div>
+                    </div>
+                </div>
+                <div class="padding16 margin-top16 rounded border border-secondary" id="dependentes">
+                    <h5>Dependentes</h5>
+                    <div class="padding16 margin-bottom16 rounded border border-info">
+                        <div class="form-row">
+                            <div class="form-group col-md-8">
+                                <label>Nome</label>
+                                <input class="form-control" disabled>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>Parentesco</label>
+                                <input class="form-control" disabled>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label>Data de Nascimento</label>
+                                <input class="form-control" disabled>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Idade</label>
+                                <input class="form-control" disabled>
+                            </div>
+                            <div class="form-group col-md-4"></div>
+                            <div class="form-group col-md-2">
+                                <label style="color: #FFF">Remover</label>
+                                <button onclick="removerDependente()" class="btn btn-danger form-control" disabled>
+                                    <img src="../img/delete.png">
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -208,6 +242,107 @@
             cargo.value = fields["0"].cargo;
             agencia.value = fields["0"].lotacao;
         });
+
+        ipcRenderer.on('requestedDependente', function (event, fields) {
+            console.log(fields);
+
+            let matricula = document.getElementById('matricula').value;
+            let div = document.getElementById('dependentes');
+            let h5 = document.createElement('h5');
+
+            // Remove todos os elementos do corpo da tabela antes de inserir os novos
+            while (div.firstChild) {
+                div.removeChild(div.firstChild);
+            }
+
+            h5.textContent = 'Dependentes';
+            div.appendChild(h5);
+
+            if (fields.length == 0) {
+                console.log('Funcionário sem dependente');
+                let h6 = document.createElement('h6');
+                h6.textContent = 'Não há dependentes para este funcionário.';
+                div.appendChild(h6);
+            }
+
+            fields.forEach(element => {
+                let divDependente = document.createElement('div');
+                let div1 = document.createElement('div');
+                let div2 = document.createElement('div');
+                let divNome = document.createElement('div');
+                let divParentesco = document.createElement('div');
+                let divNascimento = document.createElement('div');
+                let divIdade = document.createElement('div');
+                let divEspaço = document.createElement('div');
+                let divRemover = document.createElement('div');
+                let labelNome = document.createElement('label');
+                let labelParentesco = document.createElement('label');
+                let labelNascimento = document.createElement('label');
+                let labelIdade = document.createElement('label');
+                let labelRemover = document.createElement('label');
+                let inputNome = document.createElement('input');
+                let inputParentesco = document.createElement('input');
+                let inputNascimento = document.createElement('input');
+                let inputIdade = document.createElement('input');
+                let buttonRemover = document.createElement('button');
+                let imgRemover = document.createElement('img');
+
+                divDependente.setAttribute('class', 'padding16 margin-bottom16 rounded border border-info');
+                div1.setAttribute('class', 'form-row');
+                div2.setAttribute('class', 'form-row');
+                divNome.setAttribute('class', 'form-group col-md-8');
+                divParentesco.setAttribute('class', 'form-group col-md-4');
+                divNascimento.setAttribute('class', 'form-group col-md-4');
+                divIdade.setAttribute('class', 'form-group col-md-2');
+                divEspaço.setAttribute('class', 'form-group col-md-4');
+                divRemover.setAttribute('class', 'form-group col-md-2');
+                labelNome.textContent = 'Nome';
+                labelParentesco.textContent = 'Parentesco';
+                labelNascimento.textContent = 'Data de Nascimento';
+                labelIdade.textContent = 'Idade';
+                labelRemover.setAttribute('style', 'color: #FFF');
+                labelRemover.textContent = 'Remover';
+                inputNome.setAttribute('class', 'form-control');
+                inputParentesco.setAttribute('class', 'form-control');
+                inputNascimento.setAttribute('class', 'form-control');
+                inputIdade.setAttribute('class', 'form-control');
+                inputNome.setAttribute('disabled', null);
+                inputParentesco.setAttribute('disabled', null);
+                inputNascimento.setAttribute('disabled', null);
+                inputIdade.setAttribute('disabled', null);
+                buttonRemover.setAttribute('class', 'btn btn-danger form-control');
+                buttonRemover.setAttribute('onclick', 'removerDependente(' + matricula + ',' + element.nome_dependente + ')');
+                imgRemover.setAttribute('src', '../img/delete.png');
+                
+                let data_nasc = element.data_nasc;
+
+                inputNome.value = element.nome_dependente;
+                inputParentesco.value = element.parentesco;
+                inputNascimento.value = data_nasc.substring(8, 10) + '/' + data_nasc.substring(5, 7) + '/' + data_nasc.substring(0, 4);
+                inputIdade.value = element.idade;
+                
+                buttonRemover.appendChild(imgRemover);
+                divNome.appendChild(labelNome);
+                divNome.appendChild(inputNome);
+                divParentesco.appendChild(labelParentesco);
+                divParentesco.appendChild(inputParentesco);
+                divNascimento.appendChild(labelNascimento);
+                divNascimento.appendChild(inputNascimento);
+                divIdade.appendChild(labelIdade);
+                divIdade.appendChild(inputIdade);
+                divRemover.appendChild(labelRemover);
+                divRemover.appendChild(buttonRemover);
+                div1.appendChild(divNome);
+                div1.appendChild(divParentesco);
+                div2.appendChild(divNascimento);
+                div2.appendChild(divIdade);
+                div2.appendChild(divEspaço);
+                div2.appendChild(divRemover);
+                divDependente.appendChild(div1);
+                divDependente.appendChild(div2);
+                div.appendChild(divDependente);
+            });
+        });
     </script>
 
     <!-- Script de pesquisa -->
@@ -237,7 +372,16 @@
 
         function selectFuncionario(matricula) {
             console.log('Clique no Funcionário ' + matricula);
-            ipcRenderer.send('requestFields', {tabela: 'funcionario', campo: 'matricula', id: matricula});
+            ipcRenderer.send('requestFields', {
+                tabela: 'funcionario',
+                campo: 'matricula',
+                id: matricula
+            });
+            ipcRenderer.send('requestFields', {
+                tabela: 'dependente',
+                campo: 'mat_funcionario',
+                id: matricula
+            });
             console.log('Dados do Funcionário ' + matricula + ' solicitados.');
 
             let botaoAtualizar = document.getElementById('atualizar');

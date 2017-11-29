@@ -370,12 +370,12 @@
                 campo: 'num_conta',
                 id: numero
             });
-            ipcRenderer.send('requestContaDoCliente', {
+            ipcRenderer.send('requestFields', {
                 tabela: 'conta_do_cliente',
                 campo: 'num_conta',
                 id: numero
             });
-            ipcRenderer.send('requestTransacaoDoCliente', {
+            ipcRenderer.send('requestFields', {
                 tabela: 'transacao_do_cliente',
                 campo: 'num_conta',
                 id: numero
