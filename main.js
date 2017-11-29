@@ -261,6 +261,33 @@ ipcMain.on('delete', function (event, arg) {
     });
 });
 
+ipcMain.on('deleteDependente', function (event, arg) {
+    // Tenta realizar a deleção
+    connection.query('DELETE FROM dependente WHERE mat_funcionario = ? and nome_dependente = ?', arg,
+    function (error, results, fields) {
+        if (error) {
+            // Exibe caixa de mensagem caso tenha ocorrido erro na deleção
+            dialog.showMessageBox({
+                type: 'error',
+                title: 'Erro ao Remover ' + arg[1],
+                message: 'O dependente ' + arg[1] + ' não pode ser removido!'
+            });
+            console.log('O dependente ' + arg[1] + ' não pode ser removido!');
+        }
+        else {
+            // Caso tenha sido removido com sucesso, informa ao usuário
+            dialog.showMessageBox({
+                type: 'info',
+                title: 'Remoção Confirmada',
+                message: 'O dependente ' + arg[1] + ' foi removido com sucesso!'
+            });
+            // Atualiza os dados da página após a remoção
+            mainWindow.webContents.reload();
+            console.log('O dependente ' + arg[1] + ' foi removido com sucesso!');
+        }
+    });
+});
+
 // Evento ocorre quando usuário solicita a inserção de tuplas em alguma tabela
 ipcMain.on('abrirTela', function (event, arg){
     // Criação de nova tela com algumas configurações
