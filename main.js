@@ -454,6 +454,52 @@ ipcMain.on('insertContaCliente', function (event, arg) {
     });
 });
 
+ipcMain.on('insertFuncionario', function (event, arg) {
+    console.log(arg);
+
+    // Verifica se o novo funcionário é um Gerente
+    if (arg[6] == 'Gerente') {
+        // Verifica se a agência já possui um gerente
+        connection.query('SELECT mat_gerente FROM agencia WHERE numero = ?;', [arg[9]],
+        function (error1, results, fields) {
+            console.log('Aqui 0');
+            console.log(results[0].mat_gerente);
+            if (!(results[0].mat_gerente == null)) {
+                dialog.showMessageBox({
+                    type: 'error',
+                    title: 'Erro ao Cadastrar Funcionário',
+                    message: 'Erro ao Cadastrar Funcionário!',
+                    detail: 'Esta Agência já possui um Gerente!'
+                });
+            }
+            else {
+                console.log('Aqui 1');
+                connection.query(`INSERT INTO funcionario VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`, arg,
+                function (error2, results, fields) {
+                    console.log('Aqui 2');
+                    if (error2 == null) {
+                        console.log('Aqui 3');
+                        connection.query(`UPDATE agencia SET mat_gerente = ? WHERE numero = ?`, [arg[0], arg[9]],
+                        function (error3, results, fields) {
+                            console.log('Aqui 4');
+                            event.sender.send('funcionarioInserido', error3);
+                        });
+                    }
+                    else {
+                        event.sender.send('funcionarioInserido', error2);
+                    }
+                });
+            }
+        });
+    }
+    else {
+        connection.query(`INSERT INTO funcionario VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`, arg,
+        function (error4, results, fields) {
+            event.sender.send('funcionarioInserido', error4);
+        });
+    }
+});
+
 ipcMain.on('insertDependente', function (event, arg) {
     console.log(arg);
     connection.query(`INSERT INTO dependente VALUES (?, ?, ?, ?,
