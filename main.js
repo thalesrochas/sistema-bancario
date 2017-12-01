@@ -547,28 +547,34 @@ ipcMain.on('novaTransacao', function (event, arg) {
             break;
 
         case 'Saque':
-            connection.query(`INSERT INTO transacao VALUES (?, ?, NOW(), ?);`,
-            [arg[0], -arg[1], arg[2]], function (err, res, fiel) {});
-
-            connection.query(`INSERT INTO realiza VALUES (?, ?);`,
-            [arg[0], arg[3]],
-            function (error, results, fields) {
-                if (error) {
-                    dialog.showMessageBox({
-                        type: 'error',
-                        title: 'Transação mal Sucedida',
-                        message: 'Saque Indisponível!',
-                        detail: 'Saldo do cliente insuficiente.'
+            connection.beginTransaction(function (err) {
+                connection.query(`INSERT INTO transacao VALUES (?, ?, NOW(), ?);`,
+                [arg[0], -arg[1], arg[2]], function (err, res, fiel) {});
+    
+                connection.query(`INSERT INTO realiza VALUES (?, ?);`,
+                [arg[0], arg[3]],
+                function (error, results, fields) {
+                    if (error) {
+                        dialog.showMessageBox({
+                            type: 'error',
+                            title: 'Transação mal Sucedida',
+                            message: 'Saque Indisponível!',
+                            detail: 'Saldo do cliente insuficiente.'
+                        });
+                        return connection.rollback(function () {});
+                    }
+                    connection.commit(function(error) {
+                        if (err) {
+                            return connection.rollback(function () {});
+                        }
+                        dialog.showMessageBox({
+                            type: 'info',
+                            title: 'Transação bem Sucedida',
+                            message: 'Saque realizado com sucesso!',
+                            detail: 'O saldo do cliente foi atualizado.'
+                        });
                     });
-                }
-                else {
-                    dialog.showMessageBox({
-                        type: 'info',
-                        title: 'Transação bem Sucedida',
-                        message: 'Saque realizado com sucesso!',
-                        detail: 'O saldo do cliente foi atualizado.'
-                    });
-                }
+                });
             });
             newWindow.close();
             break;
