@@ -356,6 +356,7 @@
     <!-- Script de funções da página -->
     <script>
         const dialog = require('electron').remote.dialog;
+        const remote = require('electron').remote;
 
         function clickElement (element) {
             console.log(element);
@@ -452,7 +453,7 @@
 
         function onClickDeletar(id) {
             // Requisita confirmação do usuário sobre a deleção da tupla
-            dialog.showMessageBox({
+            dialog.showMessageBox(remote.getCurrentWindow(), {
                 type: 'question',
                 buttons: ['Remover', 'Cancelar'],
                 defaultId: 0,
