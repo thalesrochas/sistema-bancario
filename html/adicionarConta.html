@@ -188,7 +188,7 @@
                         juros.value
                     ];
 
-                    if (titulo.textContent = 'NullBank - Atualizar Conta') {
+                    if (titulo.textContent == 'NullBank - Atualizar Conta') {
                         ipcRenderer.send('updateConta', dadosConta);
                     }
                     else {

@@ -91,7 +91,7 @@
                     endereco.value
                 ];
 
-                if (titulo.textContent = 'NullBank - Atualizar Cliente') {
+                if (titulo.textContent == 'NullBank - Atualizar Cliente') {
                     ipcRenderer.send('updateCliente', dadosCliente);
                 }
                 else {
