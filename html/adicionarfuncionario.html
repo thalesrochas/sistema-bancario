@@ -7,7 +7,7 @@
     <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../style.css">
 
-    <title>NullBank - Cadastrar Funcionário</title>
+    <title id="titulo">NullBank - Cadastrar Funcionário</title>
 </head>
 <body class="padding16 fundo-login">
     <form id="funcionario" novalidate>
@@ -134,22 +134,22 @@
         const dialog = require('electron').remote.dialog;
 
         let form = document.getElementById('funcionario');
+        let titulo = document.getElementById('titulo');
+
+        let nome = document.getElementById('nome');
+        let sexo = document.getElementById('sexo');
+        let nascimento = document.getElementById('nascimento');
+        let cidade = document.getElementById('cidade');
+        let endereco = document.getElementById('endereco');
+        let cargo = document.getElementById('cargo');
+        let salario = document.getElementById('salario');
+        let senha = document.getElementById('senha');
+        let confSenha = document.getElementById('confSenha');
+        let agencia = document.getElementById('agencia');
 
         form.addEventListener('submit', function (e) {
             if (form.checkValidity() === true) {
                 console.log('OK');
-
-                let matricula = document.getElementById('matricula');
-                let nome = document.getElementById('nome');
-                let sexo = document.getElementById('sexo');
-                let nascimento = document.getElementById('nascimento');
-                let cidade = document.getElementById('cidade');
-                let endereco = document.getElementById('endereco');
-                let cargo = document.getElementById('cargo');
-                let salario = document.getElementById('salario');
-                let senha = document.getElementById('senha');
-                let confSenha = document.getElementById('confSenha');
-                let agencia = document.getElementById('agencia');
 
                 if (!(senha.value === confSenha.value)) {
                     dialog.showMessageBox({
@@ -174,12 +174,61 @@
                         agencia.value
                     ];
 
-                    ipcRenderer.send('insertFuncionario', dadosFuncionario);
+                    if (titulo.value = 'NullBank - Atualizar Funcionário') {
+                        console.log('aqui1');
+                        ipcRenderer.send('updateFuncionario', dadosFuncionario);
+                    }
+                    else {
+                        console.log('aqui2');
+                        ipcRenderer.send('insertFuncionario', dadosFuncionario);
+                    }
                     console.log('Dados enviados');
                 }
             }
             form.classList.add('was-validated');
             e.preventDefault();
+        });
+
+        ipcRenderer.on('campos', function (event, dataFuncionario) {
+            console.log(dataFuncionario);
+            titulo.textContent = 'NullBank - Atualizar Funcionário';
+
+            let data_nasc = dataFuncionario['0'].data_nasc;
+
+            matricula.value = dataFuncionario['0'].matricula;
+            nome.value = dataFuncionario['0'].nome;
+            sexo.value = dataFuncionario['0'].sexo;
+            nascimento.value = data_nasc.substring(0, 4) + '-' + data_nasc.substring(5, 7) + '-' + data_nasc.substring(8, 10);
+            cidade.value = dataFuncionario['0'].cidade;
+            endereco.value = dataFuncionario['0'].endereco;
+            cargo.value = dataFuncionario['0'].cargo;
+            salario.value = dataFuncionario['0'].salario;
+            senha.value = dataFuncionario['0'].senha;
+            confSenha.value = dataFuncionario['0'].senha;
+            agencia.value = dataFuncionario['0'].lotacao;
+
+            matricula.setAttribute('disabled', null);
+            agencia.setAttribute('disabled', null);
+            cargo.setAttribute('disabled', null);
+        });
+
+        ipcRenderer.on('funcionarioUpdated', function (event, error) {
+            console.log(error);
+            if (error == null) {
+                dialog.showMessageBox({
+                    type: 'info',
+                    title: 'Funcionário Atualizado',
+                    message: 'Dados do funcionário atualizados com sucesso!',
+                });
+            }
+            else {
+                dialog.showMessageBox({
+                    type: 'error',
+                    title: 'Funcionário não Atualizado',
+                    message: 'Erro ao Atualizar Funcionário!'
+                });
+            }
+            remote.getCurrentWindow().close();
         });
 
         ipcRenderer.on('funcionarioInserido', function (event, error) {

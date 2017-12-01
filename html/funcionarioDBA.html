@@ -391,7 +391,7 @@
             botaoAtualizar.setAttribute('onclick', 'onClickAtualizar(' + matricula + ')');
             botaoDependente.setAttribute('onclick', 'onClickDependente(' + matricula + ')');
             botaoDeletar.setAttribute('onclick', 'onClickDeletar(' + matricula + ')');
-            // botaoAtualizar.removeAttribute('disabled');
+            botaoAtualizar.removeAttribute('disabled');
             botaoDependente.removeAttribute('disabled');
             botaoDeletar.removeAttribute('disabled');
         }
@@ -408,7 +408,16 @@
         }
 
         function onClickAtualizar(id) {
-            console.log('Funcionário Atualizado!');
+            ipcRenderer.send('abrirTela', {
+                tela: 'adicionarFuncionario',
+                tipo: 'associar',
+                args: {
+                    tabela: 'funcionario',
+                    campo: 'matricula',
+                    id: id,
+                    trans: false
+                }
+            });
         }
 
         function onClickDependente(id) {

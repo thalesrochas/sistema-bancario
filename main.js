@@ -551,3 +551,13 @@ ipcMain.on('updateCliente', function (event, arg) {
         event.sender.send('clienteUpdated', error);
     });
 });
+
+ipcMain.on('updateFuncionario', function (event, arg) {
+    console.log(arg);
+    connection.query(`UPDATE funcionario SET nome = ?, sexo = ?,
+    data_nasc = ?, cidade = ?, endereco = ?, salario = ?, senha = ? WHERE matricula = ?`,
+    [arg[1], arg[2], arg[3], arg[4], arg[5], arg[7], arg[8], arg[0]],
+    function (error, results, fields) {
+        event.sender.send('funcionarioUpdated', error);
+    });
+});
