@@ -48,7 +48,7 @@
                     </div>
                 </div>
                 <div class="form-group col-md-3">
-                    <label for="tipo">Tipo da transação</label>
+                    <label for="tipo">Tipo da Transação</label>
                     <select class="form-control" id="tipo" onchange="toggleBeneficiado()">
                         <option>Depósito</option>
                         <option>Saque</option>
@@ -61,15 +61,17 @@
         <div id="contaBeneficiada" class="padding16 rounded background-div-form margin-top16" style="display: none">
             <h5>Conta Beneficiada</h5>
             <div class="form-row">
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-5">
                     <label for="numeroBen">Número da Conta</label>
-                    <input type="number" class="form-control" id="numeroBen">
+                    <input type="number" class="form-control" id="numeroBen" min="0">
                     <div class="invalid-feedback">Por favor, insira um Número de Conta válido.</div>
                 </div>
-                <div class="form-group col-md-4">
-                    <label for="agenciaBen">Agência</label>
-                    <select class="form-control" id="agenciaBen"></select>
-                </div>
+                <!--
+                    <div class="form-group col-md-4">
+                        <label for="agenciaBen">Agência</label>
+                        <select class="form-control" id="agenciaBen"></select>
+                    </div>
+                -->
             </div>
         </div>
         <div class="center margin-top16">
@@ -92,6 +94,7 @@
 
         ipcRenderer.send('requestAgencias', 'agencia');
 
+        /*
         ipcRenderer.on('dataAgencia', function (event, dataAgencia){
             let agencia = document.getElementById('agenciaBen');
 
@@ -107,6 +110,7 @@
                 agencia.appendChild(option);
             });
         });
+        */
 
         ipcRenderer.on('campos', function (event, dataTransacao) {
             console.log(dataTransacao);
@@ -119,17 +123,28 @@
             numeroConta.value = dataTransacao['0']['0'].num_conta;
             agencia.value = dataTransacao['0']['0'].num_agencia;
             saldo.value = dataTransacao['0']['0'].saldo;
-            numeroTransacao.value = dataTransacao['1'];
+            numeroTransacao.value = dataTransacao['1'] + 1;
         });
 
         form.addEventListener('submit', function(e) {
             if (form.checkValidity() === true) {
                 console.log('OK');
 
-                let transacao = [
+                let numeroTransacao = document.getElementById('numeroTransacao');
+                let valor = document.getElementById('valor');
+                let tipo = document.getElementById('tipo');
+                let numeroConta = document.getElementById('numeroConta');
+                let numeroContaBen = document.getElementById('numeroBen');
 
+                let novaTransacao = [
+                    numeroTransacao.value,
+                    valor.value,
+                    tipo.value,
+                    numeroConta.value,
+                    numeroContaBen.value
                 ];
-                // TEM QUE TERMINAR AQUI
+
+                ipcRenderer.send('novaTransacao', novaTransacao);
             }
             form.classList.add('was-validated');
             e.preventDefault();

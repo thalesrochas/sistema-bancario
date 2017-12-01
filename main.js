@@ -147,58 +147,58 @@ ipcMain.on('trocarTelaDBA', function (event, arg) {
  */
 ipcMain.on('requestData', function (event, arg) {
     switch (arg) {
-    // Seleciona os dados de todas as agências
-    case 'agencia':
-        connection.query('SELECT numero, nome, cidade FROM agencia;',
-        function (error, results, fields) {
-            console.log(results);
-            console.log('Enviando dados de Agência...');
-            mainWindow.webContents.on('did-finish-load', () => {
-                mainWindow.webContents.send('dataAgencia', results);
+        // Seleciona os dados de todas as agências
+        case 'agencia':
+            connection.query('SELECT numero, nome, cidade FROM agencia;',
+            function (error, results, fields) {
+                console.log(results);
+                console.log('Enviando dados de Agência...');
+                mainWindow.webContents.on('did-finish-load', () => {
+                    mainWindow.webContents.send('dataAgencia', results);
+                });
+                console.log('Dados enviados!');
             });
-            console.log('Dados enviados!');
-        });
-        break;
+            break;
 
-    // Seleciona os dados de todos os funcionários
-    case 'funcionario':
-        connection.query('SELECT matricula, nome, cargo FROM funcionario;',
-        function (error, results, fields) {
-            console.log(results);
-            console.log('Enviando dados de Funcionário...');
-            mainWindow.webContents.on('did-finish-load', () => {
-                mainWindow.webContents.send('dataFuncionario', results);
+        // Seleciona os dados de todos os funcionários
+        case 'funcionario':
+            connection.query('SELECT matricula, nome, cargo FROM funcionario;',
+            function (error, results, fields) {
+                console.log(results);
+                console.log('Enviando dados de Funcionário...');
+                mainWindow.webContents.on('did-finish-load', () => {
+                    mainWindow.webContents.send('dataFuncionario', results);
+                });
+                console.log('Dados enviados!');
             });
-            console.log('Dados enviados!');
-        });
-        break;
+            break;
 
-    // Seleciona os dados de todos os clientes
-    case 'cliente':
-        connection.query('SELECT cpf, nome, cidade FROM cliente;',
-        function (error, results, fields) {
-            console.log(results);
-            console.log('Enviando dados de Cliente...');
-            mainWindow.webContents.on('did-finish-load', () => {
-                mainWindow.webContents.send('dataCliente', results);
+        // Seleciona os dados de todos os clientes
+        case 'cliente':
+            connection.query('SELECT cpf, nome, cidade FROM cliente;',
+            function (error, results, fields) {
+                console.log(results);
+                console.log('Enviando dados de Cliente...');
+                mainWindow.webContents.on('did-finish-load', () => {
+                    mainWindow.webContents.send('dataCliente', results);
+                });
+                console.log('Dados enviados!');
             });
-            console.log('Dados enviados!');
-        });
-        break;
+            break;
 
-    // Seleciona os dados de todas as contas
-    case 'conta':
-        connection.query(`SELECT num_conta as numero,
-        num_agencia as agencia, tipo_conta as tipo FROM conta;`,
-        function (error, results, fields) {
-            console.log(results);
-            console.log('Enviando dados de Conta...');
-            mainWindow.webContents.on('did-finish-load', () => {
-                mainWindow.webContents.send('dataConta', results);
+        // Seleciona os dados de todas as contas
+        case 'conta':
+            connection.query(`SELECT num_conta as numero,
+            num_agencia as agencia, tipo_conta as tipo FROM conta;`,
+            function (error, results, fields) {
+                console.log(results);
+                console.log('Enviando dados de Conta...');
+                mainWindow.webContents.on('did-finish-load', () => {
+                    mainWindow.webContents.send('dataConta', results);
+                });
+                console.log('Dados enviados!');
             });
-            console.log('Dados enviados!');
-        });
-        break;
+            break;
     }
 });
 
@@ -212,20 +212,20 @@ ipcMain.on('requestFields', function (event, arg) {
         // Envia os campos solicitados para o html que solicitou
         let evento;
         switch(arg.tabela) {
-        case 'conta_do_cliente':
-            evento = 'requestedContaDoCliente';
-            break;
+            case 'conta_do_cliente':
+                evento = 'requestedContaDoCliente';
+                break;
 
-        case 'transacao_do_cliente':
-            evento = 'requestedTransacaoDoCliente';
-            break;
+            case 'transacao_do_cliente':
+                evento = 'requestedTransacaoDoCliente';
+                break;
 
-        case 'dependente':
-            evento = 'requestedDependente';
-            break;
+            case 'dependente':
+                evento = 'requestedDependente';
+                break;
 
-        default:
-            evento = 'fieldsRequested';
+            default:
+                evento = 'fieldsRequested';
         }
         mainWindow.webContents.send(evento, results);
         console.log('Campos da tabela ' + arg.tabela + ' enviados.');
@@ -311,30 +311,30 @@ ipcMain.on('abrirTela', function (event, arg){
     // Envia para a tela o maior ID da tabela associada
     newWindow.webContents.on('did-finish-load', () => {
         switch (arg.tipo) {
-        case 'insert':
-            connection.query('SELECT MAX(' + arg.args.campo + ') AS max FROM ' + arg.args.tabela + ';',
-            function (error, results, fields) {
-                console.log('Maior número de ' + arg.args.tabela + ': ' + results[0].max);
-                newWindow.webContents.send('max', results[0].max);
-            });
-            break;
+            case 'insert':
+                connection.query('SELECT MAX(' + arg.args.campo + ') AS max FROM ' + arg.args.tabela + ';',
+                function (error, results, fields) {
+                    console.log('Maior número de ' + arg.args.tabela + ': ' + results[0].max);
+                    newWindow.webContents.send('max', results[0].max);
+                });
+                break;
 
-        case 'associar':
-            connection.query('SELECT * FROM ' + arg.args.tabela +
-            ' WHERE ' + arg.args.campo + ' = ?;', arg.args.id,
-            function (error, results, fields) {
-                if (arg.args.trans) {
-                    connection.query('SELECT MAX(num_transacao) AS max FROM transacao;',
-                    function (error, maxTransacao, fields) {
-                        console.log(maxTransacao['0'].max);
-                        newWindow.webContents.send('campos', [results, maxTransacao['0'].max]);
-                    });
-                }
-                else {
-                    console.log(results);
-                    newWindow.webContents.send('campos', results);
-                }
-            });
+            case 'associar':
+                connection.query('SELECT * FROM ' + arg.args.tabela +
+                ' WHERE ' + arg.args.campo + ' = ?;', arg.args.id,
+                function (error, results, fields) {
+                    if (arg.args.trans) {
+                        connection.query('SELECT MAX(num_transacao) AS max FROM transacao;',
+                        function (error, maxTransacao, fields) {
+                            console.log(maxTransacao['0'].max);
+                            newWindow.webContents.send('campos', [results, maxTransacao['0'].max]);
+                        });
+                    }
+                    else {
+                        console.log(results);
+                        newWindow.webContents.send('campos', results);
+                    }
+                });
         }
     });
 
@@ -358,58 +358,58 @@ ipcMain.on('requestAgencias', function (event, arg) {
 // Evento é chamado quando o usuário solicitar pesquisa em uma tela
 ipcMain.on('pesquisar', function (event, arg) {
     switch (arg.tabela) {
-    // Seleciona os dados de todas as agências
-    case 'agencia':
-        connection.query(`SELECT numero, nome, cidade FROM agencia
-        WHERE numero LIKE ? OR nome LIKE ? OR cidade LIKE ?;`,
-        ['%' + arg.txt + '%', '%' + arg.txt + '%', '%' + arg.txt + '%'],
-        function (error, results, fields) {
-            console.log(results);
-            console.log('Enviando dados de Agência...');
-            mainWindow.webContents.send('dataAgencia', results);
-            console.log('Dados enviados!');
-        });
-        break;
+        // Seleciona os dados de todas as agências
+        case 'agencia':
+            connection.query(`SELECT numero, nome, cidade FROM agencia
+            WHERE numero LIKE ? OR nome LIKE ? OR cidade LIKE ?;`,
+            ['%' + arg.txt + '%', '%' + arg.txt + '%', '%' + arg.txt + '%'],
+            function (error, results, fields) {
+                console.log(results);
+                console.log('Enviando dados de Agência...');
+                mainWindow.webContents.send('dataAgencia', results);
+                console.log('Dados enviados!');
+            });
+            break;
 
-    // Seleciona os dados de todos os funcionários
-    case 'funcionario':
-        connection.query(`SELECT matricula, nome, cargo FROM funcionario
-        WHERE matricula LIKE ? OR nome LIKE ? OR cargo LIKE ?;`,
-        ['%' + arg.txt + '%', '%' + arg.txt + '%', '%' + arg.txt + '%'],
-        function (error, results, fields) {
-            console.log(results);
-            console.log('Enviando dados de Funcionário...');
-            mainWindow.webContents.send('dataFuncionario', results);
-            console.log('Dados enviados!');
-        });
-        break;
+        // Seleciona os dados de todos os funcionários
+        case 'funcionario':
+            connection.query(`SELECT matricula, nome, cargo FROM funcionario
+            WHERE matricula LIKE ? OR nome LIKE ? OR cargo LIKE ?;`,
+            ['%' + arg.txt + '%', '%' + arg.txt + '%', '%' + arg.txt + '%'],
+            function (error, results, fields) {
+                console.log(results);
+                console.log('Enviando dados de Funcionário...');
+                mainWindow.webContents.send('dataFuncionario', results);
+                console.log('Dados enviados!');
+            });
+            break;
 
-    // Seleciona os dados de todos os clientes
-    case 'cliente':
-        connection.query(`SELECT cpf, nome, cidade FROM cliente
-        WHERE cpf LIKE ? OR nome LIKE ? OR cidade LIKE ?;`,
-        ['%' + arg.txt + '%', '%' + arg.txt + '%', '%' + arg.txt + '%'],
-        function (error, results, fields) {
-            console.log(results);
-            console.log('Enviando dados de Cliente...');
-            mainWindow.webContents.send('dataCliente', results);
-            console.log('Dados enviados!');
-        });
-        break;
+        // Seleciona os dados de todos os clientes
+        case 'cliente':
+            connection.query(`SELECT cpf, nome, cidade FROM cliente
+            WHERE cpf LIKE ? OR nome LIKE ? OR cidade LIKE ?;`,
+            ['%' + arg.txt + '%', '%' + arg.txt + '%', '%' + arg.txt + '%'],
+            function (error, results, fields) {
+                console.log(results);
+                console.log('Enviando dados de Cliente...');
+                mainWindow.webContents.send('dataCliente', results);
+                console.log('Dados enviados!');
+            });
+            break;
 
-    // Seleciona os dados de todas as contas
-    case 'conta':
-        connection.query(`SELECT num_conta as numero,
-        num_agencia as agencia, tipo_conta as tipo FROM conta
-        WHERE num_conta LIKE ? OR num_agencia LIKE ? OR tipo_conta LIKE ?;`,
-        ['%' + arg.txt + '%', '%' + arg.txt + '%', '%' + arg.txt + '%'],
-        function (error, results, fields) {
-            console.log(results);
-            console.log('Enviando dados de Conta...');
-            mainWindow.webContents.send('dataConta', results);
-            console.log('Dados enviados!');
-        });
-        break;
+        // Seleciona os dados de todas as contas
+        case 'conta':
+            connection.query(`SELECT num_conta as numero,
+            num_agencia as agencia, tipo_conta as tipo FROM conta
+            WHERE num_conta LIKE ? OR num_agencia LIKE ? OR tipo_conta LIKE ?;`,
+            ['%' + arg.txt + '%', '%' + arg.txt + '%', '%' + arg.txt + '%'],
+            function (error, results, fields) {
+                console.log(results);
+                console.log('Enviando dados de Conta...');
+                mainWindow.webContents.send('dataConta', results);
+                console.log('Dados enviados!');
+            });
+            break;
     }
 });
 
@@ -429,20 +429,20 @@ ipcMain.on('insertConta', function (event, arg) {
     });
 
     switch(arg[4]) { // Tipo de Conta
-    case 'Conta Corrente':
-        connection.query('INSERT INTO conta_corrente VALUES (?);', arg[0],
-        function (error, results, fields) {});
-        break;
-    
-    case 'Conta Poupança':
-        connection.query('INSERT INTO conta_poupanca VALUES (?, ?);', [arg[0], arg[6]],
-        function (error, results, fields) {});
-        break;
+        case 'Conta Corrente':
+            connection.query('INSERT INTO conta_corrente VALUES (?);', arg[0],
+            function (error, results, fields) {});
+            break;
+        
+        case 'Conta Poupança':
+            connection.query('INSERT INTO conta_poupanca VALUES (?, ?);', [arg[0], arg[6]],
+            function (error, results, fields) {});
+            break;
 
-    case 'Conta Especial':
-        connection.query('INSERT INTO conta_especial VALUES (?, ?);', [arg[0], arg[5]],
-        function (error, results, fields) {});
-        break;
+        case 'Conta Especial':
+            connection.query('INSERT INTO conta_especial VALUES (?, ?);', [arg[0], arg[5]],
+            function (error, results, fields) {});
+            break;
     }
 });
 
@@ -507,6 +507,124 @@ ipcMain.on('insertDependente', function (event, arg) {
     function (error, results, fields) {
         event.sender.send('dependenteInserido', error);
     });
+});
+
+ipcMain.on('novaTransacao', function (event, arg) {
+    console.log(arg);
+
+    switch (arg[2]) {
+        case 'Transferência':
+            connection.beginTransaction(function (err) {
+                connection.query(`INSERT INTO transacao VALUES (?, ?, NOW(), ?), (?, ?, NOW(), ?);`,
+                [arg[0], -arg[1], arg[2], Number(arg[0])+1, arg[1], arg[2]], function (err, res, fiel) {});
+
+                connection.query(`INSERT INTO realiza VALUES (?, ?), (?, ?);`,
+                [arg[0], arg[3], Number(arg[0])+1, arg[4]],
+                function (error, results, fields) {
+                    if (error) {
+                        dialog.showMessageBox({
+                            type: 'error',
+                            title: 'Transação mal Sucedida',
+                            message: 'Transferência não Realizada!',
+                            detail: 'Saldo do cliente insuficiente.'
+                        });
+                        return connection.rollback(function () {});
+                    }
+                    connection.commit(function (err) {
+                        if (err) {
+                            return connection.rollback(function () {});
+                        }
+                        dialog.showMessageBox({
+                            type: 'info',
+                            title: 'Transação bem Sucedida',
+                            message: 'Transferência realizada com sucesso!',
+                            detail: 'Os saldos dos clientes foram atualizados.'
+                        });
+                    });
+                });
+            });
+            newWindow.close();
+            break;
+
+        case 'Saque':
+            connection.query(`INSERT INTO transacao VALUES (?, ?, NOW(), ?);`,
+            [arg[0], -arg[1], arg[2]], function (err, res, fiel) {});
+
+            connection.query(`INSERT INTO realiza VALUES (?, ?);`,
+            [arg[0], arg[3]],
+            function (error, results, fields) {
+                if (error) {
+                    dialog.showMessageBox({
+                        type: 'error',
+                        title: 'Transação mal Sucedida',
+                        message: 'Saque Indisponível!',
+                        detail: 'Saldo do cliente insuficiente.'
+                    });
+                }
+                else {
+                    dialog.showMessageBox({
+                        type: 'info',
+                        title: 'Transação bem Sucedida',
+                        message: 'Saque realizado com sucesso!',
+                        detail: 'O saldo do cliente foi atualizado.'
+                    });
+                }
+            });
+            newWindow.close();
+            break;
+
+        case 'Depósito':
+            connection.query(`INSERT INTO transacao VALUES (?, ?, NOW(), ?);`,
+            [arg[0], arg[1], arg[2]], function (err, res, fiel) {});
+
+            connection.query(`INSERT INTO realiza VALUES (?, ?);`,
+            [arg[0], arg[3]],
+            function (error, results, fields) {
+                if (error) {
+                    dialog.showMessageBox({
+                        type: 'error',
+                        title: 'Transação mal Sucedida',
+                        message: 'Depósito Indisponível!'
+                    });
+                }
+                else {
+                    dialog.showMessageBox({
+                        type: 'info',
+                        title: 'Transação bem Sucedida',
+                        message: 'Depósito realizado com sucesso!',
+                        detail: 'O saldo do cliente foi atualizado.'
+                    });
+                }
+            });
+            newWindow.close();
+            break;
+
+        case 'Estorno':
+            connection.query(`INSERT INTO transacao VALUES (?, ?, NOW(), ?);`,
+            [arg[0], arg[1], arg[2]], function (err, res, fiel) {});
+
+            connection.query(`INSERT INTO realiza VALUES (?, ?);`,
+            [arg[0], arg[3]],
+            function (error, results, fields) {
+                if (error) {
+                    dialog.showMessageBox({
+                        type: 'error',
+                        title: 'Transação mal Sucedida',
+                        message: 'Estorno Indisponível!'
+                    });
+                }
+                else {
+                    dialog.showMessageBox({
+                        type: 'info',
+                        title: 'Transação bem Sucedida',
+                        message: 'Cliente Estornado!',
+                        detail: 'O saldo do cliente foi atualizado.'
+                    });
+                }
+            });
+            newWindow.close();
+            break;
+    }
 });
 
 ipcMain.on('updateConta', function (event, arg) {
