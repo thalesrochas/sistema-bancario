@@ -564,7 +564,7 @@ ipcMain.on('novaTransacao', function (event, arg) {
                         return connection.rollback(function () {});
                     }
                     connection.commit(function(error) {
-                        if (err) {
+                        if (error) {
                             return connection.rollback(function () {});
                         }
                         dialog.showMessageBox({
@@ -580,53 +580,65 @@ ipcMain.on('novaTransacao', function (event, arg) {
             break;
 
         case 'Depósito':
-            connection.query(`INSERT INTO transacao VALUES (?, ?, NOW(), ?);`,
-            [arg[0], arg[1], arg[2]], function (err, res, fiel) {});
-
-            connection.query(`INSERT INTO realiza VALUES (?, ?);`,
-            [arg[0], arg[3]],
-            function (error, results, fields) {
-                if (error) {
-                    dialog.showMessageBox({
-                        type: 'error',
-                        title: 'Transação mal Sucedida',
-                        message: 'Depósito Indisponível!'
+            connection.beginTransaction(function (err) {
+                connection.query(`INSERT INTO transacao VALUES (?, ?, NOW(), ?);`,
+                [arg[0], arg[1], arg[2]], function (err, res, fiel) {});
+                
+                connection.query(`INSERT INTO realiza VALUES (?, ?);`,
+                [arg[0], arg[3]],
+                function (error, results, fields) {
+                    if (error) {
+                        dialog.showMessageBox({
+                            type: 'error',
+                            title: 'Transação mal Sucedida',
+                            message: 'Depósito Indisponível!'
+                        });
+                        return connection.rollback(function () {});
+                    }
+                    connection.commit(function (error) {
+                        if (error) {
+                            return connection.rollback(function () {});
+                        }
+                        dialog.showMessageBox({
+                            type: 'info',
+                            title: 'Transação bem Sucedida',
+                            message: 'Depósito realizado com sucesso!',
+                            detail: 'O saldo do cliente foi atualizado.'
+                        });
                     });
-                }
-                else {
-                    dialog.showMessageBox({
-                        type: 'info',
-                        title: 'Transação bem Sucedida',
-                        message: 'Depósito realizado com sucesso!',
-                        detail: 'O saldo do cliente foi atualizado.'
-                    });
-                }
+                });
             });
             newWindow.close();
             break;
 
         case 'Estorno':
-            connection.query(`INSERT INTO transacao VALUES (?, ?, NOW(), ?);`,
-            [arg[0], arg[1], arg[2]], function (err, res, fiel) {});
-
-            connection.query(`INSERT INTO realiza VALUES (?, ?);`,
-            [arg[0], arg[3]],
-            function (error, results, fields) {
-                if (error) {
-                    dialog.showMessageBox({
-                        type: 'error',
-                        title: 'Transação mal Sucedida',
-                        message: 'Estorno Indisponível!'
+            connection.beginTransaction(function (err) {
+                connection.query(`INSERT INTO transacao VALUES (?, ?, NOW(), ?);`,
+                [arg[0], arg[1], arg[2]], function (err, res, fiel) {});
+                
+                connection.query(`INSERT INTO realiza VALUES (?, ?);`,
+                [arg[0], arg[3]],
+                function (error, results, fields) {
+                    if (error) {
+                        dialog.showMessageBox({
+                            type: 'error',
+                            title: 'Transação mal Sucedida',
+                            message: 'Estorno Indisponível!'
+                        });
+                        return connection.rollback(function () {});
+                    }
+                    connection.commit(function (error) {
+                        if (error) {
+                            return connection.rollback(function () {});
+                        }
+                        dialog.showMessageBox({
+                            type: 'info',
+                            title: 'Transação bem Sucedida',
+                            message: 'Cliente Estornado!',
+                            detail: 'O saldo do cliente foi atualizado.'
+                        }); 
                     });
-                }
-                else {
-                    dialog.showMessageBox({
-                        type: 'info',
-                        title: 'Transação bem Sucedida',
-                        message: 'Cliente Estornado!',
-                        detail: 'O saldo do cliente foi atualizado.'
-                    });
-                }
+                });
             });
             newWindow.close();
             break;
