@@ -814,5 +814,27 @@ ipcMain.on('requestQuery', function (event, arg) {
                 mainWindow.webContents.send('q1.3', results);
             });
             break;
+
+        case '1.4':
+            connection.query(`
+            SELECT 
+                ca.num_conta, ca.saldo
+            FROM
+                (SELECT 
+                    *
+                FROM
+                    agencia a
+                JOIN conta c ON c.num_agencia = a.numero
+                WHERE
+                    a.numero = ${arg.id}) ca
+            WHERE
+                ca.tipo_conta = 'Conta Poupança'
+            ORDER BY ca.saldo DESC;`,
+            function (error, results, fields) {
+                console.log(results);
+                console.log('Enviando dados q1.4...');
+                mainWindow.webContents.send('q1.4', results);
+            });
+            break;
     }
 });

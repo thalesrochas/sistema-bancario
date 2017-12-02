@@ -350,6 +350,12 @@
                 id: numero
             });
 
+            ipcRenderer.send('requestQuery', {
+                query: '1.4',
+                order: null,
+                id: numero
+            });
+
             console.log('Dados da Agência ' + numero + ' solicitados.');
 
             let botaoAtualizar = document.getElementById('atualizar');
@@ -628,7 +634,31 @@
                 let tdNumero = document.createElement('td');
                 let tdSaldo = document.createElement('td');
 
-                tdNumero.textContent = 'R$' + element.num_conta;
+                tdNumero.textContent = element.num_conta;
+                tdSaldo.textContent = 'R$' + element.saldo;
+
+                tr.appendChild(tdNumero);
+                tr.appendChild(tdSaldo);
+                tbody.appendChild(tr);
+            });
+        });
+
+        ipcRenderer.on('q1.4', function (event, fields) {
+            console.log('Dados da query 1.4');
+            console.log(fields);
+            let tbody = document.getElementById('tabelaContaPoupanca');
+
+            // Remove todos os elementos do corpo da tabela antes de inserir os novos
+            while (tbody.firstChild) {
+                tbody.removeChild(tbody.firstChild);
+            }
+
+            fields.forEach(element => {
+                let tr = document.createElement('tr');
+                let tdNumero = document.createElement('td');
+                let tdSaldo = document.createElement('td');
+
+                tdNumero.textContent = element.num_conta;
                 tdSaldo.textContent = 'R$' + element.saldo;
 
                 tr.appendChild(tdNumero);
