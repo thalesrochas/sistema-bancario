@@ -66,17 +66,23 @@
                     <tbody id="corpoTabela"></tbody>
                 </table>
             </div>
-            <div class="padding16 center">
-                <button class="btn btn-primary" onclick="adicionarAgencia()" disabled>
-                    <img src="../img/account.png">
-                    Nova Agência
-                </button>
-            </div>
+            <!--
+                <div class="padding16 center">
+                    <button class="btn btn-primary" onclick="adicionarAgencia()" disabled>
+                        <img src="../img/account.png">
+                        Nova Agência
+                    </button>
+                </div>
+            -->
         </div>
         
         <!-- Coluna das informações da Agência selecionada -->
         <div class="aui-item barra-vertical" style="padding-right:0; padding-top:0;">
-            <div style="overflow:auto; height:562px; padding-right:16px; padding-top:16px">
+            <!--
+                height com os botões: 562px 
+                remover padding bottom
+            -->
+            <div style="overflow:auto; height:634px; padding-right:16px; padding-top:16px; padding-bottom:16px">
                 <div class="padding16 rounded border border-secondary">
                     <h5>Dados da Agência</h5>
                     <div class="form-row">
@@ -231,16 +237,18 @@
             </div>
         
             <!-- Botões -->
-            <div class="center margin-top16">
-                <button onclick="onClickAtualizar(-1)" id="atualizar" class="btn btn-success" disabled>
-                    <img src="../img/sync.png">
-                    Atualizar
-                </button>
-                <button onclick="onClickDeletar(-1)" id="deletar" class="btn btn-danger" disabled>
-                    <img src="../img/delete.png">
-                    Remover
-                </button>
-            </div>
+            <!--
+                <div class="center margin-top16">
+                    <button onclick="onClickAtualizar(-1)" id="atualizar" class="btn btn-success" disabled>
+                        <img src="../img/sync.png">
+                        Atualizar
+                    </button>
+                    <button onclick="onClickDeletar(-1)" id="deletar" class="btn btn-danger" disabled>
+                        <img src="../img/delete.png">
+                        Remover
+                    </button>
+                </div>
+            -->
         </div>
     </div>
 
