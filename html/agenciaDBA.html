@@ -226,7 +226,7 @@
             // Verifica se há alguma linha da tabela selecionada
             if (id == -1) {
                 console.error('Nenhuma agência selecionada');
-                dialog.showMessageBox({
+                dialog.showMessageBox(remote.getCurrentWindow(), {
                     type: 'error',
                     title: 'Erro ao Remover Agência',
                     message: 'Nenhuma agência selecionada!',

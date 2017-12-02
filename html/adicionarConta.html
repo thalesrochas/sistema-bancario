@@ -169,7 +169,7 @@
                 let juros = document.getElementById('juros');
 
                 if (!(senha.value === confSenha.value)) {
-                    dialog.showMessageBox({
+                    dialog.showMessageBox(remote.getCurrentWindow(), {
                         type: 'error',
                         title: 'Erro em Senha',
                         message: 'Senha não confere!',
@@ -204,7 +204,7 @@
         ipcRenderer.on('contaInserida', function (event, error) {
             console.log(error);
             if (error == null) {
-                dialog.showMessageBox({
+                dialog.showMessageBox(remote.getCurrentWindow(), {
                     type: 'info',
                     title: 'Conta Criada',
                     message: 'Conta criada com sucesso!',
@@ -212,7 +212,7 @@
                 remote.getCurrentWindow().close();
             }
             else {
-                dialog.showMessageBox({
+                dialog.showMessageBox(remote.getCurrentWindow(), {
                     type: 'error',
                     title: 'Conta não Criada',
                     message: 'Erro ao Criar Conta!',
@@ -226,14 +226,14 @@
         ipcRenderer.on('contaUpdated', function (event, error) {
             console.log(error);
             if (error == null) {
-                dialog.showMessageBox({
+                dialog.showMessageBox(remote.getCurrentWindow(), {
                     type: 'info',
                     title: 'Conta Atualizada',
                     message: 'Conta atualizada com sucesso!',
                 });                
             }
             else {
-                dialog.showMessageBox({
+                dialog.showMessageBox(remote.getCurrentWindow(), {
                     type: 'error',
                     title: 'Conta não Atualizada',
                     message: 'Erro ao Atualizar Conta!'

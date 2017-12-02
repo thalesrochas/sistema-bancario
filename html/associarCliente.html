@@ -89,7 +89,7 @@
         ipcRenderer.on('contaClienteInserido', function (event, error) {
             console.log(error);
             if (error == null) {
-                dialog.showMessageBox({
+                dialog.showMessageBox(remote.getCurrentWindow(), {
                     type: 'info',
                     title: 'Conta Associada',
                     message: 'Conta associada com sucesso!',
@@ -97,7 +97,7 @@
                 remote.getCurrentWindow().close();
             }
             else if (error.code == 'ER_NO_REFERENCED_ROW_2') {
-                dialog.showMessageBox({
+                dialog.showMessageBox(remote.getCurrentWindow(), {
                     type: 'error',
                     title: 'Cliente não Cadastrado',
                     message: 'Cliente não Existe!'
@@ -107,7 +107,7 @@
                 cpf.focus();
             }
             else {
-                dialog.showMessageBox({
+                dialog.showMessageBox(remote.getCurrentWindow(), {
                     type: 'error',
                     title: 'Associação Inválida',
                     message: 'Associação Inválida!',

@@ -121,14 +121,14 @@
         ipcRenderer.on('clienteUpdated', function (event, error) {
             console.log(error);
             if (error == null) {
-                dialog.showMessageBox({
+                dialog.showMessageBox(remote.getCurrentWindow(), {
                     type: 'info',
                     title: 'Cliente Atualizado',
                     message: 'Dados do cliente atualizados com sucesso!',
                 });
             }
             else {
-                dialog.showMessageBox({
+                dialog.showMessageBox(remote.getCurrentWindow(), {
                     type: 'error',
                     title: 'Cliente não Atualizado',
                     message: 'Erro ao Atualizar Cliente!'
@@ -144,7 +144,7 @@
         ipcRenderer.on('clienteInserido', function (event, error) {
             console.log(error);
             if (error == null) {
-                dialog.showMessageBox({
+                dialog.showMessageBox(remote.getCurrentWindow(), {
                     type: 'info',
                     title: 'Cliente Cadastrado',
                     message: 'Cliente cadastrado com sucesso!',
@@ -152,7 +152,7 @@
                 remote.getCurrentWindow().close();
             }
             else {
-                dialog.showMessageBox({
+                dialog.showMessageBox(remote.getCurrentWindow(), {
                     type: 'error',
                     title: 'Cliente não Cadastrado',
                     message: 'Erro ao Cadastrar Cliente!',

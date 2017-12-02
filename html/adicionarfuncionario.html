@@ -152,7 +152,7 @@
                 console.log('OK');
 
                 if (!(senha.value === confSenha.value)) {
-                    dialog.showMessageBox({
+                    dialog.showMessageBox(remote.getCurrentWindow(), {
                         type: 'error',
                         title: 'Erro em Senha',
                         message: 'Senha não confere!',
@@ -215,14 +215,14 @@
         ipcRenderer.on('funcionarioUpdated', function (event, error) {
             console.log(error);
             if (error == null) {
-                dialog.showMessageBox({
+                dialog.showMessageBox(remote.getCurrentWindow(), {
                     type: 'info',
                     title: 'Funcionário Atualizado',
                     message: 'Dados do funcionário atualizados com sucesso!',
                 });
             }
             else {
-                dialog.showMessageBox({
+                dialog.showMessageBox(remote.getCurrentWindow(), {
                     type: 'error',
                     title: 'Funcionário não Atualizado',
                     message: 'Erro ao Atualizar Funcionário!'
@@ -234,14 +234,14 @@
         ipcRenderer.on('funcionarioInserido', function (event, error) {
             console.log(error);
             if (error == null) {
-                dialog.showMessageBox({
+                dialog.showMessageBox(remote.getCurrentWindow(), {
                     type: 'info',
                     title: 'Funcionário Cadastrado',
                     message: 'Funcionário cadastrado com sucesso!',
                 });
             }
             else {
-                dialog.showMessageBox({
+                dialog.showMessageBox(remote.getCurrentWindow(), {
                     type: 'error',
                     title: 'Funcionário não Cadastrado',
                     message: 'Erro ao Cadastrar Funcionário!',

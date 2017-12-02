@@ -110,7 +110,7 @@
         ipcRenderer.on('dependenteInserido', function (event, error) {
             console.log(error);
             if (error == null) {
-                dialog.showMessageBox({
+                dialog.showMessageBox(remote.getCurrentWindow(), {
                     type: 'info',
                     title: 'Dependente Cadastrado',
                     message: 'Dependente cadastrado com sucesso!',
@@ -118,7 +118,7 @@
                 remote.getCurrentWindow().close();
             }
             else if (error.code == 'ER_DUP_ENTRY') {
-                dialog.showMessageBox({
+                dialog.showMessageBox(remote.getCurrentWindow(), {
                     type: 'error',
                     title: 'Dependente não Cadastrado',
                     message: 'Já existe um depentende com o mesmo nome para este funcionário!'
@@ -128,7 +128,7 @@
                 cpf.focus();
             }
             else {
-                dialog.showMessageBox({
+                dialog.showMessageBox(remote.getCurrentWindow(), {
                     type: 'error',
                     title: 'Cadastro Inválido',
                     message: 'Cadastro Inválido!',

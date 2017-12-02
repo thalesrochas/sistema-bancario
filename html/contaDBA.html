@@ -124,9 +124,15 @@
                             <label>Nome</label>
                             <input class="form-control" disabled>
                         </div>
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-3">
                             <label>Cidade</label>
                             <input class="form-control" disabled>
+                        </div>
+                        <div class="form-group col-md-1">
+                            <label style="color: #FFF">Rem</label>
+                            <button onclick="removerDependente()" class="btn btn-danger" disabled>
+                                <img src="../img/delete.png">
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -230,6 +236,7 @@
 
             let div = document.getElementById('clientes');
             let h5 = document.createElement('h5');
+            let numero = document.getElementById('numero');
 
             // Remove todos os elementos do corpo da tabela antes de inserir os novos
             while (div.firstChild) {
@@ -257,11 +264,15 @@
                 let inputCpf = document.createElement('input');
                 let inputNome = document.createElement('input');
                 let inputCidade = document.createElement('input');
+                let divRemover = document.createElement('div');
+                let labelRemover = document.createElement('label');
+                let buttonRemover = document.createElement('button');
+                let imgRemover = document.createElement('img');
 
                 divCliente.setAttribute('class', 'form-row');
                 divCpf.setAttribute('class', 'form-group col-md-4');
                 divNome.setAttribute('class', 'form-group col-md-4');
-                divCidade.setAttribute('class', 'form-group col-md-4');
+                divCidade.setAttribute('class', 'form-group col-md-3');
                 labelCpf.textContent = 'CPF';
                 labelNome.textContent = 'Nome';
                 labelCidade.textContent = 'Cidade';
@@ -271,12 +282,21 @@
                 inputCpf.setAttribute('disabled', null);
                 inputNome.setAttribute('disabled', null);
                 inputCidade.setAttribute('disabled', null);
+                divRemover.setAttribute('class', 'form-group col-md-1');
+                labelRemover.setAttribute('style', 'color: #FFF');
+                labelRemover.textContent = 'Rem';
+                buttonRemover.setAttribute('class', 'btn btn-danger');
+                buttonRemover.setAttribute('onclick', "desassociarCliente(" + numero.value + "," + element.cpf + ")");
+                imgRemover.setAttribute('src', '../img/delete.png');
 
                 inputCpf.value = element.cpf.substring(0,3) + '.' + element.cpf.substring(3,6) +
                 '.' + element.cpf.substring(6,9) + '-' + element.cpf.substring(9,11);
                 inputNome.value = element.nome;
                 inputCidade.value = element.cidade;
 
+                buttonRemover.appendChild(imgRemover);
+                divRemover.appendChild(labelRemover);
+                divRemover.appendChild(buttonRemover);
                 divCpf.appendChild(labelCpf);
                 divCpf.appendChild(inputCpf);
                 divNome.appendChild(labelNome);
@@ -286,7 +306,9 @@
                 divCliente.appendChild(divCpf);
                 divCliente.appendChild(divNome);
                 divCliente.appendChild(divCidade);
+                divCliente.appendChild(divRemover);
                 div.appendChild(divCliente);
+
             });
         });
 
@@ -474,6 +496,26 @@
                         nome: numero.value,
                         detail: 'Pode haver clientes associados a essa conta.'
                     });
+                }
+            });
+        }
+
+        function desassociarCliente(numConta, cpf) {
+            console.log([numConta, cpf]);
+            dialog.showMessageBox(remote.getCurrentWindow(), {
+                type: 'question',
+                buttons: ['Remover', 'Cancelar'],
+                defaultId: 0,
+                cancelId: 1,
+                title: 'Confirmar Desvínculo do Cliente',
+                message: 'Você tem certeza que deseja desvincular o Cliente ' + cpf + ' da Conta ' + numConta + '?',
+                detail: 'Esta ação não pode ser desfeita!'
+            }, function (response) {
+                /* Se o usuário confirmar deleção, dados de tabela e id
+                    * são enviados para main.js para tratar a deleção
+                    */
+                if (!response) {
+                    ipcRenderer.send('deleteClienteDaConta', [numConta, cpf]);
                 }
             });
         }

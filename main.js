@@ -51,7 +51,7 @@ ipcMain.on('conectarBD', function (event, conexaoData) {
         if (err) {
             console.error('Erro na conexão: ', err.stack);
             // Alert box com erro de conexão
-            dialog.showMessageBox({
+            dialog.showMessageBox(mainWindow, {
                 type: 'error',
                 title: 'Erro de Conexão',
                 message: 'Erro de Conexão',
@@ -90,7 +90,7 @@ ipcMain.on('userLogin', function (event, loginData) {
     if (objectCompare(loginData, DBA)) {
         console.log('Login como DBA...');
         // Informe de usuário DBA
-        dialog.showMessageBox({
+        dialog.showMessageBox(mainWindow, {
             type: 'none',
             title: 'Login feito por DBA',
             message: 'Login feito por DBA',
@@ -110,7 +110,7 @@ ipcMain.on('userLogin', function (event, loginData) {
             if (results.some(element => element.matricula == loginData.matricula &&
             element.senha == loginData.senha)) {
                 // TODO Abrir tela de usuário correspondente
-                dialog.showMessageBox({
+                dialog.showMessageBox(mainWindow, {
                     type: 'none',
                     message: 'Abrir nova tela',
                     detail: 'Abrir uma nova tela de acordo com o cargo do funcionário.'
@@ -118,7 +118,7 @@ ipcMain.on('userLogin', function (event, loginData) {
             }
             else {
                 // Exibe mensagem de erro de login, caso todos os testes falhem
-                dialog.showMessageBox({
+                dialog.showMessageBox(mainWindow, {
                     type: 'warning',
                     title: 'Erro de Login',
                     message: 'Erro de Login',
@@ -239,7 +239,7 @@ ipcMain.on('delete', function (event, arg) {
     function (error, results, fields) {
         if (error) {
             // Exibe caixa de mensagem caso tenha ocorrido erro na deleção
-            dialog.showMessageBox({
+            dialog.showMessageBox(mainWindow, {
                 type: 'error',
                 title: 'Erro ao Remover ' + arg.nome_tabela,
                 message: arg.nome_tabela + ' ' + arg.nome + ' não pode ser removido!',
@@ -249,7 +249,7 @@ ipcMain.on('delete', function (event, arg) {
         }
         else {
             // Caso tenha sido removido com sucesso, informa ao usuário
-            dialog.showMessageBox({
+            dialog.showMessageBox(mainWindow, {
                 type: 'info',
                 title: 'Remoção Confirmada',
                 message: arg.nome_tabela + ' ' + arg.nome + ' foi removido com sucesso!'
@@ -267,7 +267,7 @@ ipcMain.on('deleteDependente', function (event, arg) {
     function (error, results, fields) {
         if (error) {
             // Exibe caixa de mensagem caso tenha ocorrido erro na deleção
-            dialog.showMessageBox({
+            dialog.showMessageBox(mainWindow, {
                 type: 'error',
                 title: 'Erro ao Remover ' + arg[1],
                 message: 'O dependente ' + arg[1] + ' não pode ser removido!'
@@ -276,7 +276,7 @@ ipcMain.on('deleteDependente', function (event, arg) {
         }
         else {
             // Caso tenha sido removido com sucesso, informa ao usuário
-            dialog.showMessageBox({
+            dialog.showMessageBox(mainWindow, {
                 type: 'info',
                 title: 'Remoção Confirmada',
                 message: 'O dependente ' + arg[1] + ' foi removido com sucesso!'
@@ -284,6 +284,32 @@ ipcMain.on('deleteDependente', function (event, arg) {
             // Atualiza os dados da página após a remoção
             mainWindow.webContents.reload();
             console.log('O dependente ' + arg[1] + ' foi removido com sucesso!');
+        }
+    });
+});
+
+ipcMain.on('deleteClienteDaConta', function (event, arg) {
+    connection.query('DELETE FROM conta_cliente WHERE num_conta = ? AND cpf_cliente = ?;', arg,
+    function (error, results, fields) {
+        if (error) {
+            // Exibe caixa de mensagem caso tenha ocorrido erro na deleção
+            dialog.showMessageBox(mainWindow, {
+                type: 'error',
+                title: 'Erro ao Desvincular ' + arg[1],
+                message: 'O Cliente ' + arg[1] + ' não pode ser desvinculado!'
+            });
+            console.log('O cliente ' + arg[1] + ' não pode ser desvinculado!');
+        }
+        else {
+            // Caso tenha sido removido com sucesso, informa ao usuário
+            dialog.showMessageBox(mainWindow, {
+                type: 'info',
+                title: 'Desvínculo Confirmada',
+                message: 'O cliente ' + arg[1] + ' foi desvinculado com sucesso!'
+            });
+            // Atualiza os dados da página após a remoção
+            mainWindow.webContents.reload();
+            console.log('O cliente ' + arg[1] + ' foi desvinculado com sucesso!');
         }
     });
 });
@@ -465,7 +491,7 @@ ipcMain.on('insertFuncionario', function (event, arg) {
             console.log('Aqui 0');
             console.log(results[0].mat_gerente);
             if (!(results[0].mat_gerente == null)) {
-                dialog.showMessageBox({
+                dialog.showMessageBox(newWindow, {
                     type: 'error',
                     title: 'Erro ao Cadastrar Funcionário',
                     message: 'Erro ao Cadastrar Funcionário!',
@@ -522,7 +548,7 @@ ipcMain.on('novaTransacao', function (event, arg) {
                 [arg[0], arg[3], Number(arg[0])+1, arg[4]],
                 function (error, results, fields) {
                     if (error) {
-                        dialog.showMessageBox({
+                        dialog.showMessageBox(newWindow, {
                             type: 'error',
                             title: 'Transação mal Sucedida',
                             message: 'Transferência não Realizada!',
@@ -534,7 +560,7 @@ ipcMain.on('novaTransacao', function (event, arg) {
                         if (err) {
                             return connection.rollback(function () {});
                         }
-                        dialog.showMessageBox({
+                        dialog.showMessageBox(newWindow, {
                             type: 'info',
                             title: 'Transação bem Sucedida',
                             message: 'Transferência realizada com sucesso!',
@@ -555,7 +581,7 @@ ipcMain.on('novaTransacao', function (event, arg) {
                 [arg[0], arg[3]],
                 function (error, results, fields) {
                     if (error) {
-                        dialog.showMessageBox({
+                        dialog.showMessageBox(newWindow, {
                             type: 'error',
                             title: 'Transação mal Sucedida',
                             message: 'Saque Indisponível!',
@@ -567,7 +593,7 @@ ipcMain.on('novaTransacao', function (event, arg) {
                         if (error) {
                             return connection.rollback(function () {});
                         }
-                        dialog.showMessageBox({
+                        dialog.showMessageBox(newWindow, {
                             type: 'info',
                             title: 'Transação bem Sucedida',
                             message: 'Saque realizado com sucesso!',
@@ -588,7 +614,7 @@ ipcMain.on('novaTransacao', function (event, arg) {
                 [arg[0], arg[3]],
                 function (error, results, fields) {
                     if (error) {
-                        dialog.showMessageBox({
+                        dialog.showMessageBox(newWindow, {
                             type: 'error',
                             title: 'Transação mal Sucedida',
                             message: 'Depósito Indisponível!'
@@ -599,7 +625,7 @@ ipcMain.on('novaTransacao', function (event, arg) {
                         if (error) {
                             return connection.rollback(function () {});
                         }
-                        dialog.showMessageBox({
+                        dialog.showMessageBox(newWindow, {
                             type: 'info',
                             title: 'Transação bem Sucedida',
                             message: 'Depósito realizado com sucesso!',
@@ -620,7 +646,7 @@ ipcMain.on('novaTransacao', function (event, arg) {
                 [arg[0], arg[3]],
                 function (error, results, fields) {
                     if (error) {
-                        dialog.showMessageBox({
+                        dialog.showMessageBox(newWindow, {
                             type: 'error',
                             title: 'Transação mal Sucedida',
                             message: 'Estorno Indisponível!'
@@ -631,7 +657,7 @@ ipcMain.on('novaTransacao', function (event, arg) {
                         if (error) {
                             return connection.rollback(function () {});
                         }
-                        dialog.showMessageBox({
+                        dialog.showMessageBox(newWindow, {
                             type: 'info',
                             title: 'Transação bem Sucedida',
                             message: 'Cliente Estornado!',

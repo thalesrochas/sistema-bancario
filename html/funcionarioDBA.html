@@ -463,7 +463,7 @@
 
         function removerDependente(mat_funcionario, nome_dependente) {
             console.log([mat_funcionario, nome_dependente]);
-            dialog.showMessageBox({
+            dialog.showMessageBox(remote.getCurrentWindow(), {
                 type: 'question',
                 buttons: ['Remover', 'Cancelar'],
                 defaultId: 0,
