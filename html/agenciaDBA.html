@@ -75,39 +75,160 @@
         </div>
         
         <!-- Coluna das informações da Agência selecionada -->
-        <div class="aui-item barra-vertical">
-            <div style="margin-bottom:170px"></div>
-            <div class="padding16 rounded border border-secondary">
-                <h5>Dados da Agência</h5>
-                <div class="form-row">
-                    <div class="form-group col-md-3">
-                        <label for="numero">Número</label>
-                        <input type="text" class="form-control" id="numero" disabled>
-                    </div>
-                    <div class="form-group col-md-9">
-                        <label for="nome">Nome</label>
-                        <input type="text" class="form-control" id="nome" disabled>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-md-3">
-                        <label for="gerente">Gerente</label>
-                        <input type="text" class="form-control" id="gerente" disabled>
-                    </div> 
-                    <div class="form-group col-md-4">
-                        <label for="salario">Salário Montante</label>
-                        <div class="input-group">
-                            <span class="input-group-addon">R$</span>
-                            <input type="text" class="form-control" id="salario" disabled>
+        <div class="aui-item barra-vertical" style="padding-right:0; padding-top:0;">
+            <div style="overflow:auto; height:562px; padding-right:16px; padding-top:16px">
+                <div class="padding16 rounded border border-secondary">
+                    <h5>Dados da Agência</h5>
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label for="numero">Número</label>
+                            <input type="text" class="form-control" id="numero" disabled>
+                        </div>
+                        <div class="form-group col-md-9">
+                            <label for="nome">Nome</label>
+                            <input type="text" class="form-control" id="nome" disabled>
                         </div>
                     </div>
-                    <div class="form-group col-md-5">
-                        <label for="cidade">Cidade</label>
-                        <input type="text" class="form-control" id="cidade" disabled>
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label for="gerente">Gerente</label>
+                            <input type="text" class="form-control" id="gerente" disabled>
+                        </div> 
+                        <div class="form-group col-md-4">
+                            <label for="salario">Salário Montante</label>
+                            <div class="input-group">
+                                <span class="input-group-addon">R$</span>
+                                <input type="text" class="form-control" id="salario" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-5">
+                            <label for="cidade">Cidade</label>
+                            <input type="text" class="form-control" id="cidade" disabled>
+                        </div>
                     </div>
                 </div>
+                <div class="padding16 margin-top16 rounded border border-secondary" id="funcionario">
+                    <div class="form-row">
+                        <h5 style="margin-right: 229px">Funcionários</h5>
+                        <label style="margin-right: 10px">Ordenar por:</label>
+                        <div class="btn-group btn-group-sm margin-bottom16">
+                            <button class="btn btn-info" disabled>Nome</button>
+                            <button class="btn btn-info" disabled>Salário</button>
+                        </div>
+                    </div>
+                    <div class="padding16 margin-bottom16 rounded border border-info">
+                        <div class="form-row">
+                            <div class="form-group col-md-8">
+                                <label>Nome</label>
+                                <input class="form-control" disabled>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>Cargo</label>
+                                <input class="form-control" disabled>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-8">
+                                <label>Endereço</label>
+                                <input class="form-control" disabled>
+                            </div> 
+                            <div class="form-group col-md-4">
+                                <label>Cidade</label>
+                                <input class="form-control" disabled>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-5">
+                                <label>Salário</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon">R$</span>
+                                    <input class="form-control" disabled>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-5">
+                                <label>Número de Dependentes</label>
+                                <input class="form-control" disabled>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="padding16 margin-top16 rounded border border-secondary">
+                    <h5>Clientes</h5>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nome</th>
+                                <th scope="col">Tipo de Conta</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaCliente"></tbody>
+                    </table>
+                </div>
+                <div class="padding16 margin-top16 rounded border border-secondary">
+                    <h5>Contas Especiais</h5>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Número da Conta</th>
+                                <th scope="col">Saldo</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaContaEspecial"></tbody>
+                    </table>
+                </div>
+                <div class="padding16 margin-top16 rounded border border-secondary">
+                    <h5>Contas Especiais</h5>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Número da Conta</th>
+                                <th scope="col">Saldo</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaContaPoupanca"></tbody>
+                    </table>
+                </div>
+                <div class="padding16 margin-top16 rounded border border-secondary">
+                    <div class="form-row">
+                        <h5 style="margin-right: 102px">Número de Transações</h5>
+                        <label style="margin-right: 10px">Últimos:</label>
+                        <div class="btn-group btn-group-sm margin-bottom16">
+                            <button class="btn btn-info">7 dias</button>
+                            <button class="btn btn-info">30 dias</button>
+                            <button class="btn btn-info">365 dias</button>
+                        </div>
+                    </div>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Número da Conta</th>
+                                <th scope="col">Número de Transações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaNumTransacao"></tbody>
+                    </table>
+                </div>
+                <div class="padding16 margin-top16 rounded border border-secondary">
+                    <div class="form-row">
+                        <h5 style="margin-right: 62px">Volume de Movimentações</h5>
+                        <label style="margin-right: 10px">Últimos:</label>
+                        <div class="btn-group btn-group-sm margin-bottom16">
+                            <button class="btn btn-info">7 dias</button>
+                            <button class="btn btn-info">30 dias</button>
+                            <button class="btn btn-info">365 dias</button>
+                        </div>
+                    </div>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Número da Conta</th>
+                                <th scope="col">Valor Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaVolTransacao"></tbody>
+                    </table>
+                </div>
             </div>
-            <div style="margin-bottom:170px"></div>
         
             <!-- Botões -->
             <div class="center margin-top16">
@@ -205,7 +326,18 @@
 
         function selectAgencia(numero) {
             console.log('Clique na Agência ' + numero);
-            ipcRenderer.send('requestFields', {tabela: 'agencia', campo: 'numero', id: numero});
+            ipcRenderer.send('requestFields', {
+                tabela: 'agencia',
+                campo: 'numero',
+                id: numero
+            });
+
+            ipcRenderer.send('requestQuery', {
+                query: '1.1',
+                order: 'f.nome',
+                id: numero
+            });
+
             console.log('Dados da Agência ' + numero + ' solicitados.');
 
             let botaoAtualizar = document.getElementById('atualizar');
@@ -285,6 +417,153 @@
         function onClickDesconectar() {
             ipcRenderer.send('acessar', 'Carregando tela de login!');
         }
+
+        function ordenar(campo) {
+            let numero = document.getElementById('numero');
+            ipcRenderer.send('requestQuery', {
+                query: '1.1',
+                order: campo,
+                id: numero.value
+            });
+        }
+    </script>
+
+    <!-- Querys -->
+    <script>
+        ipcRenderer.on('q1.1', function (event, fields) {
+            console.log('Dados da query 1.1');
+            console.log(fields);
+
+            let div = document.getElementById('funcionario');
+            let divHeader = document.createElement('div');
+            let h5 = document.createElement('h5');
+            let labelOrdenar = document.createElement('label');
+            let divBotoes = document.createElement('div');
+            let buttonNome = document.createElement('button');
+            let buttonSalario = document.createElement('button');
+
+            // Remove todos os elementos do corpo da tabela antes de inserir os novos
+            while (div.firstChild) {
+                div.removeChild(div.firstChild);
+            }
+
+            divHeader.setAttribute('class', 'form-row');
+            h5.setAttribute('style', 'margin-right: 229px');
+            h5.textContent = 'Funcionários';
+            labelOrdenar.setAttribute('style', 'margin-right: 10px');
+            labelOrdenar.textContent = 'Ordenar por:';
+            divBotoes.setAttribute('class', 'btn-group btn-group-sm margin-bottom16');
+            buttonNome.setAttribute('class', 'btn btn-info');
+            buttonNome.setAttribute('onclick', 'ordenar("f.nome")');
+            buttonNome.textContent = 'Nome';
+            buttonSalario.setAttribute('class', 'btn btn-info');
+            buttonSalario.setAttribute('onclick', 'ordenar("f.salario")');
+            buttonSalario.textContent = 'Salário';
+
+            divBotoes.appendChild(buttonNome);
+            divBotoes.appendChild(buttonSalario);
+            divHeader.appendChild(h5);
+            divHeader.appendChild(labelOrdenar);
+            divHeader.appendChild(divBotoes);
+            div.appendChild(divHeader);
+
+            if (fields.length == 0) {
+                console.log('Funcionário sem dependente');
+                let h6 = document.createElement('h6');
+                h6.textContent = 'Não há dependentes para este funcionário.';
+                div.appendChild(h6);
+            }
+
+            fields.forEach(element => {
+                let divFuncionario = document.createElement('div');
+                let div1 = document.createElement('div');
+                let div2 = document.createElement('div');
+                let div3 = document.createElement('div');
+                let divNome = document.createElement('div');
+                let divCargo = document.createElement('div');
+                let divEndereco = document.createElement('div');
+                let divCidade = document.createElement('div');
+                let divSalario = document.createElement('div');
+                let divSalario2 = document.createElement('div');
+                let divNumDep = document.createElement('div');
+                let labelNome = document.createElement('label');
+                let labelCargo = document.createElement('label');
+                let labelEndereco = document.createElement('label');
+                let labelCidade = document.createElement('label');
+                let labelSalario = document.createElement('label');
+                let labelNumDep = document.createElement('label');
+                let spanSalario = document.createElement('span');
+                let inputNome = document.createElement('input');
+                let inputCargo = document.createElement('input');
+                let inputEndereco = document.createElement('input');
+                let inputCidade = document.createElement('input');
+                let inputSalario = document.createElement('input');
+                let inputNumDep = document.createElement('input');
+
+                divFuncionario.setAttribute('class', 'padding16 margin-bottom16 rounded border border-info');
+                div1.setAttribute('class', 'form-row');
+                div2.setAttribute('class', 'form-row');
+                div3.setAttribute('class', 'form-row');
+                divNome.setAttribute('class', 'form-group col-md-8');
+                divCargo.setAttribute('class', 'form-group col-md-4');
+                divEndereco.setAttribute('class', 'form-group col-md-8');
+                divCidade.setAttribute('class', 'form-group col-md-4');
+                divSalario.setAttribute('class', 'form-group col-md-5');
+                divSalario2.setAttribute('class', 'input-group');
+                divNumDep.setAttribute('class', 'form-group col-md-5');
+                labelNome.textContent = 'Nome';
+                labelCargo.textContent = 'Cargo';
+                labelEndereco.textContent = 'Endereço';
+                labelCidade.textContent = 'Cidade';
+                labelSalario.textContent = 'Salário';
+                labelNumDep.textContent = 'Número de Dependentes';
+                spanSalario.setAttribute('class', 'input-group-addon');
+                spanSalario.textContent = 'R$';
+                inputNome.setAttribute('class', 'form-control');
+                inputNome.setAttribute('disabled', null);
+                inputCargo.setAttribute('class', 'form-control');
+                inputCargo.setAttribute('disabled', null);
+                inputEndereco.setAttribute('class', 'form-control');
+                inputEndereco.setAttribute('disabled', null);
+                inputCidade.setAttribute('class', 'form-control');
+                inputCidade.setAttribute('disabled', null);
+                inputSalario.setAttribute('class', 'form-control');
+                inputSalario.setAttribute('disabled', null);
+                inputNumDep.setAttribute('class', 'form-control');
+                inputNumDep.setAttribute('disabled', null);
+                inputNome.value = element.nome;
+                inputCargo.value = element.cargo;
+                inputEndereco.value = element.endereco;
+                inputCidade.value = element.cidade;
+                inputSalario.value = element.salario;
+                inputNumDep.value = element.num_dependente;
+
+                divSalario2.appendChild(spanSalario);
+                divSalario2.appendChild(inputSalario);
+                divSalario.appendChild(labelSalario);
+                divSalario.appendChild(divSalario2);
+                divNome.appendChild(labelNome);
+                divNome.appendChild(inputNome);
+                divCargo.appendChild(labelCargo);
+                divCargo.appendChild(inputCargo);
+                divEndereco.appendChild(labelEndereco);
+                divEndereco.appendChild(inputEndereco);
+                divCidade.appendChild(labelCidade);
+                divCidade.appendChild(inputCidade);
+                divNumDep.appendChild(labelNumDep);
+                divNumDep.appendChild(inputNumDep);
+                div1.appendChild(divNome);
+                div1.appendChild(divCargo);
+                div2.appendChild(divEndereco);
+                div2.appendChild(divCidade);
+                div3.appendChild(divSalario);
+                div3.appendChild(divNumDep);
+                divFuncionario.appendChild(div1);
+                divFuncionario.appendChild(div2);
+                divFuncionario.appendChild(div3);
+                div.appendChild(divFuncionario);
+            });
+        });
     </script>
     
     <!-- Scripts para Bootstrap -->

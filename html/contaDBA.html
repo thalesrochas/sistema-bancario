@@ -140,7 +140,7 @@
                         </div>
                         <div class="form-group col-md-1">
                             <label style="color: #FFF">Rem</label>
-                            <button onclick="removerDependente()" class="btn btn-danger" disabled>
+                            <button class="btn btn-danger" disabled>
                                 <img src="../img/delete.png">
                             </button>
                         </div>
@@ -148,18 +148,18 @@
                 </div>
                 <div class="padding16 margin-top16 rounded border border-secondary">
                     <h5>Transações</h5>
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Nº</th>
-                                    <th scope="col">Valor</th>
-                                    <th scope="col">Data</th>
-                                    <th scope="col">Hora</th>
-                                    <th scope="col">Tipo</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tabelaTransacao"></tbody>
-                        </table>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nº</th>
+                                <th scope="col">Valor</th>
+                                <th scope="col">Data</th>
+                                <th scope="col">Hora</th>
+                                <th scope="col">Tipo</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaTransacao"></tbody>
+                    </table>
                 </div>
             </div>
         
@@ -529,6 +529,15 @@
                 }
             });
         }
+
+        ipcRenderer.on('clienteDaContaRemovido', function (event, fields){
+            let numero = document.getElementById('numero');
+            ipcRenderer.send('requestFields', {
+                tabela: 'conta_do_cliente',
+                campo: 'num_conta',
+                id: numero.value
+            });
+        });
         
         let desconectar = document.getElementById('desconectar');
         let icon = document.getElementById('icon');

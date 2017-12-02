@@ -491,6 +491,15 @@
             });
         }
 
+        ipcRenderer.on('dependenteRemovido', function (event, fields) {
+            let matricula = document.getElementById('matricula');
+            ipcRenderer.send('requestFields', {
+                tabela: 'dependente',
+                campo: 'mat_funcionario',
+                id: matricula.value
+            });
+        });
+
         let desconectar = document.getElementById('desconectar');
         let icon = document.getElementById('icon');
 

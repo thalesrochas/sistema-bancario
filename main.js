@@ -104,7 +104,7 @@ ipcMain.on('userLogin', function (event, loginData) {
         }));
     }
     else { // Executa uma query para buscar os dados de matricula e senha no banco
-        connection.query('SELECT cargo FROM funcionario WHERE matricula = ? AND senha = ?;',
+        connection.query('SELECT cargo, lotacao FROM funcionario WHERE matricula = ? AND senha = ?;',
         [loginData.matricula, loginData.senha],
         function (error, results, fields) {
             console.log(results);
@@ -123,12 +123,27 @@ ipcMain.on('userLogin', function (event, loginData) {
                 switch (results[0].cargo) {
                     case 'Gerente':
                         console.log('Gerente');
+                        mainWindow.loadURL(url.format({
+                            pathname: 'html/gerenteMain.html',
+                            protocol: 'file:',
+                            slashes: true
+                        }));
                         break;
                     case 'Atendente':
                         console.log('Atendente');
+                        mainWindow.loadURL(url.format({
+                            pathname: 'html/atendenteMain.html',
+                            protocol: 'file:',
+                            slashes: true
+                        }));
                         break;
                     case 'Caixa':
                         console.log('Caixa');
+                        mainWindow.loadURL(url.format({
+                            pathname: 'html/caixaMain.html',
+                            protocol: 'file:',
+                            slashes: true
+                        }));
                         break;
                 }
             }
@@ -289,7 +304,7 @@ ipcMain.on('deleteDependente', function (event, arg) {
                 message: 'O dependente ' + arg[1] + ' foi removido com sucesso!'
             });
             // Atualiza os dados da página após a remoção
-            mainWindow.webContents.reload();
+            mainWindow.send('dependenteRemovido', '');
             console.log('O dependente ' + arg[1] + ' foi removido com sucesso!');
         }
     });
@@ -315,7 +330,7 @@ ipcMain.on('deleteClienteDaConta', function (event, arg) {
                 message: 'O cliente ' + arg[1] + ' foi desvinculado com sucesso!'
             });
             // Atualiza os dados da página após a remoção
-            mainWindow.webContents.reload();
+            mainWindow.send('clienteDaContaRemovido', '');
             console.log('O cliente ' + arg[1] + ' foi desvinculado com sucesso!');
         }
     });
@@ -729,4 +744,33 @@ ipcMain.on('updateFuncionario', function (event, arg) {
     function (error, results, fields) {
         event.sender.send('funcionarioUpdated', error);
     });
+});
+
+ipcMain.on('requestQuery', function (event, arg) {
+    console.log(arg)
+    switch (arg.query) {
+        case '1.1':
+            connection.query(`
+            SELECT 
+                f.nome, f.cargo, f.endereco, f.cidade, f.salario, nd.num_dependente
+            FROM
+                ((SELECT 
+                    f.nome, COUNT(d.mat_funcionario) AS num_dependente
+                FROM
+                    funcionario f
+                LEFT OUTER JOIN dependente d ON d.mat_funcionario = f.matricula
+                GROUP BY f.nome) nd
+                JOIN funcionario f ON f.nome = nd.nome)
+                    JOIN
+                agencia a ON f.lotacao = a.numero
+            WHERE
+                a.numero = ${arg.id}
+            ORDER BY ${arg.order};`,
+            function (error, results, fields) {
+                console.log(results);
+                console.log('Enviando dados...');
+                mainWindow.webContents.send('q1.1', results);
+            });
+            break;
+    }
 });
