@@ -112,8 +112,8 @@
                         <h5 style="margin-right: 229px">Funcionários</h5>
                         <label style="margin-right: 10px">Ordenar por:</label>
                         <div class="btn-group btn-group-sm margin-bottom16">
-                            <button class="btn btn-info" disabled>Nome</button>
-                            <button class="btn btn-info" disabled>Salário</button>
+                            <button class="btn btn-outline-info" disabled>Nome</button>
+                            <button class="btn btn-outline-info" disabled>Salário</button>
                         </div>
                     </div>
                     <div class="padding16 margin-bottom16 rounded border border-info">
@@ -193,9 +193,9 @@
                         <h5 style="margin-right: 102px">Número de Transações</h5>
                         <label style="margin-right: 10px">Últimos:</label>
                         <div class="btn-group btn-group-sm margin-bottom16">
-                            <button id="btnNum7" class="btn btn-info" onclick="onClickNumTrans(7)" disabled>7 dias</button>
-                            <button id="btnNum30" class="btn btn-info" onclick="onClickNumTrans(30)" disabled>30 dias</button>
-                            <button id="btnNum365" class="btn btn-info" onclick="onClickNumTrans(365)" disabled>365 dias</button>
+                            <button id="btnNum7" class="btn btn-outline-info" onclick="onClickNumTrans(7)" disabled>7 dias</button>
+                            <button id="btnNum30" class="btn btn-outline-info" onclick="onClickNumTrans(30)" disabled>30 dias</button>
+                            <button id="btnNum365" class="btn btn-outline-info" onclick="onClickNumTrans(365)" disabled>365 dias</button>
                         </div>
                     </div>
                     <table class="table table-striped">
@@ -213,9 +213,9 @@
                         <h5 style="margin-right: 62px">Volume de Movimentações</h5>
                         <label style="margin-right: 10px">Últimos:</label>
                         <div class="btn-group btn-group-sm margin-bottom16">
-                            <button id="btnVol7" class="btn btn-info" disabled>7 dias</button>
-                            <button id="btnVol30"class="btn btn-info" disabled>30 dias</button>
-                            <button id="btnVol365" class="btn btn-info" disabled>365 dias</button>
+                            <button id="btnVol7" class="btn btn-outline-info" onclick="onClickVolTrans(7)" disabled>7 dias</button>
+                            <button id="btnVol30" class="btn btn-outline-info" onclick="onClickVolTrans(30)" disabled>30 dias</button>
+                            <button id="btnVol365" class="btn btn-outline-info" onclick="onClickVolTrans(365)" disabled>365 dias</button>
                         </div>
                     </div>
                     <table class="table table-striped">
@@ -310,6 +310,9 @@
             btnVol7.removeAttribute('disabled');
             btnVol30.removeAttribute('disabled');
             btnVol365.removeAttribute('disabled');
+
+            btnNum7.setAttribute('class', 'btn btn-info');
+            btnVol7.setAttribute('class', 'btn btn-info');
         });
     </script>
 
@@ -373,6 +376,12 @@
 
             ipcRenderer.send('requestQuery', {
                 query: '1.5',
+                order: '7',
+                id: numero
+            });
+
+            ipcRenderer.send('requestQuery', {
+                query: '1.6',
                 order: '7',
                 id: numero
             });
@@ -467,9 +476,62 @@
         }
 
         function onClickNumTrans(dias) {
+            let btnNum7 = document.getElementById('btnNum7');
+            let btnNum30 = document.getElementById('btnNum30');
+            let btnNum365 = document.getElementById('btnNum365');
+
+            switch (dias) {
+                case 7:
+                    btnNum7.setAttribute('class', 'btn btn-info');
+                    btnNum30.setAttribute('class', 'btn btn-outline-info');
+                    btnNum365.setAttribute('class', 'btn btn-outline-info');
+                    break;
+                case 30:
+                    btnNum7.setAttribute('class', 'btn btn-outline-info');
+                    btnNum30.setAttribute('class', 'btn btn-info');
+                    btnNum365.setAttribute('class', 'btn btn-outline-info');
+                    break;
+                case 365:
+                    btnNum7.setAttribute('class', 'btn btn-outline-info');
+                    btnNum30.setAttribute('class', 'btn btn-outline-info');
+                    btnNum365.setAttribute('class', 'btn btn-info');
+                    break;
+            }
+
             let numero = document.getElementById('numero');
             ipcRenderer.send('requestQuery', {
                 query: '1.5',
+                order: dias,
+                id: numero.value
+            });
+        }
+
+        function onClickVolTrans(dias) {
+            let btnVol7 = document.getElementById('btnVol7');
+            let btnVol30 = document.getElementById('btnVol30');
+            let btnVol365 = document.getElementById('btnVol365');
+
+            switch (dias) {
+                case 7:
+                    btnVol7.setAttribute('class', 'btn btn-info');
+                    btnVol30.setAttribute('class', 'btn btn-outline-info');
+                    btnVol365.setAttribute('class', 'btn btn-outline-info');
+                    break;
+                case 30:
+                    btnVol7.setAttribute('class', 'btn btn-outline-info');
+                    btnVol30.setAttribute('class', 'btn btn-info');
+                    btnVol365.setAttribute('class', 'btn btn-outline-info');
+                    break;
+                case 365:
+                    btnVol7.setAttribute('class', 'btn btn-outline-info');
+                    btnVol30.setAttribute('class', 'btn btn-outline-info');
+                    btnVol365.setAttribute('class', 'btn btn-info');
+                    break;
+            }
+
+            let numero = document.getElementById('numero');
+            ipcRenderer.send('requestQuery', {
+                query: '1.6',
                 order: dias,
                 id: numero.value
             });
@@ -501,12 +563,22 @@
             labelOrdenar.setAttribute('style', 'margin-right: 10px');
             labelOrdenar.textContent = 'Ordenar por:';
             divBotoes.setAttribute('class', 'btn-group btn-group-sm margin-bottom16');
-            buttonNome.setAttribute('class', 'btn btn-info');
             buttonNome.setAttribute('onclick', 'ordenar("f.nome")');
             buttonNome.textContent = 'Nome';
-            buttonSalario.setAttribute('class', 'btn btn-info');
             buttonSalario.setAttribute('onclick', 'ordenar("f.salario")');
             buttonSalario.textContent = 'Salário';
+
+            switch (fields[1]) {
+                case 'f.nome':
+                    buttonNome.setAttribute('class', 'btn btn-info');
+                    buttonSalario.setAttribute('class', 'btn btn-outline-info');
+                    break;
+
+                case 'f.salario':
+                    buttonNome.setAttribute('class', 'btn btn-outline-info');
+                    buttonSalario.setAttribute('class', 'btn btn-info');
+                    break;
+            }
 
             divBotoes.appendChild(buttonNome);
             divBotoes.appendChild(buttonSalario);
@@ -515,14 +587,14 @@
             divHeader.appendChild(divBotoes);
             div.appendChild(divHeader);
 
-            if (fields.length == 0) {
+            if (fields[0].length == 0) {
                 console.log('Funcionário sem dependente');
                 let h6 = document.createElement('h6');
                 h6.textContent = 'Não há dependentes para este funcionário.';
                 div.appendChild(h6);
             }
 
-            fields.forEach(element => {
+            fields[0].forEach(element => {
                 let divFuncionario = document.createElement('div');
                 let div1 = document.createElement('div');
                 let div2 = document.createElement('div');
@@ -698,7 +770,7 @@
         });
 
         ipcRenderer.on('q1.5', function (event, fields) {
-            console.log('Dados da query 1.4');
+            console.log('Dados da query 1.5');
             console.log(fields);
             let tbody = document.getElementById('tabelaNumTransacao');
 
@@ -717,6 +789,30 @@
 
                 tr.appendChild(tdNumConta);
                 tr.appendChild(tdNumTransacao);
+                tbody.appendChild(tr);
+            });
+        });
+
+        ipcRenderer.on('q1.6', function (event, fields) {
+            console.log('Dados da query 1.6');
+            console.log(fields);
+            let tbody = document.getElementById('tabelaVolTransacao');
+
+            // Remove todos os elementos do corpo da tabela antes de inserir os novos
+            while (tbody.firstChild) {
+                tbody.removeChild(tbody.firstChild);
+            }
+
+            fields.forEach(element => {
+                let tr = document.createElement('tr');
+                let tdNumConta = document.createElement('td');
+                let tdVolTransacao = document.createElement('td');
+
+                tdNumConta.textContent = element.num_conta;
+                tdVolTransacao.textContent = 'R$' + element.valor_total;
+
+                tr.appendChild(tdNumConta);
+                tr.appendChild(tdVolTransacao);
                 tbody.appendChild(tr);
             });
         });

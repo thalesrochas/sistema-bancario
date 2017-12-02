@@ -767,9 +767,9 @@ ipcMain.on('requestQuery', function (event, arg) {
                 a.numero = ${arg.id}
             ORDER BY ${arg.order};`,
             function (error, results, fields) {
-                console.log(results);
+                console.log([results, arg.order]);
                 console.log('Enviando dados q1.1...');
-                mainWindow.webContents.send('q1.1', results);
+                mainWindow.webContents.send('q1.1', [results, arg.order]);
             });
             break;
         
@@ -856,5 +856,24 @@ ipcMain.on('requestQuery', function (event, arg) {
                 mainWindow.webContents.send('q1.5', results);
             });
             break;
+
+        case '1.6':
+            connection.query(`
+            SELECT
+                c.num_conta, SUM(ABS(t.valor_transacao)) AS valor_total
+            FROM
+                ((conta c
+                JOIN realiza r ON c.num_conta = r.num_conta)
+                JOIN transacao t ON t.num_transacao = r.num_transacao)
+            WHERE
+                c.num_agencia = ${arg.id}
+                    AND (TO_DAYS(NOW()) - TO_DAYS(t.data_hora)) <= ${arg.order}
+            GROUP BY c.num_conta
+            ORDER BY valor_total DESC;`,
+            function (error, results, fields) {
+                console.log(results);
+                console.log('Enviando dados q1.6...');
+                mainWindow.webContents.send('q1.6', results);
+            });
     }
 });

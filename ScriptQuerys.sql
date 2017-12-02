@@ -113,13 +113,14 @@ GROUP BY c.num_conta;
 -- 365 dias);
 -- -------------------------------------------------------
 SELECT -- todas as transações são convertidas para seu módulo com ABS()
-    c.num_conta, ABS(SUM(t.valor_transacao)) AS valor_total
+    c.num_conta, SUM(ABS(t.valor_transacao)) AS valor_total
 FROM
     ((conta c
     JOIN realiza r ON c.num_conta = r.num_conta)
     JOIN transacao t ON t.num_transacao = r.num_transacao)
 WHERE
-    (TO_DAYS(NOW()) - TO_DAYS(t.data_hora)) <= 7
+    c.num_agencia = 7820
+        AND (TO_DAYS(NOW()) - TO_DAYS(t.data_hora)) <= 7
 GROUP BY c.num_conta -- Agrupa por número de conta
 ORDER BY valor_total DESC; -- Ordena do maior volume para o menor
 
