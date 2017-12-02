@@ -104,26 +104,33 @@ ipcMain.on('userLogin', function (event, loginData) {
         }));
     }
     else { // Executa uma query para buscar os dados de matricula e senha no banco
-        connection.query('SELECT matricula, senha, cargo FROM funcionario;',
+        connection.query('SELECT cargo FROM funcionario WHERE matricula = ? AND senha = ?;',
+        [loginData.matricula, loginData.senha],
         function (error, results, fields) {
-            // Se houver alguma tupla correspondente no banco
-            if (results.some(element => element.matricula == loginData.matricula &&
-            element.senha == loginData.senha)) {
-                // TODO Abrir tela de usuário correspondente
-                dialog.showMessageBox(mainWindow, {
-                    type: 'none',
-                    message: 'Abrir nova tela',
-                    detail: 'Abrir uma nova tela de acordo com o cargo do funcionário.'
-                });
-            }
-            else {
+            console.log(results);
+
+            if (results.length === 0) {
                 // Exibe mensagem de erro de login, caso todos os testes falhem
+                console.log('Erro no Login');
                 dialog.showMessageBox(mainWindow, {
                     type: 'warning',
                     title: 'Erro de Login',
                     message: 'Erro de Login',
                     detail: 'Matrícula ou senha inválida!'
                 });
+            }
+            else {
+                switch (results[0].cargo) {
+                    case 'Gerente':
+                        console.log('Gerente');
+                        break;
+                    case 'Atendente':
+                        console.log('Atendente');
+                        break;
+                    case 'Caixa':
+                        console.log('Caixa');
+                        break;
+                }
             }
         });
     }
