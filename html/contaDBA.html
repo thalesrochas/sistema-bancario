@@ -147,7 +147,15 @@
                     </div>
                 </div>
                 <div class="padding16 margin-top16 rounded border border-secondary">
-                    <h5>Transações</h5>
+                    <div class="form-row">
+                        <h5 style="margin-right: 225px">Transações</h5>
+                        <div class="btn-group btn-group-sm margin-bottom16">
+                            <button id="btnAll" class="btn btn-outline-info" onclick="onClickExtrato('todas')" disabled>Todas</button>
+                            <button id="btnNum7" class="btn btn-outline-info" onclick="onClickExtrato('7')" disabled>7 dias</button>
+                            <button id="btnNum30" class="btn btn-outline-info" onclick="onClickExtrato('30')" disabled>30 dias</button>
+                            <button id="btnNum365" class="btn btn-outline-info" onclick="onClickExtrato('365')" disabled>365 dias</button>
+                        </div>
+                    </div>
                     <table class="table">
                         <thead>
                             <tr>
@@ -430,6 +438,23 @@
             botaoAssociar.removeAttribute('disabled');
             botaoTransacao.removeAttribute('disabled');
             botaoDeletar.removeAttribute('disabled');
+
+            // Remover os atributos de desabilitado dos botões de numero de transações e volume
+            let btnAll = document.getElementById('btnAll');
+            let btnNum7 = document.getElementById('btnNum7');
+            let btnNum30 = document.getElementById('btnNum30');
+            let btnNum365 = document.getElementById('btnNum365');
+
+            btnAll.removeAttribute('disabled');
+            btnNum7.removeAttribute('disabled');
+            btnNum30.removeAttribute('disabled');
+            btnNum365.removeAttribute('disabled');
+
+            btnAll.setAttribute('class', 'btn btn-info');
+            btnNum7.setAttribute('class', 'btn btn-outline-info');
+            btnNum30.setAttribute('class', 'btn btn-outline-info');
+            btnNum365.setAttribute('class', 'btn btn-outline-info');
+
         }
 
         function adicionarConta(){
@@ -528,6 +553,62 @@
                     ipcRenderer.send('deleteClienteDaConta', [numConta, cpf]);
                 }
             });
+        }
+
+        function onClickExtrato(dias) {
+            let numero = document.getElementById('numero');
+            let btnAll = document.getElementById('btnAll');
+            let btnNum7 = document.getElementById('btnNum7');
+            let btnNum30 = document.getElementById('btnNum30');
+            let btnNum365 = document.getElementById('btnNum365');
+
+            switch (dias) {
+                case 'todas':
+                    btnAll.setAttribute('class', 'btn btn-info');
+                    btnNum7.setAttribute('class', 'btn btn-outline-info');
+                    btnNum30.setAttribute('class', 'btn btn-outline-info');
+                    btnNum365.setAttribute('class', 'btn btn-outline-info');
+
+                    ipcRenderer.send('requestFields', {
+                        tabela: 'transacao_do_cliente',
+                        campo: 'num_conta',
+                        id: numero.value
+                    });
+                    break;
+                case '7':
+                    btnAll.setAttribute('class', 'btn btn-outline-info');
+                    btnNum7.setAttribute('class', 'btn btn-info');
+                    btnNum30.setAttribute('class', 'btn btn-outline-info');
+                    btnNum365.setAttribute('class', 'btn btn-outline-info');
+
+                    ipcRenderer.send('requestExtrato', {
+                        tabela: 'extrato_7dias',
+                        id: numero.value
+                    });
+                    break;
+                case '30':
+                    btnAll.setAttribute('class', 'btn btn-outline-info');
+                    btnNum7.setAttribute('class', 'btn btn-outline-info');
+                    btnNum30.setAttribute('class', 'btn btn-info');
+                    btnNum365.setAttribute('class', 'btn btn-outline-info');
+
+                    ipcRenderer.send('requestExtrato', {
+                        tabela: 'extrato_30dias',
+                        id: numero.value
+                    });
+                    break;
+                case '365':
+                    btnAll.setAttribute('class', 'btn btn-outline-info');
+                    btnNum7.setAttribute('class', 'btn btn-outline-info');
+                    btnNum30.setAttribute('class', 'btn btn-outline-info');
+                    btnNum365.setAttribute('class', 'btn btn-info');
+
+                    ipcRenderer.send('requestExtrato', {
+                        tabela: 'extrato_365dias',
+                        id: numero.value
+                    });
+                    break;
+            }
         }
 
         ipcRenderer.on('clienteDaContaRemovido', function (event, fields){

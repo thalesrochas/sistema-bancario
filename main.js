@@ -747,7 +747,7 @@ ipcMain.on('updateFuncionario', function (event, arg) {
 });
 
 ipcMain.on('requestQuery', function (event, arg) {
-    console.log(arg)
+    console.log(arg);
     switch (arg.query) {
         case '1.1':
             connection.query(`
@@ -961,4 +961,12 @@ ipcMain.on('requestQuery', function (event, arg) {
             });
             break;
     }
+});
+
+ipcMain.on('requestExtrato', function (event, arg) {
+    console.log(arg);
+    connection.query(`SELECT * FROM ${arg.tabela} WHERE num_conta = ?`, [arg.id],
+    function (error, results, fields) {
+        mainWindow.webContents.send('requestedTransacaoDoCliente', results);
+    });
 });
