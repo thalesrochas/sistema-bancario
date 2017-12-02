@@ -13,7 +13,17 @@
     <!-- Abas da página -->
     <div>
         <div class="degrade">
-            <h1 class="nullbank">NullBank</h1>   
+            <div class="aui-group">
+                <div class="aui-item">
+                    <h1 class="nullbank">NullBank</h1>
+                </div>
+                <div class="aui-item">
+                    <button id="desconectar" class="btn btn-outline-light btn-sm desconectar" onclick="onClickDesconectar()">
+                        Encerrar Sessão
+                        <img id="icon" src="../img/exit_to_app.png">
+                    </button>
+                </div>
+            </div>
         </div>
         <ul class="nav nav-tabs">
             <li class="nav-item">
@@ -259,6 +269,21 @@
                     }
                 });
             }
+        }
+
+        let desconectar = document.getElementById('desconectar');
+        let icon = document.getElementById('icon');
+
+        desconectar.addEventListener('mouseleave', function () {
+            icon.setAttribute('src', '../img/exit_to_app.png');
+        });
+
+        desconectar.addEventListener('mouseenter', function () {
+            icon.setAttribute('src', '../img/exit_to_app_black.png');
+        });
+
+        function onClickDesconectar() {
+            ipcRenderer.send('acessar', 'Carregando tela de login!');
         }
     </script>
     
