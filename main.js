@@ -548,7 +548,7 @@ ipcMain.on('novaTransacao', function (event, arg) {
                 [arg[0], arg[3], Number(arg[0])+1, arg[4]],
                 function (error, results, fields) {
                     if (error) {
-                        dialog.showMessageBox(newWindow, {
+                        dialog.showMessageBox(mainWindow, {
                             type: 'error',
                             title: 'Transação mal Sucedida',
                             message: 'Transferência não Realizada!',
@@ -560,7 +560,7 @@ ipcMain.on('novaTransacao', function (event, arg) {
                         if (err) {
                             return connection.rollback(function () {});
                         }
-                        dialog.showMessageBox(newWindow, {
+                        dialog.showMessageBox(mainWindow, {
                             type: 'info',
                             title: 'Transação bem Sucedida',
                             message: 'Transferência realizada com sucesso!',
@@ -581,7 +581,7 @@ ipcMain.on('novaTransacao', function (event, arg) {
                 [arg[0], arg[3]],
                 function (error, results, fields) {
                     if (error) {
-                        dialog.showMessageBox(newWindow, {
+                        dialog.showMessageBox(mainWindow, {
                             type: 'error',
                             title: 'Transação mal Sucedida',
                             message: 'Saque Indisponível!',
@@ -593,7 +593,7 @@ ipcMain.on('novaTransacao', function (event, arg) {
                         if (error) {
                             return connection.rollback(function () {});
                         }
-                        dialog.showMessageBox(newWindow, {
+                        dialog.showMessageBox(mainWindow, {
                             type: 'info',
                             title: 'Transação bem Sucedida',
                             message: 'Saque realizado com sucesso!',
@@ -614,7 +614,7 @@ ipcMain.on('novaTransacao', function (event, arg) {
                 [arg[0], arg[3]],
                 function (error, results, fields) {
                     if (error) {
-                        dialog.showMessageBox(newWindow, {
+                        dialog.showMessageBox(mainWindow, {
                             type: 'error',
                             title: 'Transação mal Sucedida',
                             message: 'Depósito Indisponível!'
@@ -625,7 +625,7 @@ ipcMain.on('novaTransacao', function (event, arg) {
                         if (error) {
                             return connection.rollback(function () {});
                         }
-                        dialog.showMessageBox(newWindow, {
+                        dialog.showMessageBox(mainWindow, {
                             type: 'info',
                             title: 'Transação bem Sucedida',
                             message: 'Depósito realizado com sucesso!',
@@ -646,7 +646,7 @@ ipcMain.on('novaTransacao', function (event, arg) {
                 [arg[0], arg[3]],
                 function (error, results, fields) {
                     if (error) {
-                        dialog.showMessageBox(newWindow, {
+                        dialog.showMessageBox(mainWindow, {
                             type: 'error',
                             title: 'Transação mal Sucedida',
                             message: 'Estorno Indisponível!'
@@ -657,7 +657,7 @@ ipcMain.on('novaTransacao', function (event, arg) {
                         if (error) {
                             return connection.rollback(function () {});
                         }
-                        dialog.showMessageBox(newWindow, {
+                        dialog.showMessageBox(mainWindow, {
                             type: 'info',
                             title: 'Transação bem Sucedida',
                             message: 'Cliente Estornado!',
