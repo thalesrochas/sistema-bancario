@@ -126,7 +126,7 @@
                 </div>
                 <div class="padding16 margin-top16 rounded border border-secondary">
                     <h5>Possui Conta Conjunta com</h5>
-                    <table class="table">
+                    <table class="table table-striped">
                         <thead>
                             <tr>
                                 <th scope="col">Nome</th>
@@ -229,6 +229,8 @@
             });
         });
 
+        let globalCPF;
+
         // Evento ocorre quando os dados requisitados retornam do main.js
         ipcRenderer.on('fieldsRequested', function (event, fields) {
             console.log(fields);
@@ -242,6 +244,8 @@
             let endereco = document.getElementById('endereco');
             let cidade = document.getElementById('cidade');
             
+            globalCPF = fields["0"].cpf;
+
             nome.value = fields["0"].nome;
             cpf.value = fields["0"].cpf.substring(0,3) + '.' + fields["0"].cpf.substring(3,6) +
             '.' + fields["0"].cpf.substring(6,9) + '-' + fields["0"].cpf.substring(9,11);
@@ -249,6 +253,24 @@
             nascimento.value = data_nasc.substring(8, 10) + '/' + data_nasc.substring(5, 7) + '/' + data_nasc.substring(0, 4);
             endereco.value = fields["0"].endereco;
             cidade.value = fields["0"].cidade;
+
+            // Remover os atributos de desabilitado dos botões de numero de transações e volume
+            let btnNum7 = document.getElementById('btnNum7');
+            let btnNum30 = document.getElementById('btnNum30');
+            let btnNum365 = document.getElementById('btnNum365');
+            let btnVol7 = document.getElementById('btnVol7');
+            let btnVol30 = document.getElementById('btnVol30');
+            let btnVol365 = document.getElementById('btnVol365');
+
+            btnNum7.removeAttribute('disabled');
+            btnNum30.removeAttribute('disabled');
+            btnNum365.removeAttribute('disabled');
+            btnVol7.removeAttribute('disabled');
+            btnVol30.removeAttribute('disabled');
+            btnVol365.removeAttribute('disabled');
+
+            btnNum7.setAttribute('class', 'btn btn-info');
+            btnVol7.setAttribute('class', 'btn btn-info');
         });
     </script>
 
@@ -289,6 +311,24 @@
             ipcRenderer.send('requestQuery', {
                 query: '2.1',
                 order: null,
+                id: cpf
+            });
+
+            ipcRenderer.send('requestQuery', {
+                query: '2.2',
+                order: null,
+                id: cpf
+            });
+
+            ipcRenderer.send('requestQuery', {
+                query: '2.3',
+                order: '7',
+                id: cpf
+            });
+
+            ipcRenderer.send('requestQuery', {
+                query: '2.4',
+                order: '7',
                 id: cpf
             });
 
@@ -365,8 +405,69 @@
         function onClickDesconectar() {
             ipcRenderer.send('acessar', 'Carregando tela de login!');
         }
+
+        function onClickNumTrans(dias) {
+            let btnNum7 = document.getElementById('btnNum7');
+            let btnNum30 = document.getElementById('btnNum30');
+            let btnNum365 = document.getElementById('btnNum365');
+
+            switch (dias) {
+                case 7:
+                    btnNum7.setAttribute('class', 'btn btn-info');
+                    btnNum30.setAttribute('class', 'btn btn-outline-info');
+                    btnNum365.setAttribute('class', 'btn btn-outline-info');
+                    break;
+                case 30:
+                    btnNum7.setAttribute('class', 'btn btn-outline-info');
+                    btnNum30.setAttribute('class', 'btn btn-info');
+                    btnNum365.setAttribute('class', 'btn btn-outline-info');
+                    break;
+                case 365:
+                    btnNum7.setAttribute('class', 'btn btn-outline-info');
+                    btnNum30.setAttribute('class', 'btn btn-outline-info');
+                    btnNum365.setAttribute('class', 'btn btn-info');
+                    break;
+            }
+
+            ipcRenderer.send('requestQuery', {
+                query: '2.3',
+                order: dias,
+                id: globalCPF
+            });
+        }
+
+        function onClickVolTrans(dias) {
+            let btnVol7 = document.getElementById('btnVol7');
+            let btnVol30 = document.getElementById('btnVol30');
+            let btnVol365 = document.getElementById('btnVol365');
+
+            switch (dias) {
+                case 7:
+                    btnVol7.setAttribute('class', 'btn btn-info');
+                    btnVol30.setAttribute('class', 'btn btn-outline-info');
+                    btnVol365.setAttribute('class', 'btn btn-outline-info');
+                    break;
+                case 30:
+                    btnVol7.setAttribute('class', 'btn btn-outline-info');
+                    btnVol30.setAttribute('class', 'btn btn-info');
+                    btnVol365.setAttribute('class', 'btn btn-outline-info');
+                    break;
+                case 365:
+                    btnVol7.setAttribute('class', 'btn btn-outline-info');
+                    btnVol30.setAttribute('class', 'btn btn-outline-info');
+                    btnVol365.setAttribute('class', 'btn btn-info');
+                    break;
+            }
+
+            ipcRenderer.send('requestQuery', {
+                query: '2.4',
+                order: dias,
+                id: globalCPF
+            });
+        }
     </script>
 
+    <!-- Querys -->
     <script>
         ipcRenderer.on('q2.1', function (event, fields) {
             console.log('Dados da query 2.1');
@@ -398,6 +499,80 @@
                 tr.appendChild(tdTipo);
                 tr.appendChild(tdGerente);
                 tr.appendChild(tdSaldo);
+                tbody.appendChild(tr);
+            });
+        });
+
+        ipcRenderer.on('q2.2', function (event, fields) {
+            console.log('Dados da query 2.2');
+            console.log(fields);
+
+            let tbody = document.getElementById('tabelaContaConjunta');
+
+            // Remove todos os elementos do corpo da tabela antes de inserir os novos
+            while (tbody.firstChild) {
+                tbody.removeChild(tbody.firstChild);
+            }
+
+            fields.forEach(element => {
+                let tr = document.createElement('tr');
+                let tdNome = document.createElement('td');
+                let tdCpf = document.createElement('td');
+
+                tdNome.textContent = element.cliente;
+                tdCpf.textContent = element.cpf;
+
+                tr.appendChild(tdNome);
+                tr.appendChild(tdCpf);
+                tbody.appendChild(tr);
+            });
+        });
+
+        ipcRenderer.on('q2.3', function (event, fields) {
+            console.log('Dados da query 2.3');
+            console.log(fields);
+
+            let tbody = document.getElementById('tabelaNumTransacao');
+
+            // Remove todos os elementos do corpo da tabela antes de inserir os novos
+            while (tbody.firstChild) {
+                tbody.removeChild(tbody.firstChild);
+            }
+
+            fields.forEach(element => {
+                let tr = document.createElement('tr');
+                let tdNumConta = document.createElement('td');
+                let tdNumTransacao = document.createElement('td');
+
+                tdNumConta.textContent = element.num_conta;
+                tdNumTransacao.textContent = element.num_transacoes;
+
+                tr.appendChild(tdNumConta);
+                tr.appendChild(tdNumTransacao);
+                tbody.appendChild(tr);
+            });
+        });
+
+        ipcRenderer.on('q2.4', function (event, fields) {
+            console.log('Dados da query 2.4');
+            console.log(fields);
+            let tbody = document.getElementById('tabelaVolTransacao');
+
+            // Remove todos os elementos do corpo da tabela antes de inserir os novos
+            while (tbody.firstChild) {
+                tbody.removeChild(tbody.firstChild);
+            }
+
+            fields.forEach(element => {
+                let tr = document.createElement('tr');
+                let tdNumConta = document.createElement('td');
+                let tdVolTransacao = document.createElement('td');
+
+                tdNumConta.textContent = element.num_conta;
+                tdVolTransacao.textContent = 'R$' + element.valor_total;
+
+                tr.appendChild(tdNumConta);
+                tr.appendChild(tdVolTransacao);
                 tbody.appendChild(tr);
             });
         });

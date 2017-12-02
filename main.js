@@ -894,7 +894,71 @@ ipcMain.on('requestQuery', function (event, arg) {
                 console.log('Enviando dados q2.1...');
                 mainWindow.webContents.send('q2.1', results);
             });
+            break;
+
+        case '2.2':
+            connection.query(`
+            SELECT 
+                cli.nome AS cliente, cli.cpf AS cpf
+            FROM
+                cliente cli
+                JOIN conta_cliente cc ON cli.cpf = cc.cpf_cliente
+            WHERE
+                cpf <> ${arg.id}
+                AND num_conta = SOME (SELECT 
+                    num_conta
+                FROM
+                    conta_cliente
+                    WHERE
+                        cpf_cliente = ${arg.id});`,
+            function (error, results, fields) {
+                console.log(results);
+                console.log('Enviando dados q2.2...');
+                mainWindow.webContents.send('q2.2', results);
+            });
+            break;
+
+        case '2.3':
+            connection.query(`
+            SELECT 
+                cc.num_conta, COUNT(t.num_transacao) AS num_transacoes
+            FROM
+                (((conta_cliente cc
+                JOIN conta c ON cc.num_conta = c.num_conta)
+                LEFT OUTER JOIN realiza r ON c.num_conta = r.num_conta)
+                LEFT OUTER JOIN transacao t ON r.num_transacao = t.num_transacao)
+            WHERE
+                cc.cpf_cliente = ${arg.id}
+                    AND c.tipo_conta = 'Conta Corrente'
+                    AND (TO_DAYS(NOW()) - TO_DAYS(t.data_hora)) <= ${arg.order}
+            GROUP BY cc.num_conta
+            ORDER BY num_transacoes DESC;`,
+            function (error, results, fields) {
+                console.log(results);
+                console.log('Enviando dados q2.3...');
+                mainWindow.webContents.send('q2.3', results);
+            });
+            break;
+
+        case '2.4':
+            connection.query(`
+            SELECT 
+                cc.num_conta, SUM(ABS(t.valor_transacao)) AS valor_total
+            FROM
+                (((conta_cliente cc
+                JOIN conta c ON cc.num_conta = c.num_conta)
+                JOIN realiza r ON c.num_conta = r.num_conta)
+                JOIN transacao t ON r.num_transacao = t.num_transacao)
+            WHERE -- Pesquisa por CPF do cliente
+                cc.cpf_cliente = ${arg.id}
+                    AND (TO_DAYS(NOW()) - TO_DAYS(t.data_hora)) <= ${arg.order}
+            GROUP BY cc.num_conta
+            ORDER BY valor_total DESC;`,
+            function (error, results, fields) {
+                console.log(results);
+                console.log('Enviando dados q2.4..');
+                mainWindow.webContents.send('q2.4', results);
+            });
+            break;
     }
 });
-
-// connection.query(``, function (error, results, fields) {});
