@@ -768,9 +768,28 @@ ipcMain.on('requestQuery', function (event, arg) {
             ORDER BY ${arg.order};`,
             function (error, results, fields) {
                 console.log(results);
-                console.log('Enviando dados...');
+                console.log('Enviando dados q1.1...');
                 mainWindow.webContents.send('q1.1', results);
             });
             break;
+        
+        case '1.2':
+            connection.query(`
+            SELECT 
+                cli.nome AS nome_cliente, tipo_conta
+            FROM
+                ((cliente cli
+                JOIN conta_cliente cc ON cli.cpf = cc.cpf_cliente)
+                JOIN agencia a ON a.numero = cc.num_agencia)
+                    JOIN
+                conta con ON con.num_conta = cc.num_conta
+            WHERE
+                a.numero = ${arg.id}
+            order by tipo_conta, cli.nome;`,
+            function (error, results, fields) {
+                console.log(results);
+                console.log('Enviando dados q1.2...');
+                mainWindow.webContents.send('q1.2', results);
+            });
     }
 });
