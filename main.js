@@ -836,5 +836,25 @@ ipcMain.on('requestQuery', function (event, arg) {
                 mainWindow.webContents.send('q1.4', results);
             });
             break;
+
+        case '1.5':
+            connection.query(`
+            SELECT 
+                c.num_conta, COUNT(*) AS num_transacoes
+            FROM
+                ((conta c
+                JOIN realiza r ON c.num_conta = r.num_conta)
+                JOIN transacao t ON t.num_transacao = r.num_transacao)
+            WHERE
+                c.tipo_conta = 'Conta Corrente'
+                    AND c.num_agencia = ${arg.id}
+                    AND (TO_DAYS(NOW()) - TO_DAYS(t.data_hora)) <= ${arg.order}
+            GROUP BY c.num_conta;`,
+            function (error, results, fields) {
+                console.log(results);
+                console.log('Enviando dados q1.5...');
+                mainWindow.webContents.send('q1.5', results);
+            });
+            break;
     }
 });

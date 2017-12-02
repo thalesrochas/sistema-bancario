@@ -94,13 +94,14 @@ ORDER BY ca.saldo DESC;
 -- 365 dias);
 -- -------------------------------------------------------
 SELECT 
-    c.num_conta, COUNT(*)
+    c.num_conta, COUNT(*) AS num_transacoes
 FROM
     ((conta c
     JOIN realiza r ON c.num_conta = r.num_conta)
     JOIN transacao t ON t.num_transacao = r.num_transacao)
 WHERE
     c.tipo_conta = 'Conta Corrente'
+        AND c.num_agencia = 7820
         -- Ajustar para 7, 30 ou 365
         AND (TO_DAYS(NOW()) - TO_DAYS(t.data_hora)) <= 7
 GROUP BY c.num_conta;

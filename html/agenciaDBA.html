@@ -193,15 +193,15 @@
                         <h5 style="margin-right: 102px">Número de Transações</h5>
                         <label style="margin-right: 10px">Últimos:</label>
                         <div class="btn-group btn-group-sm margin-bottom16">
-                            <button class="btn btn-info">7 dias</button>
-                            <button class="btn btn-info">30 dias</button>
-                            <button class="btn btn-info">365 dias</button>
+                            <button id="btnNum7" class="btn btn-info" onclick="onClickNumTrans(7)" disabled>7 dias</button>
+                            <button id="btnNum30" class="btn btn-info" onclick="onClickNumTrans(30)" disabled>30 dias</button>
+                            <button id="btnNum365" class="btn btn-info" onclick="onClickNumTrans(365)" disabled>365 dias</button>
                         </div>
                     </div>
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th scope="col">Número da Conta</th>
+                                <th scope="col">Nº da Conta Corrente</th>
                                 <th scope="col">Número de Transações</th>
                             </tr>
                         </thead>
@@ -213,9 +213,9 @@
                         <h5 style="margin-right: 62px">Volume de Movimentações</h5>
                         <label style="margin-right: 10px">Últimos:</label>
                         <div class="btn-group btn-group-sm margin-bottom16">
-                            <button class="btn btn-info">7 dias</button>
-                            <button class="btn btn-info">30 dias</button>
-                            <button class="btn btn-info">365 dias</button>
+                            <button id="btnVol7" class="btn btn-info" disabled>7 dias</button>
+                            <button id="btnVol30"class="btn btn-info" disabled>30 dias</button>
+                            <button id="btnVol365" class="btn btn-info" disabled>365 dias</button>
                         </div>
                     </div>
                     <table class="table table-striped">
@@ -289,12 +289,27 @@
             let gerente = document.getElementById('gerente');
             let salario = document.getElementById('salario');
             let cidade = document.getElementById('cidade');
-
+            
             numero.value = fields["0"].numero;
             nome.value = fields["0"].nome;
             gerente.value = fields["0"].mat_gerente;
             salario.value = fields["0"].salario_montante;
             cidade.value = fields["0"].cidade;
+
+            // Remover os atributos de desabilitado dos botões de numero de transações e volume
+            let btnNum7 = document.getElementById('btnNum7');
+            let btnNum30 = document.getElementById('btnNum30');
+            let btnNum365 = document.getElementById('btnNum365');
+            let btnVol7 = document.getElementById('btnVol7');
+            let btnVol30 = document.getElementById('btnVol30');
+            let btnVol365 = document.getElementById('btnVol365');
+
+            btnNum7.removeAttribute('disabled');
+            btnNum30.removeAttribute('disabled');
+            btnNum365.removeAttribute('disabled');
+            btnVol7.removeAttribute('disabled');
+            btnVol30.removeAttribute('disabled');
+            btnVol365.removeAttribute('disabled');
         });
     </script>
 
@@ -353,6 +368,12 @@
             ipcRenderer.send('requestQuery', {
                 query: '1.4',
                 order: null,
+                id: numero
+            });
+
+            ipcRenderer.send('requestQuery', {
+                query: '1.5',
+                order: '7',
                 id: numero
             });
 
@@ -441,6 +462,15 @@
             ipcRenderer.send('requestQuery', {
                 query: '1.1',
                 order: campo,
+                id: numero.value
+            });
+        }
+
+        function onClickNumTrans(dias) {
+            let numero = document.getElementById('numero');
+            ipcRenderer.send('requestQuery', {
+                query: '1.5',
+                order: dias,
                 id: numero.value
             });
         }
@@ -663,6 +693,30 @@
 
                 tr.appendChild(tdNumero);
                 tr.appendChild(tdSaldo);
+                tbody.appendChild(tr);
+            });
+        });
+
+        ipcRenderer.on('q1.5', function (event, fields) {
+            console.log('Dados da query 1.4');
+            console.log(fields);
+            let tbody = document.getElementById('tabelaNumTransacao');
+
+            // Remove todos os elementos do corpo da tabela antes de inserir os novos
+            while (tbody.firstChild) {
+                tbody.removeChild(tbody.firstChild);
+            }
+
+            fields.forEach(element => {
+                let tr = document.createElement('tr');
+                let tdNumConta = document.createElement('td');
+                let tdNumTransacao = document.createElement('td');
+
+                tdNumConta.textContent = element.num_conta;
+                tdNumTransacao.textContent = element.num_transacoes;
+
+                tr.appendChild(tdNumConta);
+                tr.appendChild(tdNumTransacao);
                 tbody.appendChild(tr);
             });
         });
