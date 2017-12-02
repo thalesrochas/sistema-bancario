@@ -74,42 +74,109 @@
             </div>
         </div>
         
-        <div class="aui-item barra-vertical">
-            <div style="margin-bottom:127px"></div>
-            <div class="padding16 rounded border border-secondary">
-                <h5>Dados Pessoais</h5>
-                <div class="form-row">
-                    <div class="form-group col-md-12">
-                        <label for="nome">Nome</label>
-                        <input type="text" class="form-control" id="nome" disabled>
+        <div class="aui-item barra-vertical" style="padding-right:0; padding-top:0;">
+            <div style="overflow:auto; height:562px; padding-right:16px; padding-top:16px">
+                <div class="padding16 rounded border border-secondary">
+                    <h5>Dados Pessoais</h5>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="nome">Nome</label>
+                            <input type="text" class="form-control" id="nome" disabled>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="cpf">CPF</label>
+                            <input type="text" class="form-control" id="cpf" disabled>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="rg">RG</label>
+                            <input type="text" class="form-control" id="rg" disabled>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="nascimento">Data de Nascimento</label>
+                            <input type="text" class="form-control" id="nascimento" disabled>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-8">
+                            <label for="endereco">Endereço</label>
+                            <input type="text" class="form-control" id="endereco" disabled>
+                        </div> 
+                        <div class="form-group col-md-4">
+                            <label for="cidade">Cidade</label>
+                            <input type="text" class="form-control" id="cidade" disabled>
+                        </div>
                     </div>
                 </div>
-                <div class="form-row">
-                    <div class="form-group col-md-4">
-                        <label for="cpf">CPF</label>
-                        <input type="text" class="form-control" id="cpf" disabled>
-                    </div>
-                    <div class="form-group col-md-4">
-                        <label for="rg">RG</label>
-                        <input type="text" class="form-control" id="rg" disabled>
-                    </div>
-                    <div class="form-group col-md-4">
-                        <label for="nascimento">Data de Nascimento</label>
-                        <input type="text" class="form-control" id="nascimento" disabled>
-                    </div>
+                <div class="padding16 margin-top16 rounded border border-secondary">
+                    <h5>Contas</h5>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nº</th>
+                                <th scope="col">Ag.</th>
+                                <th scope="col">Tipo</th>
+                                <th scope="col">Gerente</th>
+                                <th scope="col">Saldo</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaConta"></tbody>
+                    </table>
                 </div>
-                <div class="form-row">
-                    <div class="form-group col-md-8">
-                        <label for="endereco">Endereço</label>
-                        <input type="text" class="form-control" id="endereco" disabled>
-                    </div> 
-                    <div class="form-group col-md-4">
-                        <label for="cidade">Cidade</label>
-                        <input type="text" class="form-control" id="cidade" disabled>
+                <div class="padding16 margin-top16 rounded border border-secondary">
+                    <h5>Possui Conta Conjunta com</h5>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nome</th>
+                                <th scope="col">CPF</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaContaConjunta"></tbody>
+                    </table>
+                </div>
+                <div class="padding16 margin-top16 rounded border border-secondary">
+                    <div class="form-row">
+                        <h5 style="margin-right: 102px">Número de Transações</h5>
+                        <label style="margin-right: 10px">Últimos:</label>
+                        <div class="btn-group btn-group-sm margin-bottom16">
+                            <button id="btnNum7" class="btn btn-outline-info" onclick="onClickNumTrans(7)" disabled>7 dias</button>
+                            <button id="btnNum30" class="btn btn-outline-info" onclick="onClickNumTrans(30)" disabled>30 dias</button>
+                            <button id="btnNum365" class="btn btn-outline-info" onclick="onClickNumTrans(365)" disabled>365 dias</button>
+                        </div>
                     </div>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nº da Conta Corrente</th>
+                                <th scope="col">Número de Transações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaNumTransacao"></tbody>
+                    </table>
+                </div>
+                <div class="padding16 margin-top16 rounded border border-secondary">
+                    <div class="form-row">
+                        <h5 style="margin-right: 62px">Volume de Movimentações</h5>
+                        <label style="margin-right: 10px">Últimos:</label>
+                        <div class="btn-group btn-group-sm margin-bottom16">
+                            <button id="btnVol7" class="btn btn-outline-info" onclick="onClickVolTrans(7)" disabled>7 dias</button>
+                            <button id="btnVol30" class="btn btn-outline-info" onclick="onClickVolTrans(30)" disabled>30 dias</button>
+                            <button id="btnVol365" class="btn btn-outline-info" onclick="onClickVolTrans(365)" disabled>365 dias</button>
+                        </div>
+                    </div>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Número da Conta</th>
+                                <th scope="col">Valor Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaVolTransacao"></tbody>
+                    </table>
                 </div>
             </div>
-            <div style="margin-bottom:127px"></div>
 
             <!-- Botões -->
             <div class="center margin-top16">
@@ -213,7 +280,18 @@
 
         function selectCliente(cpf) {
             console.log('Clique no Funcionário ' + cpf);
-            ipcRenderer.send('requestFields', {tabela: 'cliente', campo: 'cpf', id: cpf});
+            ipcRenderer.send('requestFields', {
+                tabela: 'cliente',
+                campo: 'cpf',
+                id: cpf
+            });
+
+            ipcRenderer.send('requestQuery', {
+                query: '2.1',
+                order: null,
+                id: cpf
+            });
+
             console.log('Dados do Cliente ' + cpf + ' solicitados.');
 
             let botaoAtualizar = document.getElementById('atualizar');
@@ -287,6 +365,42 @@
         function onClickDesconectar() {
             ipcRenderer.send('acessar', 'Carregando tela de login!');
         }
+    </script>
+
+    <script>
+        ipcRenderer.on('q2.1', function (event, fields) {
+            console.log('Dados da query 2.1');
+            console.log(fields);
+
+            let tbody = document.getElementById('tabelaConta');
+
+            // Remove todos os elementos do corpo da tabela antes de inserir os novos
+            while (tbody.firstChild) {
+                tbody.removeChild(tbody.firstChild);
+            }
+
+            fields.forEach(element => {
+                let tr = document.createElement('tr');
+                let tdNumConta = document.createElement('td');
+                let tdAgencia = document.createElement('td');
+                let tdTipo = document.createElement('td');
+                let tdGerente = document.createElement('td');
+                let tdSaldo = document.createElement('td');
+
+                tdNumConta.textContent = element.num_conta;
+                tdAgencia.textContent = element.agencia;
+                tdTipo.textContent = element.tipo_conta;
+                tdGerente.textContent = element.gerente;
+                tdSaldo.textContent = 'R$' + element.saldo;
+
+                tr.appendChild(tdNumConta);
+                tr.appendChild(tdAgencia);
+                tr.appendChild(tdTipo);
+                tr.appendChild(tdGerente);
+                tr.appendChild(tdSaldo);
+                tbody.appendChild(tr);
+            });
+        });
     </script>
 
     <!-- Scripts para Bootstrap -->

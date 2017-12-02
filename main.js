@@ -875,5 +875,26 @@ ipcMain.on('requestQuery', function (event, arg) {
                 console.log('Enviando dados q1.6...');
                 mainWindow.webContents.send('q1.6', results);
             });
+            break;
+            
+        case '2.1':
+            connection.query(`
+            SELECT cli.nome AS cliente, cc.num_conta, c.tipo_conta, a.nome AS agencia, f.nome AS gerente, c.saldo
+            FROM
+                (((cliente cli
+                JOIN conta_cliente cc ON cli.cpf = cc.cpf_cliente)
+                JOIN conta c ON c.num_conta = cc.num_conta)
+                JOIN agencia a ON a.numero = cc.num_agencia)
+                    JOIN
+                funcionario f ON f.matricula = a.mat_gerente
+            WHERE
+                cpf = ${arg.id};`,
+            function (error, results, fields) {
+                console.log(results);
+                console.log('Enviando dados q2.1...');
+                mainWindow.webContents.send('q2.1', results);
+            });
     }
 });
+
+// connection.query(``, function (error, results, fields) {});

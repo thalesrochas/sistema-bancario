@@ -193,7 +193,7 @@ ORDER BY num_transacoes DESC; -- Ordena do maior para o menor
 -- último ano (últimos 365 dias);
 -- -------------------------------------------------------
 SELECT 
-    cc.num_conta, ABS(SUM(t.valor_transacao)) AS valor_total
+    cc.num_conta, SUM(ABS(t.valor_transacao)) AS valor_total
 FROM
     (((conta_cliente cc
     JOIN conta c ON cc.num_conta = c.num_conta)
