@@ -660,12 +660,24 @@ ipcMain.on('novaTransacao', function (event, arg) {
                 connection.query(`INSERT INTO realiza VALUES (?, ?), (?, ?);`,
                 [arg[0], arg[3], Number(arg[0])+1, arg[4]],
                 function (error, results, fields) {
-                    if (error) {
+                    console.log(error);
+                    // ER_NO_REFERENCED_ROW_2 - conta não existe
+                    // ER_SIGNAL_EXCEPTION -- Saldo insuficiente
+                    if (error.code == 'ER_SIGNAL_EXCEPTION') {
                         dialog.showMessageBox(mainWindow, {
                             type: 'error',
                             title: 'Transação mal Sucedida',
                             message: 'Transferência não Realizada!',
                             detail: 'Saldo do cliente insuficiente.'
+                        });
+                        return connection.rollback(function () {});
+                    }
+                    else {
+                        dialog.showMessageBox(mainWindow, {
+                            type: 'error',
+                            title: 'Transação mal Sucedida',
+                            message: 'Transferência não Realizada!',
+                            detail: 'A conta beneficiária ' + arg[4] + ' não existe.'
                         });
                         return connection.rollback(function () {});
                     }
