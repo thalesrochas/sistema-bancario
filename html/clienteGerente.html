@@ -107,33 +107,6 @@
                     </div>
                 </div>
                 <div class="padding16 margin-top16 rounded border border-secondary">
-                    <h5>Contas</h5>
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th scope="col">Nº</th>
-                                <th scope="col">Ag.</th>
-                                <th scope="col">Tipo</th>
-                                <th scope="col">Gerente</th>
-                                <th scope="col">Saldo</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tabelaConta"></tbody>
-                    </table>
-                </div>
-                <div class="padding16 margin-top16 rounded border border-secondary">
-                    <h5>Possui Conta Conjunta com</h5>
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th scope="col">Nome</th>
-                                <th scope="col">CPF</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tabelaContaConjunta"></tbody>
-                    </table>
-                </div>
-                <div class="padding16 margin-top16 rounded border border-secondary">
                     <div class="form-row">
                         <h5 style="margin-right: 102px">Número de Transações</h5>
                         <label style="margin-right: 10px">Últimos:</label>
@@ -320,18 +293,6 @@
             });
 
             ipcRenderer.send('requestQuery', {
-                query: '2.1',
-                order: null,
-                id: cpf
-            });
-
-            ipcRenderer.send('requestQuery', {
-                query: '2.2',
-                order: null,
-                id: cpf
-            });
-
-            ipcRenderer.send('requestQuery', {
                 query: '2.3',
                 order: '7',
                 id: cpf
@@ -480,65 +441,6 @@
 
     <!-- Querys -->
     <script>
-        ipcRenderer.on('q2.1', function (event, fields) {
-            console.log('Dados da query 2.1');
-            console.log(fields);
-
-            let tbody = document.getElementById('tabelaConta');
-
-            // Remove todos os elementos do corpo da tabela antes de inserir os novos
-            while (tbody.firstChild) {
-                tbody.removeChild(tbody.firstChild);
-            }
-
-            fields.forEach(element => {
-                let tr = document.createElement('tr');
-                let tdNumConta = document.createElement('td');
-                let tdAgencia = document.createElement('td');
-                let tdTipo = document.createElement('td');
-                let tdGerente = document.createElement('td');
-                let tdSaldo = document.createElement('td');
-
-                tdNumConta.textContent = element.num_conta;
-                tdAgencia.textContent = element.agencia;
-                tdTipo.textContent = element.tipo_conta;
-                tdGerente.textContent = element.gerente;
-                tdSaldo.textContent = 'R$' + element.saldo;
-
-                tr.appendChild(tdNumConta);
-                tr.appendChild(tdAgencia);
-                tr.appendChild(tdTipo);
-                tr.appendChild(tdGerente);
-                tr.appendChild(tdSaldo);
-                tbody.appendChild(tr);
-            });
-        });
-
-        ipcRenderer.on('q2.2', function (event, fields) {
-            console.log('Dados da query 2.2');
-            console.log(fields);
-
-            let tbody = document.getElementById('tabelaContaConjunta');
-
-            // Remove todos os elementos do corpo da tabela antes de inserir os novos
-            while (tbody.firstChild) {
-                tbody.removeChild(tbody.firstChild);
-            }
-
-            fields.forEach(element => {
-                let tr = document.createElement('tr');
-                let tdNome = document.createElement('td');
-                let tdCpf = document.createElement('td');
-
-                tdNome.textContent = element.cliente;
-                tdCpf.textContent = element.cpf;
-
-                tr.appendChild(tdNome);
-                tr.appendChild(tdCpf);
-                tbody.appendChild(tr);
-            });
-        });
-
         ipcRenderer.on('q2.3', function (event, fields) {
             console.log('Dados da query 2.3');
             console.log(fields);
