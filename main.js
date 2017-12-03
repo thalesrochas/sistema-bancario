@@ -140,7 +140,7 @@ ipcMain.on('userLogin', function (event, loginData) {
                     case 'Caixa':
                         console.log('Caixa');
                         mainWindow.loadURL(url.format({
-                            pathname: 'html/caixaMain.html',
+                            pathname: 'html/contaCaixa.html',
                             protocol: 'file:',
                             slashes: true
                         }));
