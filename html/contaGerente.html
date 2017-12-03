@@ -387,12 +387,16 @@
         let pesquisa = document.getElementById('pesquisa');
         
         function pesquisar() {
+            let titulo = remote.getCurrentWindow().getTitle();
+            titulo = titulo.substring(titulo.length-4);
+
             let dadosPesquisa = {
                 tabela: 'conta',
-                txt: pesquisa.value
+                txt: pesquisa.value,
+                agencia: titulo
             };
 
-            ipcRenderer.send('pesquisar', dadosPesquisa);
+            ipcRenderer.send('pesquisaRestrita', dadosPesquisa);
         }
     </script>
 

@@ -508,6 +508,50 @@ ipcMain.on('pesquisar', function (event, arg) {
     }
 });
 
+ipcMain.on('pesquisaRestrita', function (event, arg) {
+    switch (arg.tabela) {
+        // Seleciona os dados de todos os funcionários
+        case 'funcionario':
+            connection.query(`SELECT matricula, nome, cargo FROM funcionario
+            WHERE (matricula LIKE ? OR nome LIKE ? OR cargo LIKE ?) AND lotacao = ?;`,
+            ['%' + arg.txt + '%', '%' + arg.txt + '%', '%' + arg.txt + '%', arg.agencia],
+            function (error, results, fields) {
+                console.log(results);
+                console.log('Enviando dados restritos de Funcionário...');
+                mainWindow.webContents.send('dataFuncionario', results);
+                console.log('Dados enviados!');
+            });
+            break;
+
+        // Seleciona os dados de todos os clientes
+        case 'cliente':
+            connection.query(`SELECT cpf, nome, cidade FROM cliente c JOIN conta_cliente cc ON c.cpf = cc.cpf_cliente
+            WHERE (c.cpf LIKE ? OR c.nome LIKE ? OR c.cidade LIKE ?) AND cc.num_agencia = ?;`,
+            ['%' + arg.txt + '%', '%' + arg.txt + '%', '%' + arg.txt + '%', arg.agencia],
+            function (error, results, fields) {
+                console.log(results);
+                console.log('Enviando dados restritos de Cliente...');
+                mainWindow.webContents.send('dataCliente', results);
+                console.log('Dados enviados!');
+            });
+            break;
+
+        // Seleciona os dados de todas as contas
+        case 'conta':
+            connection.query(`SELECT num_conta as numero,
+            num_agencia as agencia, tipo_conta as tipo FROM conta
+            WHERE (num_conta LIKE ? OR num_agencia LIKE ? OR tipo_conta LIKE ?) AND num_agencia = ?;`,
+            ['%' + arg.txt + '%', '%' + arg.txt + '%', '%' + arg.txt + '%', arg.agencia],
+            function (error, results, fields) {
+                console.log(results);
+                console.log('Enviando dados de Conta...');
+                mainWindow.webContents.send('dataConta', results);
+                console.log('Dados enviados!');
+            });
+            break;
+    }
+});
+
 ipcMain.on('insertCliente', function (event, arg) {
     console.log(arg);
     connection.query('INSERT INTO cliente VALUES (?, ?, ?, ?, ?, ?);', arg,
