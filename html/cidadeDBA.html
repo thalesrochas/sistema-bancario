@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../style.css">
+    
+    <title>NullBank DBA - Cidades</title>
+</head>
+<body>
+    <!-- Abas da página -->
+    <div>
+        <div class="degrade">
+            <div class="aui-group">
+                <div class="aui-item">
+                    <h1 class="nullbank">NullBank</h1>
+                </div>
+                <div class="aui-item">
+                    <button id="desconectar" class="btn btn-outline-light btn-sm desconectar" onclick="onClickDesconectar()">
+                        Encerrar Sessão
+                        <img id="icon" src="../img/exit_to_app.png">
+                    </button>
+                </div>
+            </div>
+        </div>
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="clickElement('agenciaDBA')">Agências</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="clickElement('funcionarioDBA')">Funcionários</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="clickElement('clienteDBA')">Clientes</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="clickElement('contaDBA')">Contas</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="#">Cidades</a>
+            </li>
+        </ul>
+    </div>
+    
+    <div class="aui-group">
+        <!-- Coluna da tabela de Cidades -->
+        <div class="aui-item column-width" style="width: 492px">
+            <div class="input-group padding16">
+                <input id="pesquisa" type="text" oninput="pesquisar()" class="form-control" placeholder="Pesquisar..." autofocus>
+                <span class="input-group-addon badge-info">
+                    <img src="../img/search.png">
+                </span>
+            </div>
+            <div class="table-padding">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Cidades</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div class="table-padding-corpo" style="overflow:auto; height:497px">
+                <table class="table table-hover">
+                    <tbody id="corpoTabela"></tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="aui-item barra-vertical" style="padding-right:0; padding-top:0; width: 800px">
+            <div style="overflow:auto; height:634px; padding-right:16px; padding-top:16px; padding-bottom:16px">
+                <div class="padding16 rounded border border-secondary">
+                    <h5>Clientes</h5>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nome</th>
+                                <th scope="col">Endereço</th>
+                                <th scope="col">Idade</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaQ3.1"></tbody>
+                    </table>
+                </div>
+                <div class="padding16 margin-top16 rounded border border-secondary">
+                    <h5>Funcionários</h5>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nome</th>
+                                <th scope="col">Endereço</th>
+                                <th scope="col">Cargo</th>
+                                <th scope="col">Salário</th>
+                                <th scope="col">Agência</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaQ3.2"></tbody>
+                    </table>
+                </div>
+                <div class="padding16 margin-top16 rounded border border-secondary">
+                    <h5>Agências</h5>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nome</th>
+                                <th scope="col">Salário Montante</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaQ3.3"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Script de requisições de dados -->
+    <script>
+        const ipcRenderer = require('electron').ipcRenderer;
+        
+        // Quando a página carrega, os dados são requisitados
+        ipcRenderer.send('requestData', 'cidade');
+
+        // Evento ocorre quando os dados são enviados por main.js
+        ipcRenderer.on('dataCidade', function (event, dataCidade) {
+            let tbody = document.getElementById('corpoTabela');
+
+            // Remove todos os elementos do corpo da tabela antes de inserir os novos
+            while (tbody.firstChild) {
+                tbody.removeChild(tbody.firstChild);
+            }
+
+            // Inserir os dados do banco na tabela
+            dataCidade.forEach(element => {
+                let tr = document.createElement('tr');
+                let tdCidade = document.createElement('td');
+
+                // Cria atributo de onclick com numero da agencia como parâmetro
+                tr.setAttribute('onclick', 'selectCidade("' + element.cidade + '")');
+                tdCidade.textContent = element.cidade;
+
+                tr.appendChild(tdCidade);
+                tbody.appendChild(tr);
+            });
+        });
+    </script>
+
+    <!-- Script de pesquisa -->
+    <script>
+        let pesquisa = document.getElementById('pesquisa');
+        function pesquisar() {
+            let dadosPesquisa = {
+                tabela: 'cidade',
+                txt: pesquisa.value
+            };
+
+            ipcRenderer.send('pesquisar', dadosPesquisa);
+        }
+    </script>
+    
+    <!-- Script de funções da página -->
+    <script>
+        const dialog = require('electron').remote.dialog;
+        const remote = require('electron').remote;
+
+        function clickElement (element) {
+            console.log(element);
+            // Envia o evento 'trocarTelaDBA' para main.js
+            ipcRenderer.send('trocarTelaDBA', element);
+            console.log('Dados de troca de tela enviados!');
+        }
+
+        function selectCidade(cidade) {
+            console.log('Clique na Cidade ' + cidade);
+
+            ipcRenderer.send('requestQuery', {
+                query: '3.1',
+                order: null,
+                id: cidade
+            });
+
+            ipcRenderer.send('requestQuery', {
+                query: '3.2',
+                order: null,
+                id: cidade
+            });
+
+            ipcRenderer.send('requestQuery', {
+                query: '3.3',
+                order: null,
+                id: cidade
+            });
+
+            console.log('Dados da Cidade ' + cidade + ' solicitados.');
+        }
+        
+        let desconectar = document.getElementById('desconectar');
+        let icon = document.getElementById('icon');
+
+        desconectar.addEventListener('mouseleave', function () {
+            icon.setAttribute('src', '../img/exit_to_app.png');
+        });
+
+        desconectar.addEventListener('mouseenter', function () {
+            icon.setAttribute('src', '../img/exit_to_app_black.png');
+        });
+        
+        function onClickDesconectar() {
+            ipcRenderer.send('acessar', 'Carregando tela de login!');
+        }
+    </script>
+
+    <!-- Querys -->
+    <script>
+        ipcRenderer.on('q3.1', function (event, fields) {
+            console.log('Dados da query 3.1');
+            console.log(fields);
+
+            let tbody = document.getElementById('tabelaQ3.1');
+
+            // Remove todos os elementos do corpo da tabela antes de inserir os novos
+            while (tbody.firstChild) {
+                tbody.removeChild(tbody.firstChild);
+            }
+
+            fields.forEach(element => {
+                let tr = document.createElement('tr');
+                let tdNome = document.createElement('td');
+                let tdEndereco = document.createElement('td');
+                let tdIdade = document.createElement('td');
+
+                tdNome.textContent = element.nome;
+                tdEndereco.textContent = element.endereco;
+                tdIdade.textContent = element.idade;
+
+                tr.appendChild(tdNome);
+                tr.appendChild(tdEndereco);
+                tr.appendChild(tdIdade);
+                tbody.appendChild(tr);
+            });
+        });
+
+        ipcRenderer.on('q3.2', function (event, fields) {
+            console.log('Dados da query 3.2');
+            console.log(fields);
+            let tbody = document.getElementById('tabelaQ3.2');
+
+            // Remove todos os elementos do corpo da tabela antes de inserir os novos
+            while (tbody.firstChild) {
+                tbody.removeChild(tbody.firstChild);
+            }
+
+            fields.forEach(element => {
+                let tr = document.createElement('tr');
+                let tdNomeFunc = document.createElement('td');
+                let tdEndereco = document.createElement('td');
+                let tdCargo = document.createElement('td');
+                let tdSalario = document.createElement('td');
+                let tdAgencia = document.createElement('td');
+
+                tdNomeFunc.textContent = element.nome_funcionario;
+                tdEndereco.textContent = element.endereco;
+                tdCargo.textContent = element.cargo;
+                tdSalario.textContent = 'R$' + element.salario;
+                tdAgencia.textContent = element.nome_agencia;
+
+                tr.appendChild(tdNomeFunc);
+                tr.appendChild(tdEndereco);
+                tr.appendChild(tdCargo);
+                tr.appendChild(tdSalario);
+                tr.appendChild(tdAgencia);
+                tbody.appendChild(tr);
+            });
+        });
+
+        ipcRenderer.on('q3.3', function (event, fields) {
+            console.log('Dados da query 3.3');
+            console.log(fields);
+
+            let tbody = document.getElementById('tabelaQ3.3');
+
+            // Remove todos os elementos do corpo da tabela antes de inserir os novos
+            while (tbody.firstChild) {
+                tbody.removeChild(tbody.firstChild);
+            }
+
+            fields.forEach(element => {
+                let tr = document.createElement('tr');
+                let tdNome = document.createElement('td');
+                let tdSalario = document.createElement('td');
+
+                tdNome.textContent = element.nome;
+                tdSalario.textContent = 'R$' + element.salario_montante;
+
+                tr.appendChild(tdNome);
+                tr.appendChild(tdSalario);
+                tbody.appendChild(tr);
+            });
+        });
+    </script>
+
+    <!-- Scripts para Bootstrap -->
+    <script>let $ = require('../bootstrap/js/jquery-3.2.1.min.js');</script>
+    <script src="../bootstrap/js/popper.min.js"></script>
+    <script src="../bootstrap/js/bootstrap.js"></script>
+</body>
+</html>

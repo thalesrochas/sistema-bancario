@@ -232,7 +232,7 @@ ORDER BY idade, nome; -- Ordena por idade e por nome.
 -- agrupando-os por agência, por cargo e por salário;
 -- -------------------------------------------------------
 SELECT
-    a.nome AS nome_agência,
+    a.nome AS nome_agencia,
 	f.nome AS nome_funcionario,
     f.endereco,
     f.cargo,

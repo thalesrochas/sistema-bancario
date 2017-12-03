@@ -227,6 +227,17 @@ ipcMain.on('requestData', function (event, arg) {
                 console.log('Dados enviados!');
             });
             break;
+
+        case 'cidade':
+            connection.query(`SELECT cidade FROM funcionario UNION select CIDADE FROM cliente;`,
+            function (error, results, fields) {
+                console.log(results);
+                console.log('Enviando dados de Cidade...');
+                mainWindow.webContents.on('did-finish-load', () => {
+                    mainWindow.webContents.send('dataCidade', results);
+                });
+                console.log('Dados enviados!');
+            });
     }
 });
 
@@ -517,6 +528,17 @@ ipcMain.on('pesquisar', function (event, arg) {
                 console.log('Dados enviados!');
             });
             break;
+
+        case 'cidade':
+            connection.query(`SELECT cidade FROM funcionario WHERE cidade LIKE ?
+            UNION
+            SELECT cidade FROM cliente WHERE cidade LIKE ?;`, ['%' + arg.txt + '%', '%' + arg.txt + '%'],
+            function (error, results, fields) {
+                console.log(results);
+                console.log('Enviando dados de Cidade...');
+                mainWindow.webContents.send('dataCidade', results);
+                console.log('Dados enviados!');
+            });
     }
 });
 
@@ -1073,6 +1095,64 @@ ipcMain.on('requestQuery', function (event, arg) {
                 console.log(results);
                 console.log('Enviando dados q2.4..');
                 mainWindow.webContents.send('q2.4', results);
+            });
+            break;
+
+        case '3.1':
+            connection.query(`
+            SELECT
+                nome,
+                endereco,
+                YEAR(FROM_DAYS(TO_DAYS(CURDATE()) - TO_DAYS(data_nasc))) AS idade
+            FROM
+                cliente
+            WHERE
+                cidade = ?
+            ORDER BY idade, nome;`, arg.id,
+            function (error, results, fields) {
+                console.log(results);
+                console.log('Enviando dados q3.1..');
+                mainWindow.webContents.send('q3.1', results);
+            });
+            break;
+
+        case '3.2':
+            connection.query(`
+            SELECT
+                a.nome AS nome_agencia,
+                f.nome AS nome_funcionario,
+                f.endereco,
+                f.cargo,
+                f.salario
+            FROM 
+                funcionario f 
+                JOIN agencia a ON f.lotacao = a.numero
+            WHERE
+                a.cidade = ?
+            ORDER BY
+                a.nome, f.cargo, f.salario;`, arg.id,
+            function (error, results, fields) {
+                console.log(results);
+                console.log('Enviando dados q3.2..');
+                mainWindow.webContents.send('q3.2', results);
+            });
+            break;
+
+        case '3.3':
+            connection.query(`
+            SELECT 
+                nome,
+                salario_montante
+            FROM 
+                agencia 
+            WHERE
+                cidade = ?
+            ORDER BY 
+                salario_montante;`, arg.id,
+            function (error, results, fields) {
+                console.log(results);
+                console.log('Enviando dados q3.3..');
+                mainWindow.webContents.send('q3.3', results);
             });
             break;
     }
