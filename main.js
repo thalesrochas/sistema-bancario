@@ -66,6 +66,9 @@ ipcMain.on('conectarBD', function (event, conexaoData) {
                 protocol: 'file:',
                 slashes: true
             }));
+
+            // Cria variável para descriptografia
+            connection.query(`SELECT @chave:='374876';`, function(err, res, fiel){});
         }
     });
 });
@@ -104,7 +107,7 @@ ipcMain.on('userLogin', function (event, loginData) {
         }));
     }
     else { // Executa uma query para buscar os dados de matricula e senha no banco
-        connection.query('SELECT cargo, lotacao FROM funcionario WHERE matricula = ? AND senha = ?;',
+        connection.query('SELECT cargo, lotacao FROM funcionario WHERE matricula = ? AND AES_DECRYPT(senha, @chave) = ?;',
         [loginData.matricula, loginData.senha],
         function (error, results, fields) {
             console.log(results);
@@ -299,6 +302,15 @@ ipcMain.on('requestFields', function (event, arg) {
         mainWindow.webContents.send(evento, results);
         console.log('Campos da tabela ' + arg.tabela + ' enviados.');
     });
+});
+
+ipcMain.on('requestSenha', function (event, arg) {
+    connection.query(`SELECT AES_DECRYPT(senha, @chave) AS senha
+    FROM ${arg.tabela} WHERE ${arg.campo} = ?;`, arg.id,
+    function (error, results, fields) {
+        mainWindow.webContents.send('senhaRequested', results);
+    });
+    console.log('Senha enviada!');
 });
 
 // Evento é chamado quando é solicitada a deleção de uma tupla de uma tabela
@@ -562,7 +574,7 @@ ipcMain.on('insertCliente', function (event, arg) {
 
 ipcMain.on('insertConta', function (event, arg) {
     console.log(arg);
-    connection.query('INSERT INTO conta VALUES (?, ?, ?, ?, ?);', arg.slice(0,5),
+    connection.query('INSERT INTO conta VALUES (?, ?, ?, AES_ENCRYPT(?, @chave), ?);', arg.slice(0,5),
     function (error, results, fields) {
         event.sender.send('contaInserida', error);
     });
@@ -613,7 +625,7 @@ ipcMain.on('insertFuncionario', function (event, arg) {
             }
             else {
                 console.log('Aqui 1');
-                connection.query(`INSERT INTO funcionario VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`, arg,
+                connection.query(`INSERT INTO funcionario VALUES (?, ?, ?, ?, ?, ?, ?, ?, AES_ENCRYPT(?, @chave), ?);`, arg,
                 function (error2, results, fields) {
                     console.log('Aqui 2');
                     if (error2 == null) {
@@ -632,7 +644,7 @@ ipcMain.on('insertFuncionario', function (event, arg) {
         });
     }
     else {
-        connection.query(`INSERT INTO funcionario VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`, arg,
+        connection.query(`INSERT INTO funcionario VALUES (?, ?, ?, ?, ?, ?, ?, ?, AES_ENCRYPT(?, @chave), ?);`, arg,
         function (error4, results, fields) {
             event.sender.send('funcionarioInserido', error4);
         });
@@ -798,7 +810,7 @@ ipcMain.on('novaTransacao', function (event, arg) {
 
 ipcMain.on('updateConta', function (event, arg) {
     console.log(arg);
-    connection.query('UPDATE conta SET saldo = ?, senha = ?, tipo_conta = ? WHERE num_conta = ?',
+    connection.query('UPDATE conta SET saldo = ?, senha = AES_ENCRYPT(?, @chave), tipo_conta = ? WHERE num_conta = ?',
     [arg[2], arg[3], arg[4], arg[0]],
     function (error, results, fields) {
         connection.query('DELETE FROM conta_corrente WHERE num_conta = ?', arg[0],
@@ -842,7 +854,7 @@ ipcMain.on('updateCliente', function (event, arg) {
 ipcMain.on('updateFuncionario', function (event, arg) {
     console.log(arg);
     connection.query(`UPDATE funcionario SET nome = ?, sexo = ?,
-    data_nasc = ?, cidade = ?, endereco = ?, salario = ?, senha = ? WHERE matricula = ?`,
+    data_nasc = ?, cidade = ?, endereco = ?, salario = ?, senha = AES_ENCRYPT(?, @chave) WHERE matricula = ?`,
     [arg[1], arg[2], arg[3], arg[4], arg[5], arg[7], arg[8], arg[0]],
     function (error, results, fields) {
         event.sender.send('funcionarioUpdated', error);

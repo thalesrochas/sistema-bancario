@@ -249,7 +249,6 @@
             let endereco = document.getElementById('endereco');
             let cidade = document.getElementById('cidade');
             let matricula = document.getElementById('matricula');
-            let senha = document.getElementById('senha');
             let salario = document.getElementById('salario');
             let cargo = document.getElementById('cargo');
             let agencia = document.getElementById('agencia');
@@ -260,10 +259,15 @@
             endereco.value = fields["0"].endereco;
             cidade.value = fields["0"].cidade;
             matricula.value = fields["0"].matricula;
-            senha.value = fields["0"].senha;
             salario.value = fields["0"].salario;
             cargo.value = fields["0"].cargo;
             agencia.value = fields["0"].lotacao;
+        });
+
+        ipcRenderer.on('senhaRequested', function (event, fields) {
+            console.log(fields);
+            let senha = document.getElementById('senha');
+            senha.value = fields["0"].senha;
         });
 
         ipcRenderer.on('requestedDependente', function (event, fields) {
@@ -432,6 +436,11 @@
         function selectFuncionario(matricula) {
             console.log('Clique no Funcionário ' + matricula);
             ipcRenderer.send('requestFields', {
+                tabela: 'funcionario',
+                campo: 'matricula',
+                id: matricula
+            });
+            ipcRenderer.send('requestSenha', {
                 tabela: 'funcionario',
                 campo: 'matricula',
                 id: matricula

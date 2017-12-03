@@ -7,6 +7,9 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
+-- Variável de Criptografia
+SELECT @chave:='374876';
+
 -- -----------------------------------------------------
 -- Schema Equipe374876
 -- -----------------------------------------------------
@@ -43,6 +46,8 @@ CREATE TABLE IF NOT EXISTS `funcionario` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+-- Permite criptografia no campo SENHA
+ALTER TABLE `funcionario` CHANGE `senha` senha VARCHAR(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci;
 
 -- -----------------------------------------------------
 -- Table `agencia`
@@ -74,7 +79,7 @@ CREATE TABLE IF NOT EXISTS `conta` (
   `num_conta` INT NOT NULL AUTO_INCREMENT,
   `num_agencia` INT NOT NULL,
   `saldo` DECIMAL(11,2) NOT NULL DEFAULT 0.00,
-  `senha` INT(6) NOT NULL,
+  `senha` VARCHAR(20) NOT NULL,
   `tipo_conta` ENUM('Conta Corrente', 'Conta Poupança', 'Conta Especial') NOT NULL,
   PRIMARY KEY (`num_conta`),
   INDEX `fk_Contas_Agencia1_idx` (`num_agencia` ASC),
@@ -85,6 +90,8 @@ CREATE TABLE IF NOT EXISTS `conta` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+-- Permite criptografia no campo SENHA
+ALTER TABLE `conta` CHANGE `senha` senha VARCHAR(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci;
 
 -- -----------------------------------------------------
 -- Table `conta_poupanca`
@@ -368,21 +375,21 @@ CREATE  OR REPLACE VIEW `transacao_do_cliente` AS
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `Equipe374876`;
-INSERT INTO `funcionario` (`matricula`, `nome`, `sexo`, `data_nasc`, `cidade`, `endereco`, `cargo`, `salario`, `senha`, `lotacao`) VALUES (1, 'Linda Levine', 'Feminino', '1974-03-01', 'Sobral', 'Rua Angelim', 'Gerente', 35678.09, '123456', 8714);
-INSERT INTO `funcionario` (`matricula`, `nome`, `sexo`, `data_nasc`, `cidade`, `endereco`, `cargo`, `salario`, `senha`, `lotacao`) VALUES (2, 'Casey Benton', 'Masculino', '1964-01-11', 'Paraná', 'Rua Ararupe', 'Caixa', 8726.99, '112233', 8714);
-INSERT INTO `funcionario` (`matricula`, `nome`, `sexo`, `data_nasc`, `cidade`, `endereco`, `cargo`, `salario`, `senha`, `lotacao`) VALUES (3, 'Stacey Molina', 'Feminino', '1968-02-23', 'Rio de Janeiro', 'Rua Cabral', 'Caixa', 17764.10, '123321', 7820);
-INSERT INTO `funcionario` (`matricula`, `nome`, `sexo`, `data_nasc`, `cidade`, `endereco`, `cargo`, `salario`, `senha`, `lotacao`) VALUES (4, 'Omar Vazquez', 'Masculino', '1977-05-12', 'Campo Grande', 'Rua Jardim Veneza', 'Atendente', 15724.09, '147258', 8714);
-INSERT INTO `funcionario` (`matricula`, `nome`, `sexo`, `data_nasc`, `cidade`, `endereco`, `cargo`, `salario`, `senha`, `lotacao`) VALUES (5, 'Lila Morin', 'Feminino', '1992-09-18', 'Goiânia', 'Rua João Peixoto', 'Atendente', 10757.62, '159357', 7820);
-INSERT INTO `funcionario` (`matricula`, `nome`, `sexo`, `data_nasc`, `cidade`, `endereco`, `cargo`, `salario`, `senha`, `lotacao`) VALUES (6, 'William Huff', 'Masculino', '1961-02-05', 'Hawkings', 'Rua Doze', 'Gerente', 20471.79, '456987', 7820);
-INSERT INTO `funcionario` (`matricula`, `nome`, `sexo`, `data_nasc`, `cidade`, `endereco`, `cargo`, `salario`, `senha`, `lotacao`) VALUES (7, 'Aphrodite Gates', 'Feminino', '1995-04-18', 'Montes Claros', 'Rua Ribeiro Gomes', 'Atendente', 16937.60, '153759', 7379);
-INSERT INTO `funcionario` (`matricula`, `nome`, `sexo`, `data_nasc`, `cidade`, `endereco`, `cargo`, `salario`, `senha`, `lotacao`) VALUES (8, 'Tatyana Giles', 'Feminino', '1978-08-30', 'Teresina', 'Rua Paulo', 'Caixa', 12824.07, '426871', 7379);
-INSERT INTO `funcionario` (`matricula`, `nome`, `sexo`, `data_nasc`, `cidade`, `endereco`, `cargo`, `salario`, `senha`, `lotacao`) VALUES (9, 'Rafael Roman', 'Masculino', '1995-11-29', 'Icó', 'Avenida Rio', 'Gerente', 23246.57, '014789', 7379);
-INSERT INTO `funcionario` (`matricula`, `nome`, `sexo`, `data_nasc`, `cidade`, `endereco`, `cargo`, `salario`, `senha`, `lotacao`) VALUES (10, 'Fleur Everett', 'Feminino', '1971-10-18', 'Vitória', 'Rua do Frade', 'Atendente', 15724.09, '555000', 6436);
-INSERT INTO `funcionario` (`matricula`, `nome`, `sexo`, `data_nasc`, `cidade`, `endereco`, `cargo`, `salario`, `senha`, `lotacao`) VALUES (11, 'Maxwell Mullins', 'Masculino', '1993-05-07', 'Goiânia', 'Rua Projetada 3', 'Caixa', 12948.51, '044990', 6436);
-INSERT INTO `funcionario` (`matricula`, `nome`, `sexo`, `data_nasc`, `cidade`, `endereco`, `cargo`, `salario`, `senha`, `lotacao`) VALUES (12, 'Isaac Hill', 'Masculino', '1966-06-20', 'Brasília', 'Rua Mogno', 'Atendente', 8832.93, '123589', 2921);
-INSERT INTO `funcionario` (`matricula`, `nome`, `sexo`, `data_nasc`, `cidade`, `endereco`, `cargo`, `salario`, `senha`, `lotacao`) VALUES (13, 'Austin Rose', 'Feminino', '1983-04-17', 'Londres', 'Rua Norma', 'Gerente', 31685.58, '235711', 6436);
-INSERT INTO `funcionario` (`matricula`, `nome`, `sexo`, `data_nasc`, `cidade`, `endereco`, `cargo`, `salario`, `senha`, `lotacao`) VALUES (14, 'Danielle Valencia', 'Feminino', '1991-11-22', 'Salvador', 'Avenida Principal', 'Caixa', 25848.08, '963012', 2921);
-INSERT INTO `funcionario` (`matricula`, `nome`, `sexo`, `data_nasc`, `cidade`, `endereco`, `cargo`, `salario`, `senha`, `lotacao`) VALUES (15, 'Geoffrey Olsen', 'Masculino', '1988-11-23', 'Indiana', 'Avenida Ênio Fabene', 'Gerente', 25069.00, '714581', 2921);
+INSERT INTO `funcionario` (`matricula`, `nome`, `sexo`, `data_nasc`, `cidade`, `endereco`, `cargo`, `salario`, `senha`, `lotacao`) VALUES (1, 'Linda Levine', 'Feminino', '1974-03-01', 'Sobral', 'Rua Angelim', 'Gerente', 35678.09, AES_ENCRYPT('123456', @chave), 8714);
+INSERT INTO `funcionario` (`matricula`, `nome`, `sexo`, `data_nasc`, `cidade`, `endereco`, `cargo`, `salario`, `senha`, `lotacao`) VALUES (2, 'Casey Benton', 'Masculino', '1964-01-11', 'Paraná', 'Rua Ararupe', 'Caixa', 8726.99, AES_ENCRYPT('112233', @chave), 8714);
+INSERT INTO `funcionario` (`matricula`, `nome`, `sexo`, `data_nasc`, `cidade`, `endereco`, `cargo`, `salario`, `senha`, `lotacao`) VALUES (3, 'Stacey Molina', 'Feminino', '1968-02-23', 'Rio de Janeiro', 'Rua Cabral', 'Caixa', 17764.10, AES_ENCRYPT('123321', @chave), 7820);
+INSERT INTO `funcionario` (`matricula`, `nome`, `sexo`, `data_nasc`, `cidade`, `endereco`, `cargo`, `salario`, `senha`, `lotacao`) VALUES (4, 'Omar Vazquez', 'Masculino', '1977-05-12', 'Campo Grande', 'Rua Jardim Veneza', 'Atendente', 15724.09, AES_ENCRYPT('147258', @chave), 8714);
+INSERT INTO `funcionario` (`matricula`, `nome`, `sexo`, `data_nasc`, `cidade`, `endereco`, `cargo`, `salario`, `senha`, `lotacao`) VALUES (5, 'Lila Morin', 'Feminino', '1992-09-18', 'Goiânia', 'Rua João Peixoto', 'Atendente', 10757.62, AES_ENCRYPT('159357', @chave), 7820);
+INSERT INTO `funcionario` (`matricula`, `nome`, `sexo`, `data_nasc`, `cidade`, `endereco`, `cargo`, `salario`, `senha`, `lotacao`) VALUES (6, 'William Huff', 'Masculino', '1961-02-05', 'Hawkings', 'Rua Doze', 'Gerente', 20471.79, AES_ENCRYPT('456987', @chave), 7820);
+INSERT INTO `funcionario` (`matricula`, `nome`, `sexo`, `data_nasc`, `cidade`, `endereco`, `cargo`, `salario`, `senha`, `lotacao`) VALUES (7, 'Aphrodite Gates', 'Feminino', '1995-04-18', 'Montes Claros', 'Rua Ribeiro Gomes', 'Atendente', 16937.60, AES_ENCRYPT('153759', @chave), 7379);
+INSERT INTO `funcionario` (`matricula`, `nome`, `sexo`, `data_nasc`, `cidade`, `endereco`, `cargo`, `salario`, `senha`, `lotacao`) VALUES (8, 'Tatyana Giles', 'Feminino', '1978-08-30', 'Teresina', 'Rua Paulo', 'Caixa', 12824.07, AES_ENCRYPT('426871', @chave), 7379);
+INSERT INTO `funcionario` (`matricula`, `nome`, `sexo`, `data_nasc`, `cidade`, `endereco`, `cargo`, `salario`, `senha`, `lotacao`) VALUES (9, 'Rafael Roman', 'Masculino', '1995-11-29', 'Icó', 'Avenida Rio', 'Gerente', 23246.57, AES_ENCRYPT('014789', @chave), 7379);
+INSERT INTO `funcionario` (`matricula`, `nome`, `sexo`, `data_nasc`, `cidade`, `endereco`, `cargo`, `salario`, `senha`, `lotacao`) VALUES (10, 'Fleur Everett', 'Feminino', '1971-10-18', 'Vitória', 'Rua do Frade', 'Atendente', 15724.09, AES_ENCRYPT('555000', @chave), 6436);
+INSERT INTO `funcionario` (`matricula`, `nome`, `sexo`, `data_nasc`, `cidade`, `endereco`, `cargo`, `salario`, `senha`, `lotacao`) VALUES (11, 'Maxwell Mullins', 'Masculino', '1993-05-07', 'Goiânia', 'Rua Projetada 3', 'Caixa', 12948.51, AES_ENCRYPT('044990', @chave), 6436);
+INSERT INTO `funcionario` (`matricula`, `nome`, `sexo`, `data_nasc`, `cidade`, `endereco`, `cargo`, `salario`, `senha`, `lotacao`) VALUES (12, 'Isaac Hill', 'Masculino', '1966-06-20', 'Brasília', 'Rua Mogno', 'Atendente', 8832.93, AES_ENCRYPT('123589', @chave), 2921);
+INSERT INTO `funcionario` (`matricula`, `nome`, `sexo`, `data_nasc`, `cidade`, `endereco`, `cargo`, `salario`, `senha`, `lotacao`) VALUES (13, 'Austin Rose', 'Feminino', '1983-04-17', 'Londres', 'Rua Norma', 'Gerente', 31685.58, AES_ENCRYPT('235711', @chave), 6436);
+INSERT INTO `funcionario` (`matricula`, `nome`, `sexo`, `data_nasc`, `cidade`, `endereco`, `cargo`, `salario`, `senha`, `lotacao`) VALUES (14, 'Danielle Valencia', 'Feminino', '1991-11-22', 'Salvador', 'Avenida Principal', 'Caixa', 25848.08, AES_ENCRYPT('963012', @chave), 2921);
+INSERT INTO `funcionario` (`matricula`, `nome`, `sexo`, `data_nasc`, `cidade`, `endereco`, `cargo`, `salario`, `senha`, `lotacao`) VALUES (15, 'Geoffrey Olsen', 'Masculino', '1988-11-23', 'Indiana', 'Avenida Ênio Fabene', 'Gerente', 25069.00, AES_ENCRYPT('714581', @chave), 2921);
 
 COMMIT;
 
@@ -406,36 +413,36 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `Equipe374876`;
-INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (164711, 2921, 2134.07, 012345, 'Conta Corrente');
-INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (784581, 7820, 2977.87, 123456, 'Conta Corrente');
-INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (015040, 8714, 425.30, 123321, 'Conta Corrente');
-INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (965824, 7379, 8468.72, 112233, 'Conta Corrente');
-INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (365256, 2921, 6386.33, 456789, 'Conta Corrente');
-INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (463126, 7820, 4601.23, 001122, 'Conta Corrente');
-INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (812821, 6436, 5221.67, 987654, 'Conta Corrente');
-INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (026226, 8714, 6826.80, 998877, 'Conta Corrente');
-INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (954152, 6436, 7816.48, 445566, 'Conta Corrente');
-INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (602510, 7379, 3920.84, 654321, 'Conta Corrente');
-INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (784154, 2921, 8624.33, 893281, 'Conta Poupança');
-INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (910511, 8714, 7100.62, 722253, 'Conta Poupança');
-INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (285172, 2921, 3302.16, 275873, 'Conta Poupança');
-INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (613817, 7820, 7037.16, 804452, 'Conta Poupança');
-INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (372129, 7820, 8368.54, 291175, 'Conta Poupança');
-INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (874163, 6436, 6248.51, 949284, 'Conta Poupança');
-INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (804089, 7379, 6758.68, 805277, 'Conta Poupança');
-INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (834440, 7379, 267.64, 826706, 'Conta Poupança');
-INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (830557, 6436, 342.81, 809916, 'Conta Poupança');
-INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (986479, 6436, 4231.43, 170035, 'Conta Poupança');
-INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (513279, 8714, -272.79, 348536, 'Conta Especial');
-INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (678050, 2921, 4937.15, 787316, 'Conta Especial');
-INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (779511, 2921, -131.49, 603226, 'Conta Especial');
-INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (363829, 2921, 1017.73, 865224, 'Conta Especial');
-INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (885015, 2921, -69.45, 671054, 'Conta Especial');
-INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (750483, 6436, 871.20, 521938, 'Conta Especial');
-INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (348913, 8714, -447.22, 462981, 'Conta Especial');
-INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (885720, 7379, 9910.29, 679315, 'Conta Especial');
-INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (487652, 7820, -35.66, 440435, 'Conta Especial');
-INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (387029, 7820, 1419.11, 744929, 'Conta Especial');
+INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (164711, 2921, 2134.07, AES_ENCRYPT(012345, @chave), 'Conta Corrente');
+INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (784581, 7820, 2977.87, AES_ENCRYPT(123456, @chave), 'Conta Corrente');
+INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (015040, 8714, 425.30, AES_ENCRYPT(123321, @chave), 'Conta Corrente');
+INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (965824, 7379, 8468.72, AES_ENCRYPT(112233, @chave), 'Conta Corrente');
+INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (365256, 2921, 6386.33, AES_ENCRYPT(456789, @chave), 'Conta Corrente');
+INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (463126, 7820, 4601.23, AES_ENCRYPT(001122, @chave), 'Conta Corrente');
+INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (812821, 6436, 5221.67, AES_ENCRYPT(987654, @chave), 'Conta Corrente');
+INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (026226, 8714, 6826.80, AES_ENCRYPT(998877, @chave), 'Conta Corrente');
+INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (954152, 6436, 7816.48, AES_ENCRYPT(445566, @chave), 'Conta Corrente');
+INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (602510, 7379, 3920.84, AES_ENCRYPT(654321, @chave), 'Conta Corrente');
+INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (784154, 2921, 8624.33, AES_ENCRYPT(893281, @chave), 'Conta Poupança');
+INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (910511, 8714, 7100.62, AES_ENCRYPT(722253, @chave), 'Conta Poupança');
+INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (285172, 2921, 3302.16, AES_ENCRYPT(275873, @chave), 'Conta Poupança');
+INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (613817, 7820, 7037.16, AES_ENCRYPT(804452, @chave), 'Conta Poupança');
+INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (372129, 7820, 8368.54, AES_ENCRYPT(291175, @chave), 'Conta Poupança');
+INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (874163, 6436, 6248.51, AES_ENCRYPT(949284, @chave), 'Conta Poupança');
+INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (804089, 7379, 6758.68, AES_ENCRYPT(805277, @chave), 'Conta Poupança');
+INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (834440, 7379, 267.64, AES_ENCRYPT(826706, @chave), 'Conta Poupança');
+INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (830557, 6436, 342.81, AES_ENCRYPT(809916, @chave), 'Conta Poupança');
+INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (986479, 6436, 4231.43, AES_ENCRYPT(170035, @chave), 'Conta Poupança');
+INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (513279, 8714, -272.79, AES_ENCRYPT(348536, @chave), 'Conta Especial');
+INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (678050, 2921, 4937.15, AES_ENCRYPT(787316, @chave), 'Conta Especial');
+INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (779511, 2921, -131.49, AES_ENCRYPT(603226, @chave), 'Conta Especial');
+INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (363829, 2921, 1017.73, AES_ENCRYPT(865224, @chave), 'Conta Especial');
+INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (885015, 2921, -69.45, AES_ENCRYPT(671054, @chave), 'Conta Especial');
+INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (750483, 6436, 871.20, AES_ENCRYPT(521938, @chave), 'Conta Especial');
+INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (348913, 8714, -447.22, AES_ENCRYPT(462981, @chave), 'Conta Especial');
+INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (885720, 7379, 9910.29, AES_ENCRYPT(679315, @chave), 'Conta Especial');
+INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (487652, 7820, -35.66, AES_ENCRYPT(440435, @chave), 'Conta Especial');
+INSERT INTO `conta` (`num_conta`, `num_agencia`, `saldo`, `senha`, `tipo_conta`) VALUES (387029, 7820, 1419.11, AES_ENCRYPT(744929, @chave), 'Conta Especial');
 
 COMMIT;
 
