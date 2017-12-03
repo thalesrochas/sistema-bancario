@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../style.css">
+    
+    <title id="title">NullBank Gerente - Clientes Ag.</title>
+</head>
+<body>
+    <!-- Abas da página -->
+    <div>
+        <div class="degrade">
+            <div class="aui-group">
+                <div class="aui-item">
+                    <h1 id="titleH1" class="nullbank">NullBank</h1>
+                </div>
+                <div class="aui-item">
+                    <button id="desconectar" class="btn btn-outline-light btn-sm desconectar" onclick="onClickDesconectar()">
+                        Encerrar Sessão
+                        <img id="icon" src="../img/exit_to_app.png">
+                    </button>
+                </div>
+            </div>
+        </div>
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="clickElement('funcionarioGerente')">Funcionários</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="#">Clientes</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="clickElement('contaGerente')">Contas</a>
+            </li>
+        </ul>
+    </div>
+    
+    <div class="aui-group">
+        <!-- Coluna da tabela de Clientes -->
+        <div class="aui-item column-width">
+            <div class="input-group padding16">
+                <input id="pesquisa" type="text" oninput="pesquisar()" class="form-control" placeholder="Pesquisar..." autofocus>
+                <span class="input-group-addon badge-info">
+                    <img src="../img/search.png">
+                </span>
+            </div>
+            <div class="table-padding">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">CPF</th>
+                            <th scope="col">Nome</th>
+                            <th scope="col">Cidade</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div class="table-padding-corpo" style="overflow:auto; height:423px">
+                <table class="table table-hover">
+                    <tbody id="corpoTabela"></tbody>
+                </table>
+            </div>
+            <div class="padding16 center">
+                <button class="btn btn-primary" onclick="adicionarCliente()">
+                    <img src="../img/person_add.png">
+                    Cadastrar Cliente
+                </button>
+            </div>
+        </div>
+        
+        <div class="aui-item barra-vertical" style="padding-right:0; padding-top:0;">
+            <div style="overflow:auto; height:562px; padding-right:16px; padding-top:16px">
+                <div class="padding16 rounded border border-secondary">
+                    <h5>Dados Pessoais</h5>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="nome">Nome</label>
+                            <input type="text" class="form-control" id="nome" disabled>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="cpf">CPF</label>
+                            <input type="text" class="form-control" id="cpf" disabled>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="rg">RG</label>
+                            <input type="text" class="form-control" id="rg" disabled>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="nascimento">Data de Nascimento</label>
+                            <input type="text" class="form-control" id="nascimento" disabled>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-8">
+                            <label for="endereco">Endereço</label>
+                            <input type="text" class="form-control" id="endereco" disabled>
+                        </div> 
+                        <div class="form-group col-md-4">
+                            <label for="cidade">Cidade</label>
+                            <input type="text" class="form-control" id="cidade" disabled>
+                        </div>
+                    </div>
+                </div>
+                <div class="padding16 margin-top16 rounded border border-secondary">
+                    <h5>Contas</h5>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nº</th>
+                                <th scope="col">Ag.</th>
+                                <th scope="col">Tipo</th>
+                                <th scope="col">Gerente</th>
+                                <th scope="col">Saldo</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaConta"></tbody>
+                    </table>
+                </div>
+                <div class="padding16 margin-top16 rounded border border-secondary">
+                    <h5>Possui Conta Conjunta com</h5>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nome</th>
+                                <th scope="col">CPF</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaContaConjunta"></tbody>
+                    </table>
+                </div>
+                <div class="padding16 margin-top16 rounded border border-secondary">
+                    <div class="form-row">
+                        <h5 style="margin-right: 102px">Número de Transações</h5>
+                        <label style="margin-right: 10px">Últimos:</label>
+                        <div class="btn-group btn-group-sm margin-bottom16">
+                            <button id="btnNum7" class="btn btn-outline-info" onclick="onClickNumTrans(7)" disabled>7 dias</button>
+                            <button id="btnNum30" class="btn btn-outline-info" onclick="onClickNumTrans(30)" disabled>30 dias</button>
+                            <button id="btnNum365" class="btn btn-outline-info" onclick="onClickNumTrans(365)" disabled>365 dias</button>
+                        </div>
+                    </div>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nº da Conta Corrente</th>
+                                <th scope="col">Número de Transações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaNumTransacao"></tbody>
+                    </table>
+                </div>
+                <div class="padding16 margin-top16 rounded border border-secondary">
+                    <div class="form-row">
+                        <h5 style="margin-right: 62px">Volume de Movimentações</h5>
+                        <label style="margin-right: 10px">Últimos:</label>
+                        <div class="btn-group btn-group-sm margin-bottom16">
+                            <button id="btnVol7" class="btn btn-outline-info" onclick="onClickVolTrans(7)" disabled>7 dias</button>
+                            <button id="btnVol30" class="btn btn-outline-info" onclick="onClickVolTrans(30)" disabled>30 dias</button>
+                            <button id="btnVol365" class="btn btn-outline-info" onclick="onClickVolTrans(365)" disabled>365 dias</button>
+                        </div>
+                    </div>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Número da Conta</th>
+                                <th scope="col">Valor Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaVolTransacao"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Botões -->
+            <div class="center margin-top16">
+                <button id="atualizar" class="btn btn-success" disabled>
+                    <img src="../img/sync.png">
+                    Atualizar
+                </button>
+                <button id="deletar" class="btn btn-danger" disabled>
+                    <img src="../img/delete.png">
+                    Remover
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Script de requisições de dados -->
+    <script>
+        const ipcRenderer = require('electron').ipcRenderer;
+        
+        // Quando a página carrega, os dados são requisitados
+        ipcRenderer.on('agencia', function (event, agencia) {
+            let title = document.getElementById('title');
+            let titleH1 = document.getElementById('titleH1');
+            title.textContent = 'NullBank Gerente - Clientes Ag. ' + agencia;
+            titleH1.textContent = 'NullBank - Ag. ' + agencia;
+
+            ipcRenderer.send('requestDataRestrict', {
+                tabela: 'cliente',
+                agencia: agencia
+            });
+        });
+
+        // Evento ocorre quando os dados são enviados por main.js
+        ipcRenderer.on('dataCliente', function (event, dataCliente) {
+            let tbody = document.getElementById('corpoTabela');
+
+            // Remove todos os elementos do corpo da tabela antes de inserir os novos
+            while (tbody.firstChild) {
+                tbody.removeChild(tbody.firstChild);
+            }
+
+            // Inserir os dados do banco na tabela
+            dataCliente.forEach(element => {
+                let tr = document.createElement('tr');
+                let th = document.createElement('th');
+                let tdNome = document.createElement('td');
+                let tdCidade = document.createElement('td');
+
+                // Cria atributo de onclick com numero da agencia como parâmetro
+                tr.setAttribute('onclick', 'selectCliente(' + element.cpf + ')');
+                th.textContent = element.cpf.substring(0,3) + '.' + element.cpf.substring(3,6) +
+                '.' + element.cpf.substring(6,9) + '-' + element.cpf.substring(9,11);
+                tdNome.textContent = element.nome;
+                tdCidade.textContent = element.cidade;
+
+                tr.appendChild(th);
+                tr.appendChild(tdNome);
+                tr.appendChild(tdCidade);
+                tbody.appendChild(tr);
+            });
+        });
+
+        let globalCPF;
+
+        // Evento ocorre quando os dados requisitados retornam do main.js
+        ipcRenderer.on('fieldsRequested', function (event, fields) {
+            console.log(fields);
+
+            let data_nasc = fields["0"].data_nasc;
+
+            let nome = document.getElementById('nome');
+            let cpf = document.getElementById('cpf');
+            let rg = document.getElementById('rg');
+            let nascimento = document.getElementById('nascimento');
+            let endereco = document.getElementById('endereco');
+            let cidade = document.getElementById('cidade');
+            
+            globalCPF = fields["0"].cpf;
+
+            nome.value = fields["0"].nome;
+            cpf.value = fields["0"].cpf.substring(0,3) + '.' + fields["0"].cpf.substring(3,6) +
+            '.' + fields["0"].cpf.substring(6,9) + '-' + fields["0"].cpf.substring(9,11);
+            rg.value = fields["0"].rg;
+            nascimento.value = data_nasc.substring(8, 10) + '/' + data_nasc.substring(5, 7) + '/' + data_nasc.substring(0, 4);
+            endereco.value = fields["0"].endereco;
+            cidade.value = fields["0"].cidade;
+
+            // Remover os atributos de desabilitado dos botões de numero de transações e volume
+            let btnNum7 = document.getElementById('btnNum7');
+            let btnNum30 = document.getElementById('btnNum30');
+            let btnNum365 = document.getElementById('btnNum365');
+            let btnVol7 = document.getElementById('btnVol7');
+            let btnVol30 = document.getElementById('btnVol30');
+            let btnVol365 = document.getElementById('btnVol365');
+
+            btnNum7.removeAttribute('disabled');
+            btnNum30.removeAttribute('disabled');
+            btnNum365.removeAttribute('disabled');
+            btnVol7.removeAttribute('disabled');
+            btnVol30.removeAttribute('disabled');
+            btnVol365.removeAttribute('disabled');
+
+            btnNum7.setAttribute('class', 'btn btn-info');
+            btnVol7.setAttribute('class', 'btn btn-info');
+        });
+    </script>
+
+    <!-- Script de pesquisa -->
+    <script>
+        let pesquisa = document.getElementById('pesquisa');
+        
+        function pesquisar() {
+            let dadosPesquisa = {
+                tabela: 'cliente',
+                txt: pesquisa.value
+            };
+
+            ipcRenderer.send('pesquisar', dadosPesquisa);
+        }
+    </script>
+    
+    <!-- Script de funções da página -->
+    <script>
+        const dialog = require('electron').remote.dialog;
+        const remote = require('electron').remote;
+
+        function clickElement (element) {
+            console.log(element);
+            // Envia o evento 'trocarTelaDBA' para main.js
+            ipcRenderer.send('trocarTelaDBA', element);
+            console.log('Dados de troca de tela enviados!');
+        }
+
+        function selectCliente(cpf) {
+            console.log('Clique no Funcionário ' + cpf);
+            ipcRenderer.send('requestFields', {
+                tabela: 'cliente',
+                campo: 'cpf',
+                id: cpf
+            });
+
+            ipcRenderer.send('requestQuery', {
+                query: '2.1',
+                order: null,
+                id: cpf
+            });
+
+            ipcRenderer.send('requestQuery', {
+                query: '2.2',
+                order: null,
+                id: cpf
+            });
+
+            ipcRenderer.send('requestQuery', {
+                query: '2.3',
+                order: '7',
+                id: cpf
+            });
+
+            ipcRenderer.send('requestQuery', {
+                query: '2.4',
+                order: '7',
+                id: cpf
+            });
+
+            console.log('Dados do Cliente ' + cpf + ' solicitados.');
+
+            let botaoAtualizar = document.getElementById('atualizar');
+            let botaoDeletar = document.getElementById('deletar');
+
+            botaoAtualizar.setAttribute('onclick', 'onClickAtualizar(' + cpf + ')');
+            botaoDeletar.setAttribute('onclick', 'onClickDeletar(' + cpf + ')');
+            botaoAtualizar.removeAttribute('disabled');
+            botaoDeletar.removeAttribute('disabled');
+        }
+
+        function adicionarCliente(){
+            ipcRenderer.send('abrirTela', {
+                tela: 'adicionarCliente',
+                tipo: null,
+                args: null
+            });
+        }
+
+        function onClickAtualizar(cpf) {
+            ipcRenderer.send('abrirTela', {
+                tela: 'adicionarCliente',
+                tipo: 'associar',
+                args: {
+                    tabela: 'cliente',
+                    campo: 'cpf',
+                    id: cpf,
+                    trans: false
+                }
+            });
+        }
+
+        function onClickDeletar(id) {
+            // Requisita confirmação do usuário sobre a deleção da tupla
+            dialog.showMessageBox(remote.getCurrentWindow(), {
+                type: 'question',
+                buttons: ['Remover', 'Cancelar'],
+                defaultId: 0,
+                cancelId: 1,
+                title: 'Confirmar Remoção de Cliente',
+                message: 'Você tem certeza que deseja remover o Cliente ' + nome.value + '?',
+                detail: 'Essa ação não pode ser desfeita.\nTodos os dados desse cliente serão perdidos!'
+            }, function (response) {
+                /* Se o usuário confirmar deleção, dados de tabela e id
+                    * são enviados para main.js para tratar a deleção
+                    */
+                if (!response) {
+                    ipcRenderer.send('delete', {
+                        tabela: 'cliente',
+                        campo: 'cpf',
+                        id: id,
+                        nome_tabela: 'Cliente',
+                        nome: nome.value,
+                        detail: 'Pode ser que o Cliente esteja associado a alguma conta.'
+                    });
+                }
+            });
+        }
+        
+        let desconectar = document.getElementById('desconectar');
+        let icon = document.getElementById('icon');
+
+        desconectar.addEventListener('mouseleave', function () {
+            icon.setAttribute('src', '../img/exit_to_app.png');
+        });
+
+        desconectar.addEventListener('mouseenter', function () {
+            icon.setAttribute('src', '../img/exit_to_app_black.png');
+        });
+        
+        function onClickDesconectar() {
+            ipcRenderer.send('acessar', 'Carregando tela de login!');
+        }
+
+        function onClickNumTrans(dias) {
+            let btnNum7 = document.getElementById('btnNum7');
+            let btnNum30 = document.getElementById('btnNum30');
+            let btnNum365 = document.getElementById('btnNum365');
+
+            switch (dias) {
+                case 7:
+                    btnNum7.setAttribute('class', 'btn btn-info');
+                    btnNum30.setAttribute('class', 'btn btn-outline-info');
+                    btnNum365.setAttribute('class', 'btn btn-outline-info');
+                    break;
+                case 30:
+                    btnNum7.setAttribute('class', 'btn btn-outline-info');
+                    btnNum30.setAttribute('class', 'btn btn-info');
+                    btnNum365.setAttribute('class', 'btn btn-outline-info');
+                    break;
+                case 365:
+                    btnNum7.setAttribute('class', 'btn btn-outline-info');
+                    btnNum30.setAttribute('class', 'btn btn-outline-info');
+                    btnNum365.setAttribute('class', 'btn btn-info');
+                    break;
+            }
+
+            ipcRenderer.send('requestQuery', {
+                query: '2.3',
+                order: dias,
+                id: globalCPF
+            });
+        }
+
+        function onClickVolTrans(dias) {
+            let btnVol7 = document.getElementById('btnVol7');
+            let btnVol30 = document.getElementById('btnVol30');
+            let btnVol365 = document.getElementById('btnVol365');
+
+            switch (dias) {
+                case 7:
+                    btnVol7.setAttribute('class', 'btn btn-info');
+                    btnVol30.setAttribute('class', 'btn btn-outline-info');
+                    btnVol365.setAttribute('class', 'btn btn-outline-info');
+                    break;
+                case 30:
+                    btnVol7.setAttribute('class', 'btn btn-outline-info');
+                    btnVol30.setAttribute('class', 'btn btn-info');
+                    btnVol365.setAttribute('class', 'btn btn-outline-info');
+                    break;
+                case 365:
+                    btnVol7.setAttribute('class', 'btn btn-outline-info');
+                    btnVol30.setAttribute('class', 'btn btn-outline-info');
+                    btnVol365.setAttribute('class', 'btn btn-info');
+                    break;
+            }
+
+            ipcRenderer.send('requestQuery', {
+                query: '2.4',
+                order: dias,
+                id: globalCPF
+            });
+        }
+    </script>
+
+    <!-- Querys -->
+    <script>
+        ipcRenderer.on('q2.1', function (event, fields) {
+            console.log('Dados da query 2.1');
+            console.log(fields);
+
+            let tbody = document.getElementById('tabelaConta');
+
+            // Remove todos os elementos do corpo da tabela antes de inserir os novos
+            while (tbody.firstChild) {
+                tbody.removeChild(tbody.firstChild);
+            }
+
+            fields.forEach(element => {
+                let tr = document.createElement('tr');
+                let tdNumConta = document.createElement('td');
+                let tdAgencia = document.createElement('td');
+                let tdTipo = document.createElement('td');
+                let tdGerente = document.createElement('td');
+                let tdSaldo = document.createElement('td');
+
+                tdNumConta.textContent = element.num_conta;
+                tdAgencia.textContent = element.agencia;
+                tdTipo.textContent = element.tipo_conta;
+                tdGerente.textContent = element.gerente;
+                tdSaldo.textContent = 'R$' + element.saldo;
+
+                tr.appendChild(tdNumConta);
+                tr.appendChild(tdAgencia);
+                tr.appendChild(tdTipo);
+                tr.appendChild(tdGerente);
+                tr.appendChild(tdSaldo);
+                tbody.appendChild(tr);
+            });
+        });
+
+        ipcRenderer.on('q2.2', function (event, fields) {
+            console.log('Dados da query 2.2');
+            console.log(fields);
+
+            let tbody = document.getElementById('tabelaContaConjunta');
+
+            // Remove todos os elementos do corpo da tabela antes de inserir os novos
+            while (tbody.firstChild) {
+                tbody.removeChild(tbody.firstChild);
+            }
+
+            fields.forEach(element => {
+                let tr = document.createElement('tr');
+                let tdNome = document.createElement('td');
+                let tdCpf = document.createElement('td');
+
+                tdNome.textContent = element.cliente;
+                tdCpf.textContent = element.cpf;
+
+                tr.appendChild(tdNome);
+                tr.appendChild(tdCpf);
+                tbody.appendChild(tr);
+            });
+        });
+
+        ipcRenderer.on('q2.3', function (event, fields) {
+            console.log('Dados da query 2.3');
+            console.log(fields);
+
+            let tbody = document.getElementById('tabelaNumTransacao');
+
+            // Remove todos os elementos do corpo da tabela antes de inserir os novos
+            while (tbody.firstChild) {
+                tbody.removeChild(tbody.firstChild);
+            }
+
+            fields.forEach(element => {
+                let tr = document.createElement('tr');
+                let tdNumConta = document.createElement('td');
+                let tdNumTransacao = document.createElement('td');
+
+                tdNumConta.textContent = element.num_conta;
+                tdNumTransacao.textContent = element.num_transacoes;
+
+                tr.appendChild(tdNumConta);
+                tr.appendChild(tdNumTransacao);
+                tbody.appendChild(tr);
+            });
+        });
+
+        ipcRenderer.on('q2.4', function (event, fields) {
+            console.log('Dados da query 2.4');
+            console.log(fields);
+            let tbody = document.getElementById('tabelaVolTransacao');
+
+            // Remove todos os elementos do corpo da tabela antes de inserir os novos
+            while (tbody.firstChild) {
+                tbody.removeChild(tbody.firstChild);
+            }
+
+            fields.forEach(element => {
+                let tr = document.createElement('tr');
+                let tdNumConta = document.createElement('td');
+                let tdVolTransacao = document.createElement('td');
+
+                tdNumConta.textContent = element.num_conta;
+                tdVolTransacao.textContent = 'R$' + element.valor_total;
+
+                tr.appendChild(tdNumConta);
+                tr.appendChild(tdVolTransacao);
+                tbody.appendChild(tr);
+            });
+        });
+    </script>
+
+    <!-- Scripts para Bootstrap -->
+    <script>let $ = require('../bootstrap/js/jquery-3.2.1.min.js');</script>
+    <script src="../bootstrap/js/popper.min.js"></script>
+    <script src="../bootstrap/js/bootstrap.js"></script>
+</body>
+</html>

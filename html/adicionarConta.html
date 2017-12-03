@@ -98,18 +98,30 @@
 
         ipcRenderer.on('dataAgencia', function (event, dataAgencia){
             let agencia = document.getElementById('agencia');
+            // Recupera o número da agência
+            let titulo = remote.getCurrentWindow().getParentWindow().getTitle();
+            titulo = titulo.substring(titulo.length-4);
 
             // Remove todos os elementos do select
             while (agencia.firstChild) {
                 agencia.removeChild(agencia.firstChild);
             }
 
-            dataAgencia.forEach(element => {
+            if (isNaN(titulo)) {
+                dataAgencia.forEach(element => {
+                    let option = document.createElement('option');
+                    option.textContent = element.numero;
+
+                    agencia.appendChild(option);
+                });
+            }
+            else {
                 let option = document.createElement('option');
-                option.textContent = element.numero;
+                option.textContent = titulo;
 
                 agencia.appendChild(option);
-            });
+                agencia.setAttribute('disabled', null);
+            }
         });
 
         ipcRenderer.on('campos', function (event, dataConta) {

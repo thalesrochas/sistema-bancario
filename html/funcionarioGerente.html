@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+    
+    <title id="title">NullBank Gerente - Funcionários Ag.</title>
+</head>
+<body>
+    <!-- Abas da página -->
+    <div>
+        <div class="degrade">
+            <div class="aui-group">
+                <div class="aui-item">
+                    <h1 id="titleH1" class="nullbank">NullBank</h1>
+                </div>
+                <div class="aui-item">
+                    <button id="desconectar" class="btn btn-outline-light btn-sm desconectar" onclick="onClickDesconectar()">
+                        Encerrar Sessão
+                        <img id="icon" src="../img/exit_to_app.png">
+                    </button>
+                </div>
+            </div>
+        </div>
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" href="#">Funcionários</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="clickElement('clienteGerente')">Clientes</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="clickElement('contaGerente')">Contas</a>
+            </li>
+        </ul>
+    </div>
+    
+    <div class="aui-group">
+        <!-- Coluna da tabela de Funcionários -->
+        <div class="aui-item column-width">
+            <div class="input-group padding16">
+                <input id="pesquisa" type="text" oninput="pesquisar()" class="form-control" placeholder="Pesquisar..." autofocus>
+                <span class="input-group-addon badge-info">
+                    <img src="../img/search.png">
+                </span>
+            </div>
+            <div class="table-padding">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Matrícula</th>
+                            <th scope="col">Nome</th>
+                            <th scope="col">Cargo</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div class="table-padding-corpo" style="overflow:auto; height:423px">
+                <table class="table table-hover">
+                    <tbody id="corpoTabela"></tbody>
+                </table>
+            </div>
+            <div class="padding16 center">
+                <button class="btn btn-primary" onclick="adicionarFuncionario()">
+                    <img src="../img/group_add.png">
+                    Cadastrar Funcionário
+                </button>
+            </div>
+        </div>
+        
+        <!-- Coluna das informações do Funcionário selecionado -->
+        <div class="aui-item barra-vertical" style="padding-right:0; padding-top:0;">
+            <div style="overflow:auto; height:562px; padding-right:16px; padding-top:16px">
+                <div class="padding16 rounded border border-secondary">
+                    <h5>Dados de Funcionário</h5>
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label for="matricula">Matrícula</label>
+                            <input type="text" class="form-control" id="matricula" disabled>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="senha">Senha</label>
+                            <input type="text" class="form-control" id="senha" disabled>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="salario">Salário</label>
+                            <div class="input-group">
+                                <span class="input-group-addon">R$</span>
+                                <input type="text" class="form-control" id="salario" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="cargo">Cargo</label>
+                            <input type="text" class="form-control" id="cargo" disabled>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="agencia">Agência</label>
+                            <input type="text" class="form-control" id="agencia" disabled>
+                        </div>
+                    </div>
+                </div>
+                <div class="padding16 margin-top16 rounded border border-secondary">
+                    <h5>Dados Pessoais</h5>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="nome">Nome</label>
+                            <input type="text" class="form-control" id="nome" disabled>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label for="sexo">Sexo</label>
+                            <input type="text" class="form-control" id="sexo" disabled>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="nascimento">Data de Nascimento</label>
+                            <input type="text" class="form-control" id="nascimento" disabled>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-8">
+                            <label for="endereco">Endereço</label>
+                            <input type="text" class="form-control" id="endereco" disabled>
+                        </div> 
+                        <div class="form-group col-md-4">
+                            <label for="cidade">Cidade</label>
+                            <input type="text" class="form-control" id="cidade" disabled>
+                        </div>
+                    </div>
+                </div>
+                <div class="padding16 margin-top16 rounded border border-secondary" id="dependentes">
+                    <h5>Dependentes</h5>
+                    <div class="padding16 margin-bottom16 rounded border border-info">
+                        <div class="form-row">
+                            <div class="form-group col-md-8">
+                                <label>Nome</label>
+                                <input class="form-control" disabled>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>Parentesco</label>
+                                <input class="form-control" disabled>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label>Data de Nascimento</label>
+                                <input class="form-control" disabled>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Idade</label>
+                                <input class="form-control" disabled>
+                            </div>
+                            <div class="form-group col-md-4"></div>
+                            <div class="form-group col-md-2">
+                                <label style="color: #FFF">Remover</label>
+                                <button onclick="removerDependente()" class="btn btn-danger" disabled>
+                                    <img src="../img/delete.png">
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="gerencia" class="padding16 margin-top16 rounded border border-secondary">
+                    <h5>Gerencia as Contas de</h5>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nome</th>
+                                <th scope="col">Tipo</th>
+                                <th scope="col">Saldo</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaGerencia"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Botões -->
+            <div class="center margin-top16">
+                <button id="atualizar" class="btn btn-success" disabled>
+                    <img src="../img/sync.png">
+                    Atualizar
+                </button>
+                <button id="dependente" class="btn btn-info" disabled>
+                    <img src="../img/person_add.png">
+                    Cadastrar Dependente
+                </button>
+                <button id="deletar" class="btn btn-danger" disabled>
+                    <img src="../img/delete.png">
+                    Remover
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Script de requisições de dados -->
+    <script>
+        const ipcRenderer = require('electron').ipcRenderer;
+        
+        // Quando a página carrega, os dados são requisitados
+        ipcRenderer.on('agencia', function (event, agencia) {
+            let title = document.getElementById('title');
+            let titleH1 = document.getElementById('titleH1');
+            title.textContent = 'NullBank Gerente - Funcionários Ag. ' + agencia;
+            titleH1.textContent = 'NullBank - Ag. ' + agencia;
+
+            ipcRenderer.send('requestDataRestrict', {
+                tabela: 'funcionario',
+                agencia: agencia
+            });
+        });
+
+        // Evento ocorre quando os dados são enviados por main.js
+        ipcRenderer.on('dataFuncionario', function (event, dataFuncionario) {
+            let tbody = document.getElementById('corpoTabela');
+
+            // Remove todos os elementos do corpo da tabela antes de inserir os novos
+            while (tbody.firstChild) {
+                tbody.removeChild(tbody.firstChild);
+            }
+
+            // Inserir os dados do banco na tabela
+            dataFuncionario.forEach(element => {
+                let tr = document.createElement('tr');
+                let th = document.createElement('th');
+                let tdNome = document.createElement('td');
+                let tdCargo = document.createElement('td');
+
+                // Cria atributo de onclick com numero da agencia como parâmetro
+                tr.setAttribute('onclick', 'selectFuncionario(' + element.matricula + ')');
+                th.textContent = element.matricula;
+                tdNome.textContent = element.nome;
+                tdCargo.textContent = element.cargo;
+
+                tr.appendChild(th);
+                tr.appendChild(tdNome);
+                tr.appendChild(tdCargo);
+                tbody.appendChild(tr);
+            });
+        });
+
+        // Evento ocorre quando os dados requisitados retornam do main.js
+        ipcRenderer.on('fieldsRequested', function (event, fields) {
+            console.log(fields);
+
+            let data_nasc = fields["0"].data_nasc;
+
+            let nome = document.getElementById('nome');
+            let sexo = document.getElementById('sexo');
+            let nascimento = document.getElementById('nascimento');
+            let endereco = document.getElementById('endereco');
+            let cidade = document.getElementById('cidade');
+            let matricula = document.getElementById('matricula');
+            let senha = document.getElementById('senha');
+            let salario = document.getElementById('salario');
+            let cargo = document.getElementById('cargo');
+            let agencia = document.getElementById('agencia');
+
+            nome.value = fields["0"].nome;
+            sexo.value = fields["0"].sexo;
+            nascimento.value = data_nasc.substring(8, 10) + '/' + data_nasc.substring(5, 7) + '/' + data_nasc.substring(0, 4);
+            endereco.value = fields["0"].endereco;
+            cidade.value = fields["0"].cidade;
+            matricula.value = fields["0"].matricula;
+            senha.value = fields["0"].senha;
+            salario.value = fields["0"].salario;
+            cargo.value = fields["0"].cargo;
+            agencia.value = fields["0"].lotacao;
+        });
+
+        ipcRenderer.on('requestedDependente', function (event, fields) {
+            console.log(fields);
+
+            let matricula = document.getElementById('matricula').value;
+            let div = document.getElementById('dependentes');
+            let h5 = document.createElement('h5');
+
+            // Remove todos os elementos do corpo da tabela antes de inserir os novos
+            while (div.firstChild) {
+                div.removeChild(div.firstChild);
+            }
+
+            h5.textContent = 'Dependentes';
+            div.appendChild(h5);
+
+            if (fields.length == 0) {
+                console.log('Funcionário sem dependente');
+                let h6 = document.createElement('h6');
+                h6.textContent = 'Não há dependentes para este funcionário.';
+                div.appendChild(h6);
+            }
+
+            fields.forEach(element => {
+                let divDependente = document.createElement('div');
+                let div1 = document.createElement('div');
+                let div2 = document.createElement('div');
+                let divNome = document.createElement('div');
+                let divParentesco = document.createElement('div');
+                let divNascimento = document.createElement('div');
+                let divIdade = document.createElement('div');
+                let divEspaço = document.createElement('div');
+                let divRemover = document.createElement('div');
+                let labelNome = document.createElement('label');
+                let labelParentesco = document.createElement('label');
+                let labelNascimento = document.createElement('label');
+                let labelIdade = document.createElement('label');
+                let labelRemover = document.createElement('label');
+                let inputNome = document.createElement('input');
+                let inputParentesco = document.createElement('input');
+                let inputNascimento = document.createElement('input');
+                let inputIdade = document.createElement('input');
+                let buttonRemover = document.createElement('button');
+                let imgRemover = document.createElement('img');
+
+                divDependente.setAttribute('class', 'padding16 margin-bottom16 rounded border border-info');
+                div1.setAttribute('class', 'form-row');
+                div2.setAttribute('class', 'form-row');
+                divNome.setAttribute('class', 'form-group col-md-8');
+                divParentesco.setAttribute('class', 'form-group col-md-4');
+                divNascimento.setAttribute('class', 'form-group col-md-4');
+                divIdade.setAttribute('class', 'form-group col-md-2');
+                divEspaço.setAttribute('class', 'form-group col-md-4');
+                divRemover.setAttribute('class', 'form-group col-md-2');
+                labelNome.textContent = 'Nome';
+                labelParentesco.textContent = 'Parentesco';
+                labelNascimento.textContent = 'Data de Nascimento';
+                labelIdade.textContent = 'Idade';
+                labelRemover.setAttribute('style', 'color: #FFF');
+                labelRemover.textContent = 'Remover';
+                inputNome.setAttribute('class', 'form-control');
+                inputParentesco.setAttribute('class', 'form-control');
+                inputNascimento.setAttribute('class', 'form-control');
+                inputIdade.setAttribute('class', 'form-control');
+                inputNome.setAttribute('disabled', null);
+                inputParentesco.setAttribute('disabled', null);
+                inputNascimento.setAttribute('disabled', null);
+                inputIdade.setAttribute('disabled', null);
+                buttonRemover.setAttribute('class', 'btn btn-danger');
+                buttonRemover.setAttribute('onclick', "removerDependente(" + matricula + ",'" + element.nome_dependente + "')");
+                imgRemover.setAttribute('src', '../img/delete.png');
+                
+                let data_nasc = element.data_nasc;
+
+                inputNome.value = element.nome_dependente;
+                inputParentesco.value = element.parentesco;
+                inputNascimento.value = data_nasc.substring(8, 10) + '/' + data_nasc.substring(5, 7) + '/' + data_nasc.substring(0, 4);
+                inputIdade.value = element.idade;
+                
+                buttonRemover.appendChild(imgRemover);
+                divNome.appendChild(labelNome);
+                divNome.appendChild(inputNome);
+                divParentesco.appendChild(labelParentesco);
+                divParentesco.appendChild(inputParentesco);
+                divNascimento.appendChild(labelNascimento);
+                divNascimento.appendChild(inputNascimento);
+                divIdade.appendChild(labelIdade);
+                divIdade.appendChild(inputIdade);
+                divRemover.appendChild(labelRemover);
+                divRemover.appendChild(buttonRemover);
+                div1.appendChild(divNome);
+                div1.appendChild(divParentesco);
+                div2.appendChild(divNascimento);
+                div2.appendChild(divIdade);
+                div2.appendChild(divEspaço);
+                div2.appendChild(divRemover);
+                divDependente.appendChild(div1);
+                divDependente.appendChild(div2);
+                div.appendChild(divDependente);
+            });
+        });
+
+        ipcRenderer.on('requestedContasGerente', function (event, fields) {
+            console.log('Contas dos Gerentes:')
+            console.log(fields);
+            let tabela = document.getElementById('gerencia');
+
+            if (fields.length === 0) {
+                tabela.setAttribute('style', 'display: none');
+            }
+            else {
+                tabela.removeAttribute('style');
+                let tbody = document.getElementById('tabelaGerencia');
+
+                // Remove todos os elementos do corpo da tabela antes de inserir os novos
+                while (tbody.firstChild) {
+                    tbody.removeChild(tbody.firstChild);
+                }
+
+                fields.forEach(element => {
+                    let tr = document.createElement('tr');
+                    let tdNome = document.createElement('td');
+                    let tdTipo = document.createElement('td');
+                    let tdSaldo = document.createElement('td');
+
+                    tdNome.textContent = element.nome_cliente;
+                    tdTipo.textContent = element.tipo_conta;
+                    tdSaldo.textContent = 'R$' + element.saldo;
+
+                    tr.appendChild(tdNome);
+                    tr.appendChild(tdTipo);
+                    tr.appendChild(tdSaldo);
+                    tbody.appendChild(tr);
+                });
+            }
+        });
+    </script>
+
+    <!-- Script de pesquisa -->
+    <script>
+        let pesquisa = document.getElementById('pesquisa');
+        
+        function pesquisar() {
+            let dadosPesquisa = {
+                tabela: 'funcionario',
+                txt: pesquisa.value
+            };
+
+            ipcRenderer.send('pesquisar', dadosPesquisa);
+        }
+    </script>
+
+    <!-- Script de funções da página -->
+    <script>
+        const dialog = require('electron').remote.dialog;
+        const remote = require('electron').remote;
+
+        function clickElement(element) {
+            console.log(element);
+            // Envia o evento 'trocarTelaDBA' para main.js
+            ipcRenderer.send('trocarTelaDBA', element);
+            console.log('Dados de troca de tela enviados!');
+        }
+
+        function selectFuncionario(matricula) {
+            console.log('Clique no Funcionário ' + matricula);
+            ipcRenderer.send('requestFields', {
+                tabela: 'funcionario',
+                campo: 'matricula',
+                id: matricula
+            });
+            ipcRenderer.send('requestFields', {
+                tabela: 'dependente',
+                campo: 'mat_funcionario',
+                id: matricula
+            });
+            ipcRenderer.send('requestFields', {
+                tabela: 'contas_gerente',
+                campo: 'mat_gerente',
+                id: matricula
+            });
+            console.log('Dados do Funcionário ' + matricula + ' solicitados.');
+
+            let botaoAtualizar = document.getElementById('atualizar');
+            let botaoDependente = document.getElementById('dependente');
+            let botaoDeletar = document.getElementById('deletar');
+
+            botaoAtualizar.setAttribute('onclick', 'onClickAtualizar(' + matricula + ')');
+            botaoDependente.setAttribute('onclick', 'onClickDependente(' + matricula + ')');
+            botaoDeletar.setAttribute('onclick', 'onClickDeletar(' + matricula + ')');
+            botaoAtualizar.removeAttribute('disabled');
+            botaoDependente.removeAttribute('disabled');
+            botaoDeletar.removeAttribute('disabled');
+        }
+
+        function adicionarFuncionario() {
+            ipcRenderer.send('abrirTela', {
+                tela: 'adicionarFuncionario',
+                tipo: 'insert',
+                args: {
+                    tabela: 'funcionario',
+                    campo: 'matricula'
+                }
+            });
+        }
+
+        function onClickAtualizar(id) {
+            ipcRenderer.send('abrirTela', {
+                tela: 'adicionarFuncionario',
+                tipo: 'associar',
+                args: {
+                    tabela: 'funcionario',
+                    campo: 'matricula',
+                    id: id,
+                    trans: false
+                }
+            });
+        }
+
+        function onClickDependente(id) {
+            ipcRenderer.send('abrirTela', {
+                tela: 'dependente',
+                tipo: 'associar',
+                args: {
+                    tabela: 'funcionario',
+                    campo: 'matricula',
+                    id: id,
+                    trans: false
+                }
+            });
+        }
+
+        function onClickDeletar(id) {
+            // Requisita confirmação do usuário sobre a deleção da tupla
+            dialog.showMessageBox(remote.getCurrentWindow(), {
+                type: 'question',
+                buttons: ['Remover', 'Cancelar'],
+                defaultId: 0,
+                cancelId: 1,
+                title: 'Confirmar Remoção de Funcionário',
+                message: 'Você tem certeza que deseja remover o Funcionário ' + nome.value + '?',
+                detail: 'Esta ação não pode ser desfeita.\nTodos os dados desse funcionário serão perdidos!'
+            }, function (response) {
+                /* Se o usuário confirmar deleção, dados de tabela e id
+                    * são enviados para main.js para tratar a deleção
+                    */
+                if (!response) {
+                    ipcRenderer.send('delete', {
+                        tabela: 'funcionario',
+                        campo: 'matricula',
+                        id: id,
+                        nome_tabela: 'Funcionário',
+                        nome: nome.value,
+                        detail: 'Pode ser que esse funcionário seja um Gerente.'
+                    });
+                }
+            });
+        }
+
+        function removerDependente(mat_funcionario, nome_dependente) {
+            console.log([mat_funcionario, nome_dependente]);
+            dialog.showMessageBox(remote.getCurrentWindow(), {
+                type: 'question',
+                buttons: ['Remover', 'Cancelar'],
+                defaultId: 0,
+                cancelId: 1,
+                title: 'Confirmar Remoção de Dependente',
+                message: 'Você tem certeza que deseja remover o dependente ' + nome_dependente + '?',
+                detail: 'Esta ação não pode ser desfeita!'
+            }, function (response) {
+                /* Se o usuário confirmar deleção, dados de tabela e id
+                    * são enviados para main.js para tratar a deleção
+                    */
+                if (!response) {
+                    ipcRenderer.send('deleteDependente', [mat_funcionario, nome_dependente]);
+                }
+            });
+        }
+
+        ipcRenderer.on('dependenteRemovido', function (event, fields) {
+            let matricula = document.getElementById('matricula');
+            ipcRenderer.send('requestFields', {
+                tabela: 'dependente',
+                campo: 'mat_funcionario',
+                id: matricula.value
+            });
+        });
+
+        let desconectar = document.getElementById('desconectar');
+        let icon = document.getElementById('icon');
+
+        desconectar.addEventListener('mouseleave', function () {
+            icon.setAttribute('src', '../img/exit_to_app.png');
+        });
+
+        desconectar.addEventListener('mouseenter', function () {
+            icon.setAttribute('src', '../img/exit_to_app_black.png');
+        });
+        
+        function onClickDesconectar() {
+            ipcRenderer.send('acessar', 'Carregando tela de login!');
+        }
+    </script>
+    
+    <!-- Scripts para Bootstrap -->
+    <script>let $ = require('../bootstrap/js/jquery-3.2.1.min.js');</script>
+    <script src="../bootstrap/js/popper.min.js"></script>
+    <script src="../bootstrap/js/bootstrap.js"></script>
+</body>
+</html>

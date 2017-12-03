@@ -124,7 +124,7 @@ ipcMain.on('userLogin', function (event, loginData) {
                     case 'Gerente':
                         console.log('Gerente');
                         mainWindow.loadURL(url.format({
-                            pathname: 'html/gerenteMain.html',
+                            pathname: 'html/funcionarioGerente.html',
                             protocol: 'file:',
                             slashes: true
                         }));
@@ -146,6 +146,9 @@ ipcMain.on('userLogin', function (event, loginData) {
                         }));
                         break;
                 }
+                mainWindow.webContents.on('did-finish-load', () => {
+                    mainWindow.webContents.send('agencia', results[0].lotacao);
+                });
             }
         });
     }
@@ -218,6 +221,46 @@ ipcMain.on('requestData', function (event, arg) {
                 mainWindow.webContents.on('did-finish-load', () => {
                     mainWindow.webContents.send('dataConta', results);
                 });
+                console.log('Dados enviados!');
+            });
+            break;
+    }
+});
+
+ipcMain.on('requestDataRestrict', function (event, arg) {
+    switch (arg.tabela) {
+        // Seleciona os dados de todos os funcionários
+        case 'funcionario':
+            connection.query('SELECT matricula, nome, cargo FROM funcionario WHERE lotacao = ?;', [arg.agencia],
+            function (error, results, fields) {
+                console.log(results);
+                console.log('Enviando dados restritos de Funcionário...');
+                mainWindow.webContents.send('dataFuncionario', results);
+                console.log('Dados enviados!');
+            });
+            break;
+
+        // Seleciona os dados de todos os clientes
+        case 'cliente':
+            connection.query(`SELECT c.cpf, c.nome, c.cidade
+            FROM cliente c JOIN conta_cliente cc ON c.cpf = cc.cpf_cliente
+            WHERE num_agencia = ?;`, [arg.agencia],
+            function (error, results, fields) {
+                console.log(results);
+                console.log('Enviando dados restritos de Cliente...');
+                mainWindow.webContents.send('dataCliente', results);
+                console.log('Dados enviados!');
+            });
+            break;
+
+        // Seleciona os dados de todas as contas
+        case 'conta':
+            connection.query(`SELECT num_conta as numero,
+            num_agencia as agencia, tipo_conta as tipo FROM conta WHERE num_agencia = ?;`, [arg.agencia],
+            function (error, results, fields) {
+                console.log(results);
+                console.log('Enviando dados restritos de Conta...');
+                mainWindow.webContents.send('dataConta', results);
                 console.log('Dados enviados!');
             });
             break;
