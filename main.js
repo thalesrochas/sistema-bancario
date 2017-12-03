@@ -132,7 +132,7 @@ ipcMain.on('userLogin', function (event, loginData) {
                     case 'Atendente':
                         console.log('Atendente');
                         mainWindow.loadURL(url.format({
-                            pathname: 'html/atendenteMain.html',
+                            pathname: 'html/clienteAtendente.html',
                             protocol: 'file:',
                             slashes: true
                         }));

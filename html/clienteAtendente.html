@@ -7,7 +7,7 @@
     <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../style.css">
     
-    <title>NullBank DBA - Clientes</title>
+    <title id="title">NullBank Atendente - Clientes Ag.</title>
 </head>
 <body>
     <!-- Abas da página -->
@@ -15,7 +15,7 @@
         <div class="degrade">
             <div class="aui-group">
                 <div class="aui-item">
-                    <h1 class="nullbank">NullBank</h1>
+                    <h1 id="titleH1" class="nullbank">NullBank</h1>
                 </div>
                 <div class="aui-item">
                     <button id="desconectar" class="btn btn-outline-light btn-sm desconectar" onclick="onClickDesconectar()">
@@ -27,16 +27,10 @@
         </div>
         <ul class="nav nav-tabs">
             <li class="nav-item">
-                <a class="nav-link" href="#" onclick="clickElement('agenciaDBA')">Agências</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#" onclick="clickElement('funcionarioDBA')">Funcionários</a>
-            </li>
-            <li class="nav-item">
                 <a class="nav-link active" href="#">Clientes</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#" onclick="clickElement('contaDBA')">Contas</a>
+                <a class="nav-link" href="#" onclick="clickElement('contaAtendente')">Contas</a>
             </li>
         </ul>
     </div>
@@ -61,21 +55,15 @@
                     </thead>
                 </table>
             </div>
-            <div class="table-padding-corpo" style="overflow:auto; height:423px">
+            <div class="table-padding-corpo" style="overflow:auto; height:497px">
                 <table class="table table-hover">
                     <tbody id="corpoTabela"></tbody>
                 </table>
             </div>
-            <div class="padding16 center">
-                <button class="btn btn-primary" onclick="adicionarCliente()">
-                    <img src="../img/person_add.png">
-                    Cadastrar Cliente
-                </button>
-            </div>
         </div>
         
         <div class="aui-item barra-vertical" style="padding-right:0; padding-top:0;">
-            <div style="overflow:auto; height:562px; padding-right:16px; padding-top:16px">
+            <div style="overflow:auto; height:634px; padding-right:16px; padding-top:16px; padding-bottom:16px">
                 <div class="padding16 rounded border border-secondary">
                     <h5>Dados Pessoais</h5>
                     <div class="form-row">
@@ -108,33 +96,6 @@
                             <input type="text" class="form-control" id="cidade" disabled>
                         </div>
                     </div>
-                </div>
-                <div class="padding16 margin-top16 rounded border border-secondary">
-                    <h5>Contas</h5>
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th scope="col">Nº</th>
-                                <th scope="col">Ag.</th>
-                                <th scope="col">Tipo</th>
-                                <th scope="col">Gerente</th>
-                                <th scope="col">Saldo</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tabelaConta"></tbody>
-                    </table>
-                </div>
-                <div class="padding16 margin-top16 rounded border border-secondary">
-                    <h5>Possui Conta Conjunta com</h5>
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th scope="col">Nome</th>
-                                <th scope="col">CPF</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tabelaContaConjunta"></tbody>
-                    </table>
                 </div>
                 <div class="padding16 margin-top16 rounded border border-secondary">
                     <div class="form-row">
@@ -177,18 +138,6 @@
                     </table>
                 </div>
             </div>
-
-            <!-- Botões -->
-            <div class="center margin-top16">
-                <button id="atualizar" class="btn btn-success" disabled>
-                    <img src="../img/sync.png">
-                    Atualizar
-                </button>
-                <button id="deletar" class="btn btn-danger" disabled>
-                    <img src="../img/delete.png">
-                    Remover
-                </button>
-            </div>
         </div>
     </div>
     
@@ -197,7 +146,17 @@
         const ipcRenderer = require('electron').ipcRenderer;
         
         // Quando a página carrega, os dados são requisitados
-        ipcRenderer.send('requestData', 'cliente');
+        ipcRenderer.on('agencia', function (event, agencia) {
+            let title = document.getElementById('title');
+            let titleH1 = document.getElementById('titleH1');
+            title.textContent = 'NullBank Atendente - Clientes Ag. ' + agencia;
+            titleH1.textContent = 'NullBank - Ag. ' + agencia;
+
+            ipcRenderer.send('requestDataRestrict', {
+                tabela: 'cliente',
+                agencia: agencia
+            });
+        });
 
         // Evento ocorre quando os dados são enviados por main.js
         ipcRenderer.on('dataCliente', function (event, dataCliente) {
@@ -279,12 +238,16 @@
         let pesquisa = document.getElementById('pesquisa');
         
         function pesquisar() {
+            let titulo = remote.getCurrentWindow().getTitle();
+            titulo = titulo.substring(titulo.length-4);
+
             let dadosPesquisa = {
                 tabela: 'cliente',
-                txt: pesquisa.value
+                txt: pesquisa.value,
+                agencia: titulo
             };
 
-            ipcRenderer.send('pesquisar', dadosPesquisa);
+            ipcRenderer.send('pesquisaRestrita', dadosPesquisa);
         }
     </script>
     
@@ -309,18 +272,6 @@
             });
 
             ipcRenderer.send('requestQuery', {
-                query: '2.1',
-                order: null,
-                id: cpf
-            });
-
-            ipcRenderer.send('requestQuery', {
-                query: '2.2',
-                order: null,
-                id: cpf
-            });
-
-            ipcRenderer.send('requestQuery', {
                 query: '2.3',
                 order: '7',
                 id: cpf
@@ -333,14 +284,6 @@
             });
 
             console.log('Dados do Cliente ' + cpf + ' solicitados.');
-
-            let botaoAtualizar = document.getElementById('atualizar');
-            let botaoDeletar = document.getElementById('deletar');
-
-            botaoAtualizar.setAttribute('onclick', 'onClickAtualizar(' + cpf + ')');
-            botaoDeletar.setAttribute('onclick', 'onClickDeletar(' + cpf + ')');
-            botaoAtualizar.removeAttribute('disabled');
-            botaoDeletar.removeAttribute('disabled');
 
             // Remover os atributos de desabilitado dos botões de numero de transações e volume
             let btnNum7 = document.getElementById('btnNum7');
@@ -363,54 +306,6 @@
             btnVol7.setAttribute('class', 'btn btn-info');
             btnVol30.setAttribute('class', 'btn btn-outline-info');
             btnVol365.setAttribute('class', 'btn btn-outline-info');
-        }
-
-        function adicionarCliente(){
-            ipcRenderer.send('abrirTela', {
-                tela: 'adicionarCliente',
-                tipo: null,
-                args: null
-            });
-        }
-
-        function onClickAtualizar(cpf) {
-            ipcRenderer.send('abrirTela', {
-                tela: 'adicionarCliente',
-                tipo: 'associar',
-                args: {
-                    tabela: 'cliente',
-                    campo: 'cpf',
-                    id: cpf,
-                    trans: false
-                }
-            });
-        }
-
-        function onClickDeletar(id) {
-            // Requisita confirmação do usuário sobre a deleção da tupla
-            dialog.showMessageBox(remote.getCurrentWindow(), {
-                type: 'question',
-                buttons: ['Remover', 'Cancelar'],
-                defaultId: 0,
-                cancelId: 1,
-                title: 'Confirmar Remoção de Cliente',
-                message: 'Você tem certeza que deseja remover o Cliente ' + nome.value + '?',
-                detail: 'Essa ação não pode ser desfeita.\nTodos os dados desse cliente serão perdidos!'
-            }, function (response) {
-                /* Se o usuário confirmar deleção, dados de tabela e id
-                    * são enviados para main.js para tratar a deleção
-                    */
-                if (!response) {
-                    ipcRenderer.send('delete', {
-                        tabela: 'cliente',
-                        campo: 'cpf',
-                        id: id,
-                        nome_tabela: 'Cliente',
-                        nome: nome.value,
-                        detail: 'Pode ser que o Cliente esteja associado a alguma conta.'
-                    });
-                }
-            });
         }
         
         let desconectar = document.getElementById('desconectar');
@@ -491,65 +386,6 @@
 
     <!-- Querys -->
     <script>
-        ipcRenderer.on('q2.1', function (event, fields) {
-            console.log('Dados da query 2.1');
-            console.log(fields);
-
-            let tbody = document.getElementById('tabelaConta');
-
-            // Remove todos os elementos do corpo da tabela antes de inserir os novos
-            while (tbody.firstChild) {
-                tbody.removeChild(tbody.firstChild);
-            }
-
-            fields.forEach(element => {
-                let tr = document.createElement('tr');
-                let tdNumConta = document.createElement('td');
-                let tdAgencia = document.createElement('td');
-                let tdTipo = document.createElement('td');
-                let tdGerente = document.createElement('td');
-                let tdSaldo = document.createElement('td');
-
-                tdNumConta.textContent = element.num_conta;
-                tdAgencia.textContent = element.agencia;
-                tdTipo.textContent = element.tipo_conta;
-                tdGerente.textContent = element.gerente;
-                tdSaldo.textContent = 'R$' + element.saldo;
-
-                tr.appendChild(tdNumConta);
-                tr.appendChild(tdAgencia);
-                tr.appendChild(tdTipo);
-                tr.appendChild(tdGerente);
-                tr.appendChild(tdSaldo);
-                tbody.appendChild(tr);
-            });
-        });
-
-        ipcRenderer.on('q2.2', function (event, fields) {
-            console.log('Dados da query 2.2');
-            console.log(fields);
-
-            let tbody = document.getElementById('tabelaContaConjunta');
-
-            // Remove todos os elementos do corpo da tabela antes de inserir os novos
-            while (tbody.firstChild) {
-                tbody.removeChild(tbody.firstChild);
-            }
-
-            fields.forEach(element => {
-                let tr = document.createElement('tr');
-                let tdNome = document.createElement('td');
-                let tdCpf = document.createElement('td');
-
-                tdNome.textContent = element.cliente;
-                tdCpf.textContent = element.cpf;
-
-                tr.appendChild(tdNome);
-                tr.appendChild(tdCpf);
-                tbody.appendChild(tr);
-            });
-        });
-
         ipcRenderer.on('q2.3', function (event, fields) {
             console.log('Dados da query 2.3');
             console.log(fields);

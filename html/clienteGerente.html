@@ -313,6 +313,28 @@
             botaoDeletar.setAttribute('onclick', 'onClickDeletar(' + cpf + ')');
             botaoAtualizar.removeAttribute('disabled');
             botaoDeletar.removeAttribute('disabled');
+
+            // Remover os atributos de desabilitado dos botões de numero de transações e volume
+            let btnNum7 = document.getElementById('btnNum7');
+            let btnNum30 = document.getElementById('btnNum30');
+            let btnNum365 = document.getElementById('btnNum365');
+            let btnVol7 = document.getElementById('btnVol7');
+            let btnVol30 = document.getElementById('btnVol30');
+            let btnVol365 = document.getElementById('btnVol365');
+
+            btnNum7.removeAttribute('disabled');
+            btnNum30.removeAttribute('disabled');
+            btnNum365.removeAttribute('disabled');
+            btnVol7.removeAttribute('disabled');
+            btnVol30.removeAttribute('disabled');
+            btnVol365.removeAttribute('disabled');
+
+            btnNum7.setAttribute('class', 'btn btn-info');
+            btnNum30.setAttribute('class', 'btn btn-outline-info');
+            btnNum365.setAttribute('class', 'btn btn-outline-info');
+            btnVol7.setAttribute('class', 'btn btn-info');
+            btnVol30.setAttribute('class', 'btn btn-outline-info');
+            btnVol365.setAttribute('class', 'btn btn-outline-info');
         }
 
         function adicionarCliente(){
