@@ -168,6 +168,19 @@
                         </div>
                     </div>
                 </div>
+                <div id="gerencia" class="padding16 margin-top16 rounded border border-secondary">
+                    <h5>Gerencia as Contas de</h5>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nome</th>
+                                <th scope="col">Tipo</th>
+                                <th scope="col">Saldo</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaGerencia"></tbody>
+                    </table>
+                </div>
             </div>
 
             <!-- Botões -->
@@ -353,6 +366,41 @@
                 div.appendChild(divDependente);
             });
         });
+
+        ipcRenderer.on('requestedContasGerente', function (event, fields) {
+            console.log('Contas dos Gerentes:')
+            console.log(fields);
+            let tabela = document.getElementById('gerencia');
+
+            if (fields.length === 0) {
+                tabela.setAttribute('style', 'display: none');
+            }
+            else {
+                tabela.removeAttribute('style');
+                let tbody = document.getElementById('tabelaGerencia');
+
+                // Remove todos os elementos do corpo da tabela antes de inserir os novos
+                while (tbody.firstChild) {
+                    tbody.removeChild(tbody.firstChild);
+                }
+
+                fields.forEach(element => {
+                    let tr = document.createElement('tr');
+                    let tdNome = document.createElement('td');
+                    let tdTipo = document.createElement('td');
+                    let tdSaldo = document.createElement('td');
+
+                    tdNome.textContent = element.nome_cliente;
+                    tdTipo.textContent = element.tipo_conta;
+                    tdSaldo.textContent = 'R$' + element.saldo;
+
+                    tr.appendChild(tdNome);
+                    tr.appendChild(tdTipo);
+                    tr.appendChild(tdSaldo);
+                    tbody.appendChild(tr);
+                });
+            }
+        });
     </script>
 
     <!-- Script de pesquisa -->
@@ -391,6 +439,11 @@
             ipcRenderer.send('requestFields', {
                 tabela: 'dependente',
                 campo: 'mat_funcionario',
+                id: matricula
+            });
+            ipcRenderer.send('requestFields', {
+                tabela: 'contas_gerente',
+                campo: 'mat_gerente',
                 id: matricula
             });
             console.log('Dados do Funcionário ' + matricula + ' solicitados.');

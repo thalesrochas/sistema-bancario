@@ -246,6 +246,10 @@ ipcMain.on('requestFields', function (event, arg) {
                 evento = 'requestedDependente';
                 break;
 
+            case 'contas_gerente':
+                evento = 'requestedContasGerente';
+                break;
+
             default:
                 evento = 'fieldsRequested';
         }
