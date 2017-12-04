@@ -4,18 +4,22 @@
   "description": "Trabalho Final de Banco de Dados 2017.2 - Equipe 374876",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "package-win": "electron-packager . nullbank --overwrite --asar=true --platform=win32 --arch=ia32 --icon=img/icon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"NullBank\""
   },
   "repository": {
     "type": "git",
     "url": "git+https://thalesrochas@bitbucket.org/thalesrochas/trabalhobd-2017_2-equipe374876.git"
   },
-  "author": "Francisco Mauro, Maria Raquel, Francisco Thales",
+  "author": "Francisco Thales, Maria Raquel, Francisco Mauro",
   "license": "ISC",
   "homepage": "https://bitbucket.org/thalesrochas/trabalhobd-2017_2-equipe374876#readme",
   "dependencies": {
     "electron": "^1.7.9",
     "mysql": "^2.15.0",
     "object-compare": "^1.0.1"
+  },
+  "devDependencies": {
+    "electron-packager": "^10.1.0"
   }
 }

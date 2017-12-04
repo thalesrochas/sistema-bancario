@@ -36,6 +36,8 @@ app.on('ready', function () {
     mainWindow.on('closed', function () {
         app.exit();
     });
+
+    //mainWindow.setMenu(null);
 });
 
 // Evento executa quando o usuário tenta iniciar conexão com o Banco de Dados
@@ -419,6 +421,8 @@ ipcMain.on('abrirTela', function (event, arg){
         width: 800,
         height: 665
     });
+
+    //newWindow.setMenu(null);
     
     // Carrega a tela correspondente
     newWindow.loadURL(url.format({
