@@ -35,7 +35,7 @@
                     </div>
                 </div>
                 <div class="form-group col-md-3">
-                    <label id="lblSenha" for="senha">Senha</label><small> (6 Dígitos)</small>
+                    <label for="senha">Senha</label><small> (6 Dígitos)</small>
                     <input type="password" class="form-control" id="senha" maxlength="6" minlength="6" required>
                     <div class="invalid-feedback">Por favor, insira uma senha.</div>
                 </div> 
@@ -131,19 +131,13 @@
             let numero = document.getElementById('numero');
             let agencia = document.getElementById('agencia');
             let saldo = document.getElementById('saldo');
-            let senha = document.getElementById('senha');
-            let confSenha = document.getElementById('confSenha');
             let tipo = document.getElementById('tipo');
             let credito = document.getElementById('credito');
             let juros = document.getElementById('juros');
-            let lblSenha = document.getElementById('lblSenha');
-
-            lblSenha.textContent = 'Nova Senha';
+            
             numero.value = dataConta['0'].num_conta;
             agencia.value = dataConta['0'].num_agencia;
             saldo.value = dataConta['0'].saldo;
-            //senha.value = dataConta['0'].senha;
-            //confSenha.value = dataConta['0'].senha;
             tipo.value = dataConta['0'].tipo_conta;
 
             numero.setAttribute('disabled', null);
@@ -159,6 +153,21 @@
                 credito.removeAttribute('disabled');
                 break;
             }
+
+            ipcRenderer.send('requestSenha', {
+                tabela: 'conta',
+                campo: 'num_conta',
+                id: numero.value
+            });
+        });
+
+        ipcRenderer.on('senhaRequested', function (event, fields) {
+            console.log('Senha Requested');
+            console.log(fields);
+            let senha = document.getElementById('senha');
+            let confSenha = document.getElementById('confSenha');
+            senha.value = fields['0'].senha;
+            confSenha.value = fields['0'].senha;
         });
     </script>
 

@@ -319,7 +319,8 @@ ipcMain.on('requestSenha', function (event, arg) {
     connection.query(`SELECT AES_DECRYPT(senha, @chave) AS senha
     FROM ${arg.tabela} WHERE ${arg.campo} = ?;`, arg.id,
     function (error, results, fields) {
-        mainWindow.webContents.send('senhaRequested', results);
+        console.log(results);
+        event.sender.send('senhaRequested', results);
     });
     console.log('Senha enviada!');
 });
