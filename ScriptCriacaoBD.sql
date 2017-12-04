@@ -770,7 +770,9 @@ DROP TRIGGER IF EXISTS `transferencia_aft_ins` $$
 USE `Equipe374876`$$
 CREATE DEFINER = CURRENT_USER TRIGGER `Equipe374876`.`transferencia_aft_ins` AFTER INSERT ON `transacao` FOR EACH ROW
 BEGIN
-	-- INSERT INTO `transacao` (`valor_transacao`, `data_hora`, `tipo`) VALUES (-NEW.valor_transacao, now(), "Transferência");
+	-- IF (NEW.valor_transacao < 0) AND (NEW.tipo = "Transferência") THEN
+    --     INSERT INTO `transacao` (`valor_transacao`, `data_hora`, `tipo`) VALUES (- NEW.valor_transacao, now(), "Transferência");
+    -- END IF;
 END;$$
 
 

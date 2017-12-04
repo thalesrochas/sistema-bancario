@@ -28,3 +28,12 @@ Ao baixar, executar os seguintes comandos na pasta do repositório:
 Para executar:
 
 `npm start`
+
+## Geração de Executável e Instalador
+Para gerar o executável e instalador:
+
+`npm run package-win`
+
+`node installers/windows/createinstaller.js`
+
+### O arquivo de instalação se encontra na pasta release-builds\windows-installer\NullBank-374876.exe

@@ -1,5 +1,6 @@
 {
   "name": "nullbank",
+  "productName": "NullBank",
   "version": "1.0.0",
   "description": "Trabalho Final de Banco de Dados 2017.2 - Equipe 374876",
   "main": "main.js",
@@ -20,6 +21,7 @@
     "object-compare": "^1.0.1"
   },
   "devDependencies": {
-    "electron-packager": "^10.1.0"
+    "electron-packager": "^10.1.0",
+    "electron-winstaller": "^2.6.3"
   }
 }
