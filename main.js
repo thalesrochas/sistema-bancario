@@ -1,6 +1,7 @@
 const electron = require('electron');
 const mysql = require('mysql');
 const url = require('url');
+const path = require('path');
 const objectCompare = require('object-compare');
 
 const app = electron.app;
@@ -27,7 +28,7 @@ app.on('ready', function () {
     
     // Inicia a aplicação com a tela de conexão ao banco de dados
     mainWindow.loadURL(url.format({
-        pathname: 'html/conectarBD.html',
+        pathname: path.join(__dirname, 'html/conectarBD.html'),
         protocol: 'file:',
         slashes: true
     }));
@@ -37,7 +38,8 @@ app.on('ready', function () {
         app.exit();
     });
 
-    //mainWindow.setMenu(null);
+    //mainWindow.openDevTools({detach: true});
+    mainWindow.setMenu(null);
 });
 
 // Evento executa quando o usuário tenta iniciar conexão com o Banco de Dados
@@ -64,7 +66,7 @@ ipcMain.on('conectarBD', function (event, conexaoData) {
             console.log('Conexão bem sucedida!\nConection ID: ' + connection.threadId);
             // Após a conexão bem sucedida, abrir tela de login do usuário
             mainWindow.loadURL(url.format({
-                pathname: 'html/mainWindow.html',
+                pathname: path.join(__dirname, 'html/mainWindow.html'),
                 protocol: 'file:',
                 slashes: true
             }));
@@ -80,7 +82,7 @@ ipcMain.on('acessar', function (event, arg) {
     console.log(arg);
     // Carrega a tela de login
     mainWindow.loadURL(url.format({
-        pathname: 'html/telaLogin.html',
+        pathname: path.join(__dirname, 'html/telaLogin.html'),
         protocol: 'file:',
         slashes: true
     }));
@@ -103,7 +105,7 @@ ipcMain.on('userLogin', function (event, loginData) {
         });
         // Se for DBA, carrega tela de DBA
         mainWindow.loadURL(url.format({
-            pathname: 'html/agenciaDBA.html',
+            pathname: path.join(__dirname, 'html/agenciaDBA.html'),
             protocol: 'file:',
             slashes: true
         }));
@@ -129,7 +131,7 @@ ipcMain.on('userLogin', function (event, loginData) {
                     case 'Gerente':
                         console.log('Gerente');
                         mainWindow.loadURL(url.format({
-                            pathname: 'html/funcionarioGerente.html',
+                            pathname: path.join(__dirname, 'html/funcionarioGerente.html'),
                             protocol: 'file:',
                             slashes: true
                         }));
@@ -137,7 +139,7 @@ ipcMain.on('userLogin', function (event, loginData) {
                     case 'Atendente':
                         console.log('Atendente');
                         mainWindow.loadURL(url.format({
-                            pathname: 'html/clienteAtendente.html',
+                            pathname: path.join(__dirname, 'html/clienteAtendente.html'),
                             protocol: 'file:',
                             slashes: true
                         }));
@@ -145,7 +147,7 @@ ipcMain.on('userLogin', function (event, loginData) {
                     case 'Caixa':
                         console.log('Caixa');
                         mainWindow.loadURL(url.format({
-                            pathname: 'html/contaCaixa.html',
+                            pathname: path.join(__dirname, 'html/contaCaixa.html'),
                             protocol: 'file:',
                             slashes: true
                         }));
@@ -166,7 +168,7 @@ ipcMain.on('trocarTelaDBA', function (event, arg) {
     
     // Seleciona qual tela deve-se carregar a partir do 'arg'
     mainWindow.loadURL(url.format({
-        pathname: 'html/' + arg + '.html',
+        pathname: path.join(__dirname, 'html/' + arg + '.html'),
         protocol: 'file:',
         slashes: true
     }));
@@ -422,11 +424,11 @@ ipcMain.on('abrirTela', function (event, arg){
         height: 665
     });
 
-    //newWindow.setMenu(null);
+    newWindow.setMenu(null);
     
     // Carrega a tela correspondente
     newWindow.loadURL(url.format({
-        pathname: 'html/' + arg.tela + '.html',
+        pathname: path.join(__dirname, 'html/' + arg.tela + '.html'),
         protocol: 'file:',
         slashes: true
     }));
