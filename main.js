@@ -126,6 +126,7 @@ ipcMain.on('userLogin', function (event, loginData) {
                     detail: 'Matrícula ou senha inválida!'
                 });
             }
+            // Procura qual o tipo de funcionário que logou no sistema e redireciona para sua determinada visão
             else {
                 switch (results[0].cargo) {
                     case 'Gerente':
@@ -232,6 +233,7 @@ ipcMain.on('requestData', function (event, arg) {
             });
             break;
 
+        // Seleciona os dados de todas as cidades
         case 'cidade':
             connection.query(`SELECT cidade FROM funcionario UNION select CIDADE FROM cliente;`,
             function (error, results, fields) {
@@ -245,9 +247,10 @@ ipcMain.on('requestData', function (event, arg) {
     }
 });
 
+// Requisito dos dados para a visão dos funcinoários dependendo da agência de cada um deles
 ipcMain.on('requestDataRestrict', function (event, arg) {
     switch (arg.tabela) {
-        // Seleciona os dados de todos os funcionários
+        // Seleciona os dados de todos os funcionários da agência
         case 'funcionario':
             connection.query('SELECT matricula, nome, cargo FROM funcionario WHERE lotacao = ?;', [arg.agencia],
             function (error, results, fields) {
@@ -258,7 +261,7 @@ ipcMain.on('requestDataRestrict', function (event, arg) {
             });
             break;
 
-        // Seleciona os dados de todos os clientes
+        // Seleciona os dados de todos os clientes da agência
         case 'cliente':
             connection.query(`SELECT c.cpf, c.nome, c.cidade
             FROM cliente c JOIN conta_cliente cc ON c.cpf = cc.cpf_cliente
@@ -271,7 +274,7 @@ ipcMain.on('requestDataRestrict', function (event, arg) {
             });
             break;
 
-        // Seleciona os dados de todas as contas
+        // Seleciona os dados de todas as contas da agência
         case 'conta':
             connection.query(`SELECT num_conta as numero,
             num_agencia as agencia, tipo_conta as tipo FROM conta WHERE num_agencia = ?;`, [arg.agencia],
@@ -319,6 +322,7 @@ ipcMain.on('requestFields', function (event, arg) {
     });
 });
 
+// Requisita as senhas para serem exibidas, descriptografando-as
 ipcMain.on('requestSenha', function (event, arg) {
     connection.query(`SELECT AES_DECRYPT(senha, @chave) AS senha
     FROM ${arg.tabela} WHERE ${arg.campo} = ?;`, arg.id,
@@ -358,6 +362,7 @@ ipcMain.on('delete', function (event, arg) {
     });
 });
 
+// Evento de remoção de dependentes
 ipcMain.on('deleteDependente', function (event, arg) {
     // Tenta realizar a deleção
     connection.query('DELETE FROM dependente WHERE mat_funcionario = ? and nome_dependente = ?', arg,
@@ -385,6 +390,7 @@ ipcMain.on('deleteDependente', function (event, arg) {
     });
 });
 
+// Evento de desligamento do cliente da sua conta
 ipcMain.on('deleteClienteDaConta', function (event, arg) {
     connection.query('DELETE FROM conta_cliente WHERE num_conta = ? AND cpf_cliente = ?;', arg,
     function (error, results, fields) {
@@ -401,7 +407,7 @@ ipcMain.on('deleteClienteDaConta', function (event, arg) {
             // Caso tenha sido removido com sucesso, informa ao usuário
             dialog.showMessageBox(mainWindow, {
                 type: 'info',
-                title: 'Desvínculo Confirmada',
+                title: 'Desvínculo Confirmado',
                 message: 'O cliente ' + arg[1] + ' foi desvinculado com sucesso!'
             });
             // Atualiza os dados da página após a remoção
@@ -463,17 +469,20 @@ ipcMain.on('abrirTela', function (event, arg){
         }
     });
 
+    // Recarrega os dados da janela principal após uma inserção/atualização
     newWindow.on('closed', function () {
         mainWindow.webContents.reload();
     });
 });
 
+// Evento para capturar todos os números de agência
 ipcMain.on('requestAgencias', function (event, arg) {
     connection.query('SELECT numero FROM agencia;',
     function (error, results, fields) {
         console.log(results);
         console.log('Enviando dados de Agência...');
         newWindow.webContents.on('did-finish-load', () => {
+            // Os números de agência são enviados para a tela que solicitou
             newWindow.webContents.send('dataAgencia', results);
         });
         console.log('Dados enviados!');
@@ -536,6 +545,7 @@ ipcMain.on('pesquisar', function (event, arg) {
             });
             break;
 
+        // Seleciona os dados de todas as cidades
         case 'cidade':
             connection.query(`SELECT cidade FROM funcionario WHERE cidade LIKE ?
             UNION
@@ -549,6 +559,8 @@ ipcMain.on('pesquisar', function (event, arg) {
     }
 });
 
+// Evento de pesquisa para as visões dos funcionários
+// Funciona de acordo com a agência que está acessando
 ipcMain.on('pesquisaRestrita', function (event, arg) {
     switch (arg.tabela) {
         // Seleciona os dados de todos os funcionários
@@ -593,6 +605,7 @@ ipcMain.on('pesquisaRestrita', function (event, arg) {
     }
 });
 
+// Evento para inserção de clientes na tabela cliente
 ipcMain.on('insertCliente', function (event, arg) {
     console.log(arg);
     connection.query('INSERT INTO cliente VALUES (?, ?, ?, ?, ?, ?);', arg,
@@ -601,6 +614,7 @@ ipcMain.on('insertCliente', function (event, arg) {
     });
 });
 
+// Evento para inserção de contas na tabela conta, assim como nas tabelas de especialização
 ipcMain.on('insertConta', function (event, arg) {
     console.log(arg);
     connection.query('INSERT INTO conta VALUES (?, ?, ?, AES_ENCRYPT(?, @chave), ?);', arg.slice(0,5),
@@ -626,6 +640,7 @@ ipcMain.on('insertConta', function (event, arg) {
     }
 });
 
+// Evento para associar uma conta a um cliente
 ipcMain.on('insertContaCliente', function (event, arg) {
     console.log(arg);
     connection.query('INSERT INTO conta_cliente VALUES (?, ?, ?)', arg,
@@ -634,6 +649,7 @@ ipcMain.on('insertContaCliente', function (event, arg) {
     });
 });
 
+// Evento para a inserção de funcionários na tabela funcionário
 ipcMain.on('insertFuncionario', function (event, arg) {
     console.log(arg);
 
@@ -642,8 +658,8 @@ ipcMain.on('insertFuncionario', function (event, arg) {
         // Verifica se a agência já possui um gerente
         connection.query('SELECT mat_gerente FROM agencia WHERE numero = ?;', [arg[9]],
         function (error1, results, fields) {
-            console.log('Aqui 0');
             console.log(results[0].mat_gerente);
+            // Ocorre um erro se a agência já tiver um gerente
             if (!(results[0].mat_gerente == null)) {
                 dialog.showMessageBox(newWindow, {
                     type: 'error',
@@ -652,16 +668,13 @@ ipcMain.on('insertFuncionario', function (event, arg) {
                     detail: 'Esta Agência já possui um Gerente!'
                 });
             }
+            // Se não houver gerente, insira o gerente em funcionario e associe na tabela agência
             else {
-                console.log('Aqui 1');
                 connection.query(`INSERT INTO funcionario VALUES (?, ?, ?, ?, ?, ?, ?, ?, AES_ENCRYPT(?, @chave), ?);`, arg,
                 function (error2, results, fields) {
-                    console.log('Aqui 2');
                     if (error2 == null) {
-                        console.log('Aqui 3');
                         connection.query(`UPDATE agencia SET mat_gerente = ? WHERE numero = ?`, [arg[0], arg[9]],
                         function (error3, results, fields) {
-                            console.log('Aqui 4');
                             event.sender.send('funcionarioInserido', error3);
                         });
                     }
@@ -672,6 +685,7 @@ ipcMain.on('insertFuncionario', function (event, arg) {
             }
         });
     }
+    // Se o funcionário não for gerente, insira na tabela funcionario
     else {
         connection.query(`INSERT INTO funcionario VALUES (?, ?, ?, ?, ?, ?, ?, ?, AES_ENCRYPT(?, @chave), ?);`, arg,
         function (error4, results, fields) {
@@ -680,6 +694,7 @@ ipcMain.on('insertFuncionario', function (event, arg) {
     }
 });
 
+// Evento para inserção de dependentes na tabela dependente
 ipcMain.on('insertDependente', function (event, arg) {
     console.log(arg);
     connection.query(`INSERT INTO dependente VALUES (?, ?, ?, ?,
@@ -689,6 +704,8 @@ ipcMain.on('insertDependente', function (event, arg) {
     });
 });
 
+// Evento para realizar nova transação
+// Insere dados na tabela transacao e realiza
 ipcMain.on('novaTransacao', function (event, arg) {
     console.log(arg);
 
@@ -711,6 +728,7 @@ ipcMain.on('novaTransacao', function (event, arg) {
                             message: 'Transferência não Realizada!',
                             detail: 'Saldo do cliente insuficiente.'
                         });
+                        // Se der erro, desfaça as isnerções das tabelas
                         return connection.rollback(function () {});
                     }
                     else {
@@ -720,10 +738,13 @@ ipcMain.on('novaTransacao', function (event, arg) {
                             message: 'Transferência não Realizada!',
                             detail: 'A conta beneficiária ' + arg[4] + ' não existe.'
                         });
+                        // Se der erro, desfaça as isnerções das tabelas
                         return connection.rollback(function () {});
                     }
+                    // Se não houver erros, confirme a inclusão dos dados
                     connection.commit(function (err) {
                         if (err) {
+                            // Se der erro, desfaça as isnerções das tabelas
                             return connection.rollback(function () {});
                         }
                         dialog.showMessageBox(mainWindow, {
@@ -753,10 +774,13 @@ ipcMain.on('novaTransacao', function (event, arg) {
                             message: 'Saque Indisponível!',
                             detail: 'Saldo do cliente insuficiente.'
                         });
+                        // Se der erro, desfaça as isnerções das tabelas
                         return connection.rollback(function () {});
                     }
+                    // Se não houver erros, confirme a inclusão dos dados
                     connection.commit(function(error) {
                         if (error) {
+                            // Se der erro, desfaça as isnerções das tabelas
                             return connection.rollback(function () {});
                         }
                         dialog.showMessageBox(mainWindow, {
@@ -785,10 +809,13 @@ ipcMain.on('novaTransacao', function (event, arg) {
                             title: 'Transação mal Sucedida',
                             message: 'Depósito Indisponível!'
                         });
+                        // Se der erro, desfaça as isnerções das tabelas
                         return connection.rollback(function () {});
                     }
+                    // Se não houver erros, confirme a inclusão dos dados
                     connection.commit(function (error) {
                         if (error) {
+                            // Se der erro, desfaça as isnerções das tabelas
                             return connection.rollback(function () {});
                         }
                         dialog.showMessageBox(mainWindow, {
@@ -817,10 +844,13 @@ ipcMain.on('novaTransacao', function (event, arg) {
                             title: 'Transação mal Sucedida',
                             message: 'Estorno Indisponível!'
                         });
+                        // Se der erro, desfaça as isnerções das tabelas
                         return connection.rollback(function () {});
                     }
+                    // Se não houver erros, confirme a inclusão dos dados
                     connection.commit(function (error) {
                         if (error) {
+                            // Se der erro, desfaça as isnerções das tabelas
                             return connection.rollback(function () {});
                         }
                         dialog.showMessageBox(mainWindow, {
@@ -837,6 +867,7 @@ ipcMain.on('novaTransacao', function (event, arg) {
     }
 });
 
+// Evento atualiza os dados das contas
 ipcMain.on('updateConta', function (event, arg) {
     console.log(arg);
     connection.query('UPDATE conta SET saldo = ?, senha = AES_ENCRYPT(?, @chave), tipo_conta = ? WHERE num_conta = ?',
@@ -870,26 +901,32 @@ ipcMain.on('updateConta', function (event, arg) {
     });
 });
 
+// Evento atualiza os dados dos clientes
 ipcMain.on('updateCliente', function (event, arg) {
     console.log(arg);
     connection.query(`UPDATE cliente SET rg = ?, nome = ?,
     data_nasc = ?, cidade = ?, endereco = ? WHERE cpf = ?`,
     [arg[1], arg[2], arg[3], arg[4], arg[5], arg[0]],
     function (error, results, fields) {
+        // Informa para a janela que o cliente foi atualizado
         event.sender.send('clienteUpdated', error);
     });
 });
 
+// Evento atualiza os dados dos funcionários
 ipcMain.on('updateFuncionario', function (event, arg) {
     console.log(arg);
     connection.query(`UPDATE funcionario SET nome = ?, sexo = ?,
     data_nasc = ?, cidade = ?, endereco = ?, salario = ?, senha = AES_ENCRYPT(?, @chave) WHERE matricula = ?`,
     [arg[1], arg[2], arg[3], arg[4], arg[5], arg[7], arg[8], arg[0]],
     function (error, results, fields) {
+        // Informa para a janela que o funcionário foi atualizado
         event.sender.send('funcionarioUpdated', error);
     });
 });
 
+// Evento realiza e envia as querys paras as janelas que solicitaram
+// As querys estão comentadas no arquivo 'ScriptQuerys.sql'
 ipcMain.on('requestQuery', function (event, arg) {
     console.log(arg);
     switch (arg.query) {
@@ -1165,6 +1202,7 @@ ipcMain.on('requestQuery', function (event, arg) {
     }
 });
 
+// Evento envia os dados de extrato para a tela que solicitou
 ipcMain.on('requestExtrato', function (event, arg) {
     console.log(arg);
     connection.query(`SELECT * FROM ${arg.tabela} WHERE num_conta = ?`, [arg.id],
