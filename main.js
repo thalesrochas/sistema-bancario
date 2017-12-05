@@ -721,25 +721,27 @@ ipcMain.on('novaTransacao', function (event, arg) {
                     console.log(error);
                     // ER_NO_REFERENCED_ROW_2 - conta não existe
                     // ER_SIGNAL_EXCEPTION -- Saldo insuficiente
-                    if (error.code == 'ER_SIGNAL_EXCEPTION') {
-                        dialog.showMessageBox(mainWindow, {
-                            type: 'error',
-                            title: 'Transação mal Sucedida',
-                            message: 'Transferência não Realizada!',
-                            detail: 'Saldo do cliente insuficiente.'
-                        });
-                        // Se der erro, desfaça as isnerções das tabelas
-                        return connection.rollback(function () {});
-                    }
-                    else {
-                        dialog.showMessageBox(mainWindow, {
-                            type: 'error',
-                            title: 'Transação mal Sucedida',
-                            message: 'Transferência não Realizada!',
-                            detail: 'A conta beneficiária ' + arg[4] + ' não existe.'
-                        });
-                        // Se der erro, desfaça as isnerções das tabelas
-                        return connection.rollback(function () {});
+                    if (error !== null) {
+                        if (error.code == 'ER_SIGNAL_EXCEPTION') {
+                            dialog.showMessageBox(mainWindow, {
+                                type: 'error',
+                                title: 'Transação mal Sucedida',
+                                message: 'Transferência não Realizada!',
+                                detail: 'Saldo do cliente insuficiente.'
+                            });
+                            // Se der erro, desfaça as isnerções das tabelas
+                            return connection.rollback(function () {});
+                        }
+                        else {
+                            dialog.showMessageBox(mainWindow, {
+                                type: 'error',
+                                title: 'Transação mal Sucedida',
+                                message: 'Transferência não Realizada!',
+                                detail: 'A conta beneficiária ' + arg[4] + ' não existe.'
+                            });
+                            // Se der erro, desfaça as isnerções das tabelas
+                            return connection.rollback(function () {});
+                        }
                     }
                     // Se não houver erros, confirme a inclusão dos dados
                     connection.commit(function (err) {

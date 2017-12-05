@@ -89,6 +89,7 @@
     <script>
         const remote = require('electron').remote;
         const ipcRenderer = require('electron').ipcRenderer;
+        const dialog = require('electron').remote.dialog;
 
         let form = document.getElementById('transacao');
 
@@ -136,15 +137,30 @@
                 let numeroConta = document.getElementById('numeroConta');
                 let numeroContaBen = document.getElementById('numeroBen');
 
-                let novaTransacao = [
-                    numeroTransacao.value,
-                    valor.value,
-                    tipo.value,
-                    numeroConta.value,
-                    numeroContaBen.value
-                ];
+                console.log(numeroConta.value);
+                console.log(numeroContaBen.value);
 
-                ipcRenderer.send('novaTransacao', novaTransacao);
+                if (numeroConta.value == numeroContaBen.value) {
+                    dialog.showMessageBox(remote.getCurrentWindow(), {
+                        type: 'warning',
+                        title: 'Transação mal Sucedida',
+                        message: 'Transferência não Realizada!',
+                        detail: 'A conta beneficiária não pode ser a conta que está realizando a transferência.'
+                    });
+                    numeroContaBen.value = '';
+                    numeroContaBen.focus();
+                }
+                else {   
+                    let novaTransacao = [
+                        numeroTransacao.value,
+                        valor.value,
+                        tipo.value,
+                        numeroConta.value,
+                        numeroContaBen.value
+                    ];
+                    
+                    ipcRenderer.send('novaTransacao', novaTransacao);
+                }
             }
             form.classList.add('was-validated');
             e.preventDefault();
